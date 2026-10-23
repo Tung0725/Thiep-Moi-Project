@@ -1,0 +1,38 @@
+services:
+  postgres-dev:
+    image: postgres:16-alpine
+    container_name: wedding-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-wedding_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-wedding_db}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  minio-dev:
+    image: elestio/minio:latest
+    container_name: wedding-minio-dev
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${STORAGE_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${STORAGE_SECRET_KEY:-minioadmin}
+    ports:
+      - "9000:9000" # MinIO S3 API Endpoint
+      - "9001:9001" # MinIO Web Console UI
+    volumes:
+      - minio_dev_data:/data
+
+volumes:
+  postgres_dev_data:
+    driver: local
+  minio_dev_data:
+    driver: local
