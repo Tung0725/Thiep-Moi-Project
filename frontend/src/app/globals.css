@@ -2,13 +2,259 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary-color: #e11d48;
+/* ==============================================================================
+ * Wedding Calligraphy & Script Fonts (Authentic cloned meHappy typography)
+ * ============================================================================== */
+@font-face {
+  font-family: 'GreatVibes';
+  src: url('/templates/hb04/fonts/GreatVibes-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
+@font-face {
+  font-family: 'UVNHoaTay1';
+  src: url('/templates/hb04/fonts/UVNHoaTay1.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UVNMoiHong';
+  src: url('/templates/hb04/fonts/UVNMoiHong.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SVNMagellin';
+  src: url('/templates/hb04/fonts/SVN-Magellin.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ballet';
+  src: url('/templates/hb04/fonts/Ballet_60pt-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Wedding Font Utilities */
+.font-greatvibes {
+  font-family: 'GreatVibes', cursive, serif !important;
+}
+
+.font-hoatay {
+  font-family: 'UVNHoaTay1', cursive, serif !important;
+}
+
+.font-moihong {
+  font-family: 'UVNMoiHong', cursive, serif !important;
+}
+
+.font-magellin {
+  font-family: 'SVNMagellin', serif !important;
+}
+
+.font-ballet {
+  font-family: 'Ballet', cursive, serif !important;
+}
+
+/* ==============================================================================
+ * Wedding Entrance Animations (BounceIn, FadeIn from meHappy template)
+ * ============================================================================== */
+@keyframes bounceInLeft {
+  0% { opacity: 0; transform: translate3d(-100px, 0, 0); }
+  60% { opacity: 1; transform: translate3d(15px, 0, 0); }
+  80% { transform: translate3d(-5px, 0, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes bounceInRight {
+  0% { opacity: 0; transform: translate3d(100px, 0, 0); }
+  60% { opacity: 1; transform: translate3d(-15px, 0, 0); }
+  80% { transform: translate3d(5px, 0, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes bounceInDown {
+  0% { opacity: 0; transform: translate3d(0, -70px, 0); }
+  60% { opacity: 1; transform: translate3d(0, 12px, 0); }
+  80% { transform: translate3d(0, -4px, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes bounceInUp {
+  0% { opacity: 0; transform: translate3d(0, 70px, 0); }
+  60% { opacity: 1; transform: translate3d(0, -12px, 0); }
+  80% { transform: translate3d(0, 4px, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes pulseHeart {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.animate-bounce-in-left {
+  animation: bounceInLeft 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+.animate-bounce-in-right {
+  animation: bounceInRight 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+.animate-bounce-in-down {
+  animation: bounceInDown 0.9s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+.animate-bounce-in-up {
+  animation: bounceInUp 0.9s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+.animate-pulse-heart {
+  animation: pulseHeart 1.8s ease-in-out infinite;
+}
+
+
+@layer base {
+  :root {
+    /* Stitch Light Mode Palette (Warm Porcelain) */
+    --surface-rgb: 252 249 247;
+    --surface-dim-rgb: 221 217 215;
+    --surface-bright-rgb: 252 249 247;
+    --surface-container-lowest-rgb: 255 255 255;
+    --surface-container-low-rgb: 247 243 241;
+    --surface-container-rgb: 241 237 235;
+    --surface-container-high-rgb: 235 231 229;
+    --surface-container-highest-rgb: 229 226 224;
+    --surface-variant-rgb: 229 226 224;
+    --surface-tint-rgb: 188 11 59;
+
+    --primary-rgb: 185 5 56;
+    --primary-container-rgb: 220 44 79;
+    --primary-fixed-rgb: 255 218 219;
+    --primary-fixed-dim-rgb: 255 178 183;
+    --on-primary-rgb: 255 255 255;
+    --on-primary-container-rgb: 255 251 255;
+    --on-primary-fixed-rgb: 64 0 13;
+    --on-primary-fixed-variant-rgb: 146 0 42;
+    --inverse-primary-rgb: 255 178 183;
+
+    --secondary-rgb: 86 94 116;
+    --secondary-container-rgb: 218 226 253;
+    --secondary-fixed-rgb: 218 226 253;
+    --secondary-fixed-dim-rgb: 190 198 224;
+    --on-secondary-rgb: 255 255 255;
+    --on-secondary-container-rgb: 92 100 122;
+    --on-secondary-fixed-rgb: 19 27 46;
+    --on-secondary-fixed-variant-rgb: 63 70 92;
+
+    --tertiary-rgb: 141 75 0;
+    --tertiary-container-rgb: 177 95 0;
+    --tertiary-fixed-rgb: 255 220 195;
+    --tertiary-fixed-dim-rgb: 255 183 125;
+    --on-tertiary-rgb: 255 255 255;
+    --on-tertiary-container-rgb: 255 251 255;
+    --on-tertiary-fixed-rgb: 47 21 0;
+    --on-tertiary-fixed-variant-rgb: 110 57 0;
+
+    --background-rgb: 252 249 247;
+    --on-background-rgb: 28 27 27;
+    --on-surface-rgb: 28 27 27;
+    --on-surface-variant-rgb: 91 64 65;
+    --inverse-surface-rgb: 49 48 47;
+    --inverse-on-surface-rgb: 244 240 238;
+
+    --outline-rgb: 143 111 113;
+    --outline-variant-rgb: 227 189 191;
+
+    --error-rgb: 186 26 26;
+    --error-container-rgb: 255 218 214;
+    --on-error-rgb: 255 255 255;
+    --on-error-container-rgb: 147 0 10;
+  }
+
+  .dark {
+    /* Stitch Dark Mode Palette (Midnight Velvet) */
+    --surface-rgb: 15 17 23;
+    --surface-dim-rgb: 11 13 19;
+    --surface-bright-rgb: 34 38 56;
+    --surface-container-lowest-rgb: 11 13 19;
+    --surface-container-low-rgb: 19 21 31;
+    --surface-container-rgb: 25 28 40;
+    --surface-container-high-rgb: 34 37 54;
+    --surface-container-highest-rgb: 40 44 63;
+    --surface-variant-rgb: 30 33 48;
+    --surface-tint-rgb: 244 63 94;
+
+    --primary-rgb: 244 63 94;
+    --primary-container-rgb: 225 29 72;
+    --primary-fixed-rgb: 76 5 25;
+    --primary-fixed-dim-rgb: 253 164 175;
+    --on-primary-rgb: 255 255 255;
+    --on-primary-container-rgb: 255 255 255;
+    --on-primary-fixed-rgb: 255 228 230;
+    --on-primary-fixed-variant-rgb: 255 209 215;
+    --inverse-primary-rgb: 225 29 72;
+
+    --secondary-rgb: 148 163 184;
+    --secondary-container-rgb: 159 18 57;
+    --secondary-fixed-rgb: 51 65 85;
+    --secondary-fixed-dim-rgb: 100 116 139;
+    --on-secondary-rgb: 255 255 255;
+    --on-secondary-container-rgb: 203 213 225;
+    --on-secondary-fixed-rgb: 241 245 249;
+    --on-secondary-fixed-variant-rgb: 203 213 225;
+
+    --tertiary-rgb: 251 191 36;
+    --tertiary-container-rgb: 245 158 11;
+    --tertiary-fixed-rgb: 254 243 199;
+    --tertiary-fixed-dim-rgb: 245 158 11;
+    --on-tertiary-rgb: 30 19 0;
+    --on-tertiary-container-rgb: 0 0 0;
+    --on-tertiary-fixed-rgb: 69 26 3;
+    --on-tertiary-fixed-variant-rgb: 180 83 9;
+
+    --background-rgb: 15 17 23;
+    --on-background-rgb: 248 250 252;
+    --on-surface-rgb: 248 250 252;
+    --on-surface-variant-rgb: 148 163 184;
+    --inverse-surface-rgb: 248 250 252;
+    --inverse-on-surface-rgb: 15 17 23;
+
+    --outline-rgb: 75 82 109;
+    --outline-variant-rgb: 45 49 66;
+
+    --error-rgb: 248 113 113;
+    --error-container-rgb: 127 29 29;
+    --on-error-rgb: 69 10 10;
+    --on-error-container-rgb: 252 165 165;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    overscroll-behavior: none;
+  }
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

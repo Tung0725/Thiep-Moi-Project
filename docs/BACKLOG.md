@@ -32,13 +32,13 @@
 ## 2. Phase 1: Core MVP (Vertical Slices - Phát Triển Theo Lát Cắt Dọc)
 
 ### `[TASK-02]` [Auth Module] Đăng Ký, Đăng Nhập & Cấp Phát JWT Token
-- **Type:** Feature | **Priority:** High (Must) | **Estimate:** 5 SP | **Status:** [ ] Todo
+- **Type:** Feature | **Priority:** High (Must) | **Estimate:** 5 SP | **Status:** [x] Done
 - **Traces to:** `FR-01`, `FR-02`, `API-01`, `API-02`, `SCR-01`, `AGG-01`, `CMD-01`, `CMD-02`, `EVT-01`, `EVT-02` | **Depends on:** `TASK-01`
 - **User Story:** Là một `ROLE-GUEST`, tôi muốn đăng ký và đăng nhập tài khoản bằng email/mật khẩu để nhận JWT token quản lý các thiệp của riêng tôi.
 - **Acceptance Criteria (AC):**
-  - [ ] **AC 1:** Given thông tin email và mật khẩu hợp lệ, When gửi request `POST /api/v1/auth/register`, Then tài khoản được tạo với mật khẩu băm BCrypt (cost 12) và trả về mã `201 Created`.
-  - [ ] **AC 2 (Edge Case):** Given email đã tồn tại trong DB, When gửi đăng ký, Then hệ thống trả về mã `409 Conflict` kèm thông báo *"Email này đã được sử dụng"*.
-  - [ ] **AC 3:** Given đăng nhập thành công qua `POST /api/v1/auth/login`, Then hệ thống trả về `200 OK` kèm chuỗi JWT token có hiệu lực 24 giờ.
+  - [x] **AC 1:** Given thông tin email và mật khẩu hợp lệ, When gửi request `POST /api/v1/auth/register`, Then tài khoản được tạo với mật khẩu băm BCrypt (cost 12) và trả về mã `201 Created`.
+  - [x] **AC 2 (Edge Case):** Given email đã tồn tại trong DB, When gửi đăng ký, Then hệ thống trả về mã `409 Conflict` kèm thông báo *"Email này đã được sử dụng"*.
+  - [x] **AC 3:** Given đăng nhập thành công qua `POST /api/v1/auth/login`, Then hệ thống trả về `200 OK` kèm chuỗi JWT token có hiệu lực 24 giờ.
 
 ---
 

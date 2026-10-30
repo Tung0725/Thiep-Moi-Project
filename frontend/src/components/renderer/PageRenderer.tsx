@@ -3,6 +3,8 @@ import { PageSchema } from '@/types/schema';
 import { COMPONENT_REGISTRY } from './ComponentRegistry';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { FallingEffects } from '@/components/common/FallingEffects';
+import { BackgroundMusic } from '@/components/common/BackgroundMusic';
+import { OpeningEnvelope } from '@/components/common/OpeningEnvelope';
 
 /**
  * PageRenderer Component
@@ -15,9 +17,10 @@ import { FallingEffects } from '@/components/common/FallingEffects';
 interface PageRendererProps {
   schema: PageSchema;
   slug?: string;
+  containerClassName?: string;
 }
 
-export function PageRenderer({ schema, slug }: PageRendererProps) {
+export function PageRenderer({ schema, slug, containerClassName }: PageRendererProps) {
   const { theme, effects, blocks = [] } = schema;
 
   return (
@@ -28,11 +31,19 @@ export function PageRenderer({ schema, slug }: PageRendererProps) {
       }}
       className="relative min-h-screen w-full"
     >
+      {/* Opening Envelope Split-Panels Animation */}
+      {effects?.openingEffect?.enabled && (
+        <OpeningEnvelope config={effects.openingEffect} />
+      )}
+
+      {/* Floating Background Music Player */}
+      {effects?.musicUrl && <BackgroundMusic musicUrl={effects.musicUrl} />}
+
       {/* Falling Particle Overlay */}
       {effects?.fallingType && <FallingEffects type={effects.fallingType} />}
 
       {/* Dynamic Blocks Container */}
-      <div className="w-full max-w-md mx-auto flex flex-col">
+      <div className={`w-full ${containerClassName || 'max-w-3xl sm:max-w-4xl'} mx-auto flex flex-col`}>
         {blocks.map((block) => {
           const Component = COMPONENT_REGISTRY[block.type];
           if (!Component) return null;
@@ -49,3 +60,4 @@ export function PageRenderer({ schema, slug }: PageRendererProps) {
     </main>
   );
 }
+

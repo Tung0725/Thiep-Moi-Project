@@ -1,0 +1,722 @@
+﻿<!DOCTYPE html><html lang="vi" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><title>BlissCard - Nền tảng tạo thiệp điện tử cao cấp</title><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-lowest": "#ffffff", "surface-container": "#f1edeb", "surface-container-highest": "#e5e2e0", "on-secondary-container": "#5c647a", "on-primary": "#ffffff", "tertiary-fixed-dim": "#ffb77d", "secondary-container": "#dae2fd", "on-primary-fixed-variant": "#92002a", "on-secondary-fixed-variant": "#3f465c", "error": "#ba1a1a", "outline-variant": "#e3bdbf", "primary-fixed-dim": "#ffb2b7", "tertiary-container": "#b15f00", "on-secondary": "#ffffff", "surface-dim": "#ddd9d7", "on-tertiary": "#ffffff", "outline": "#8f6f71", "primary-fixed": "#ffdadb", "inverse-primary": "#ffb2b7", "on-surface": "#1c1b1b", "on-tertiary-fixed": "#2f1500", "on-error": "#ffffff", "inverse-surface": "#31302f", "secondary": "#565e74", "on-background": "#1c1b1b", "background": "#fcf9f7", "on-primary-fixed": "#40000d", "on-error-container": "#93000a", "secondary-fixed": "#dae2fd", "tertiary": "#8d4b00", "surface": "#fcf9f7", "on-tertiary-fixed-variant": "#6e3900", "primary": "#b90538", "tertiary-fixed": "#ffdcc3", "on-primary-container": "#fffbff", "surface-container-high": "#ebe7e5", "surface-variant": "#e5e2e0", "on-secondary-fixed": "#131b2e", "inverse-on-surface": "#f4f0ee", "surface-tint": "#bc0b3b", "surface-bright": "#fcf9f7", "error-container": "#ffdad6", "primary-container": "#dc2c4f", "on-tertiary-container": "#fffbff", "secondary-fixed-dim": "#bec6e0", "on-surface-variant": "#5b4041", "surface-container-low": "#f7f3f1" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-md": "1rem", "gutter-mobile": "1rem", "margin": "3rem", "space-2xl": "4rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "margin-tablet": "2rem", "margin-mobile": "1.25rem", "gutter": "1.5rem", "space-xl": "2.5rem", "space-3xl": "6rem" }, "fontFamily": { "label-sm": ["Inter"], "headline-lg": ["Plus Jakarta Sans"], "headline-xl": ["Plus Jakarta Sans"], "body-lg": ["Inter"], "label-lg": ["Inter"], "display-mobile": ["Plus Jakarta Sans"], "body-md": ["Inter"], "body-sm": ["Inter"], "headline-xl-mobile": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "display": ["Plus Jakarta Sans"], "label-md": ["Inter"] }, "fontSize": { "label-sm": ["0.6875rem", { "lineHeight": "1.3", "letterSpacing": "0.04em", "fontWeight": "700" }], "headline-lg": ["2rem", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-xl": ["2.5rem", { "lineHeight": "1.2", "letterSpacing": "-0.025em", "fontWeight": "700" }], "body-lg": ["1.125rem", { "lineHeight": "1.6", "letterSpacing": "-0.01em", "fontWeight": "400" }], "label-lg": ["0.875rem", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "600" }], "display-mobile": ["2.25rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }], "body-md": ["1rem", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }], "body-sm": ["0.875rem", { "lineHeight": "1.5", "letterSpacing": "0.005em", "fontWeight": "400" }], "headline-xl-mobile": ["1.875rem", { "lineHeight": "1.25", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-md": ["1.5rem", { "lineHeight": "1.35", "letterSpacing": "-0.015em", "fontWeight": "600" }], "headline-sm": ["1.25rem", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display": ["3.5rem", { "lineHeight": "1.15", "letterSpacing": "-0.03em", "fontWeight": "800" }], "label-md": ["0.75rem", { "lineHeight": "1.35", "letterSpacing": "0.02em", "fontWeight": "600" }] } } } }</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1280px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-sm"><img alt="Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7XWIHErcPyZykvpptmILGOFEqE_3Eqk_P2jUzqGZeSHu4jIacplITNUWA2EnmU_eLOc3_qtvS_hYkiFsNigFQJsl6_-Qkg-_kxn3vbcgDPL17U4wn-Q6h22hGrbcHXi2ogzJEXVFMbVIVHKzs4Ds9ccEqaVk8JnhTd2AA1AntEdk01W7zHDi44fEn-Lr894C2Q4sY388aE05dpr5XLXPnoDO0uAm033OzI6xL_OG2PFkNPgJNNGEDRQ"><a class="flex flex-col" data-path="trang-chu" href="#"><span class="font-headline-sm text-headline-sm text-primary tracking-tight font-bold leading-none">BlissCard</span><span class="font-label-sm text-label-sm text-on-surface-variant font-medium tracking-wider uppercase">by meHappy</span></a></div><nav class="hidden xl:flex items-center gap-space-lg" data-active-classes="text-primary font-bold bg-primary-fixed/40 rounded-full px-space-sm py-space-xs"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" data-path="kho-thiep-mau" href="#">Kho thiệp mẫu</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" data-path="bang-gia" href="#">Bảng giá</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" data-path="tien-ich" href="#">Tiện ích</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" data-path="cap-doi-cau-chuyen" href="#">Cặp đôi &amp; Câu chuyện</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" data-path="huong-dan" href="#">Hướng dẫn</a></nav><div class="flex items-center gap-space-sm"><div class="hidden sm:flex items-center bg-surface-container-low rounded-full p-1"><button class="px-space-xs py-1 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm shadow-[0_1px_4px_rgba(0,0,0,0.05)]" type="button">VN</button><button class="px-space-xs py-1 rounded-full text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm" type="button">EN</button></div><a class="hidden md:inline-flex font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors px-space-sm py-space-xs" data-path="dang-nhap" href="#">Đăng nhập</a><a class="hidden lg:inline-flex font-label-lg text-label-lg text-secondary hover:text-on-surface transition-colors px-space-sm py-space-xs" data-path="dang-ky" href="#">Đăng ký</a><a class="inline-flex items-center justify-center font-label-lg text-label-lg text-on-primary bg-primary-container hover:bg-primary shadow-[0_4px_14px_rgba(244,63,94,0.3)] transition-all rounded-full px-space-lg py-space-sm" data-path="tao-thiep" href="#">Tạo thiệp ngay</a><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIC6rvWCTbITrUDgglD_XtAeuNoJjKYAqCH9LcvlW6Au6v_TApUDychmH07U_VEYJNFviN0b9Tp4Ov2mv-8ElfVrE-serzC0AVbScnKpwr-MmtW6Xyvnh_Yt3yVd83pkgEyUD338GTl4ypErUKBY34y0RjzeoIdxJCbdlxBht1ztXqKY3Edh1nfJJPkOo_xT39tWiojDxbLlVLCP7igmX43hZIcE18OMW6xkQhCIiZAGtUI6eY6TU0xw"></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full font-body-md text-on-surface bg-surface overflow-x-hidden">
+<!-- ==================== HERO SECTION ==================== -->
+<section class="relative w-full overflow-hidden bg-gradient-to-b from-surface-container-low via-surface to-surface pt-space-xl pb-space-3xl">
+<!-- Subtle Background Ambient Glows -->
+<div class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[720px] h-[720px] bg-primary-fixed/30 rounded-full blur-[140px] opacity-70"></div>
+<div class="pointer-events-none absolute top-1/3 -right-20 w-[420px] h-[420px] bg-secondary-container/40 rounded-full blur-[120px] opacity-60"></div>
+<div class="relative max-w-[1280px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center">
+<!-- Left: Copy & Actions -->
+<div class="lg:col-span-6 flex flex-col gap-space-md text-left z-10">
+<!-- Trust Badge -->
+<div class="inline-flex items-center gap-space-xs self-start px-space-md py-1.5 rounded-full bg-surface-container-lowest shadow-[0_2px_12px_rgba(244,63,94,0.08)]">
+<span class="flex h-2 w-2 rounded-full bg-primary animate-ping"></span>
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+<span class="font-label-sm text-label-sm text-on-surface">Số 1 nền tảng thiệp cưới điện tử • <strong class="text-primary font-bold">65.000+</strong> cặp đôi lựa chọn</span>
+</div>
+<!-- Main Catchy Headline -->
+<h1 class="font-display text-headline-xl md:text-display font-extrabold text-on-surface tracking-tight leading-[1.15]">
+            Tạo Thiệp Cưới &amp; Mời Online <br class="hidden sm:inline">
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary-container to-tertiary-container">Tinh Tế Trong 3 Phút</span>
+</h1>
+<!-- Subheadline -->
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+            Không cần kỹ năng đồ họa. Hơn 300+ thiết kế lãng mạn, chuẩn di động, tích hợp mở phong bì sáp niêm phong nghệ thuật, quản lý khách mời RSVP và mừng cưới qua mã QR tự động.
+          </p>
+<!-- CTAs -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-md pt-space-xs">
+<a class="group relative inline-flex items-center justify-center gap-space-xs font-headline-sm text-label-lg text-on-primary bg-primary-container hover:bg-primary shadow-[0_8px_24px_rgba(220,44,79,0.35)] transition-all duration-300 rounded-full px-space-xl py-4" href="#kho-thiep">
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:rotate-12">auto_awesome</span>
+<span class="">Tạo thiệp Miễn Phí ngay</span>
+<span class="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1">arrow_forward</span>
+</a>
+<a class="inline-flex items-center justify-center gap-space-xs font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container-high transition-colors shadow-sm rounded-full px-space-lg py-4" href="#kho-thiep">
+<span class="material-symbols-outlined text-[20px] text-primary">visibility</span>
+<span class="">Xem 200+ mẫu thiệp</span>
+</a>
+</div>
+<!-- Value Bullets -->
+<div class="flex flex-wrap items-center gap-x-space-lg gap-y-space-xs pt-space-sm text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[16px]">check_circle</span>
+<span class="">Hoàn toàn miễn phí khởi đầu</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[16px]">check_circle</span>
+<span class="">Không cần cài đặt ứng dụng</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[16px]">check_circle</span>
+<span class="">Chỉnh sửa tức thì 24/7</span>
+</div>
+</div>
+</div>
+<!-- Right: Realistic 3D Mockup Showcase -->
+<div class="lg:col-span-6 relative flex justify-center items-center mt-space-xl lg:mt-0">
+<!-- Decorative Stamp Badge Floating -->
+<div class="absolute -top-6 -left-4 sm:left-4 z-30 flex items-center gap-space-xs bg-surface-container-lowest/95 backdrop-blur-md px-space-md py-space-xs rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.08)]">
+<span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-primary">
+<span class="material-symbols-outlined text-[18px]">devices</span>
+</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface font-bold">Chuẩn đa nền tảng</span>
+<span class="text-[11px] text-on-surface-variant leading-none">Máy tính &amp; Di động sắc nét</span>
+</div>
+</div>
+<!-- Desktop Device Frame -->
+<div class="relative w-full max-w-[520px] bg-surface-container-lowest rounded-2xl shadow-[0_20px_50px_rgba(28,27,27,0.12)] p-3">
+<!-- Screen Header Bar -->
+<div class="flex items-center justify-between pb-2 px-1">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-error/70"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary-fixed-dim"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-fixed"></span>
+</div>
+<div class="text-[11px] text-on-surface-variant bg-surface-container px-3 py-0.5 rounded-full font-label-sm">
+                blisscard.vn/tuankiet-quynhanh
+              </div>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">music_note</span>
+</div>
+<!-- Screen Viewport: Wedding Hero Sample -->
+<div class="relative aspect-[16/10] rounded-xl overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="Romantic Asian newlywed couple in elegant wedding attire holding hands under fairy lights in an outdoor garden banquet at twilight. Soft focus bokeh, warm champagne rose glow, high editorial wedding photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR9_SdIkvVmnasC1_nnKHzQulOrKhyoT69LxMUSulPGeamK0hXwktle9ykDQd4JotN9hJvK8TgmAh_T_Ik1nRFZ-7F-P1IKGymfcihhHIhg7pIH-L5mkEwdQCXvnvq2PuWFjH1EnM_SchbQDCymCOzOZFGq2-TfKsTWRTvkZbFirEU67fjxcUO4tgZ6NtJycUgk4VGa5lG08Sm2nqysYljAeGvm3pLRBrs2rp4g31rD6QDZlMBX1_bQw">
+<!-- Translucent Overlay Card Content -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-space-md text-white">
+<span class="font-label-sm uppercase tracking-widest text-primary-fixed text-[11px]">Lễ Thành Hôn</span>
+<h3 class="font-headline-md text-headline-md font-bold text-white drop-shadow">Tuấn Kiệt &amp; Quỳnh Anh</h3>
+<p class="text-xs text-white/90">28 Tháng 12, 2025 • Trung tâm Hội nghị Riverside Palace, TP.HCM</p>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-[11px] font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">favorite</span> 128 Lời chúc
+                  </span>
+<span class="px-2.5 py-1 rounded-full bg-primary-container text-white text-[11px] font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">how_to_reg</span> RSVP Online
+                  </span>
+</div>
+</div>
+</div>
+<!-- Monitor Stand Base Accent -->
+<div class="w-24 h-3 bg-surface-container-highest mx-auto mt-2 rounded-b-lg"></div>
+</div>
+<!-- Mobile Floating Device (Overlapping Desktop for Visual Depth) -->
+<div class="absolute -bottom-8 -right-4 sm:right-0 w-[210px] md:w-[240px] bg-on-surface rounded-[32px] p-2.5 shadow-[0_24px_60px_rgba(185,5,56,0.22)] z-20">
+<!-- Dynamic Island Speaker Notch -->
+<div class="w-20 h-3.5 bg-black rounded-full mx-auto mb-2"></div>
+<!-- Mobile Screen: Realistic Wax Envelope Interaction -->
+<div class="relative bg-surface-container-low rounded-[24px] overflow-hidden p-space-sm flex flex-col items-center text-center shadow-inner">
+<span class="text-[10px] font-label-sm text-primary uppercase tracking-widest pt-1">Thiệp cưới trân trọng</span>
+<p class="font-headline-sm text-[15px] font-bold text-on-surface mt-1">Kính mời Quý Khách</p>
+<!-- Envelope Illustration Container -->
+<div class="relative w-full aspect-[4/3] bg-surface-container-lowest rounded-xl my-2 shadow-sm flex items-center justify-center overflow-hidden p-2">
+<div class="w-full h-full rounded-lg bg-surface-container-low flex flex-col items-center justify-center relative">
+<!-- Envelope Flap Illusion -->
+<div class="w-0 h-0 border-l-[60px] border-l-transparent border-r-[60px] border-r-transparent border-t-[44px] border-t-outline-variant/40 absolute top-0"></div>
+<!-- Golden Wax Seal Button -->
+<div class="w-11 h-11 rounded-full bg-gradient-to-br from-tertiary-container via-tertiary to-on-tertiary-fixed flex items-center justify-center text-surface-container-lowest shadow-md z-10 animate-bounce">
+<span class="material-symbols-outlined text-[20px]">mark_email_read</span>
+</div>
+<span class="text-[9px] text-on-surface-variant font-label-sm mt-2">Chạm để mở phong bì</span>
+</div>
+</div>
+<!-- Quick action on mobile -->
+<div class="w-full flex flex-col gap-1.5 mt-1">
+<button class="w-full py-1.5 rounded-full bg-primary-container text-white text-[11px] font-label-sm shadow-sm flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[13px]">wallet</span> Mừng Cưới QR
+                </button>
+<div class="flex items-center justify-center gap-2 text-[10px] text-on-surface-variant">
+<span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px] text-primary">map</span> Xem vị trí</span>
+<span class="">•</span>
+<span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px] text-primary">calendar_add_on</span> Lịch hẹn</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== SOCIAL PROOF & PARTNERS ==================== -->
+<section class="w-full bg-surface-container-lowest py-space-xl shadow-sm">
+<div class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin">
+<!-- 4 High Impact Counters -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-lg mb-space-xl pb-space-lg">
+<div class="flex flex-col items-center text-center p-space-sm rounded-2xl bg-surface-container-low/70">
+<span class="font-display text-headline-xl md:text-display font-extrabold text-primary">65.000+</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold mt-1">Cặp đôi tin cậy</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Gửi gắm ngày trọng đại</span>
+</div>
+<div class="flex flex-col items-center text-center p-space-sm rounded-2xl bg-surface-container-low/70">
+<span class="font-display text-headline-xl md:text-display font-extrabold text-primary">1.8 Triệu+</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold mt-1">Lượt khách mời mở thiệp</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tương tác mượt mà tức thì</span>
+</div>
+<div class="flex flex-col items-center text-center p-space-sm rounded-2xl bg-surface-container-low/70">
+<span class="font-display text-headline-xl md:text-display font-extrabold text-primary">99.8%</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold mt-1">Tỷ lệ hài lòng tuyệt đối</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Dựa trên phản hồi người dùng</span>
+</div>
+<div class="flex flex-col items-center text-center p-space-sm rounded-2xl bg-surface-container-low/70">
+<span class="font-display text-headline-xl md:text-display font-extrabold text-tertiary-container flex items-center justify-center gap-1">
+            4.9 <span class="material-symbols-outlined text-[32px] text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">star</span>
+</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold mt-1">Đánh giá 5 sao</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Top #1 nền tảng thiệp số</span>
+</div>
+</div>
+<!-- Trust Badges From Top Studios -->
+<div class="flex flex-col md:flex-row items-center justify-between gap-space-md pt-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-bold text-center md:text-left">
+          Được khuyên dùng bởi các tạp chí cưới &amp; thương hiệu hàng đầu:
+        </span>
+<div class="flex flex-wrap items-center justify-center gap-space-xl opacity-75 grayscale hover:grayscale-0 transition-all">
+<span class="font-headline-sm font-bold text-secondary tracking-tight">MARRY<span class="text-primary font-normal">.vn</span></span>
+<span class="font-headline-sm font-bold text-secondary tracking-wider">TuArt Wedding</span>
+<span class="font-headline-sm font-bold text-secondary tracking-tight">WEDDINGBOOK</span>
+<span class="font-headline-sm font-bold text-secondary tracking-tight">Kim Tuyến Bridal</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== KHO THIỆP MẪU NỔI BẬT ==================== -->
+<section class="w-full py-space-3xl bg-surface" id="kho-thiep">
+<div class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin">
+<!-- Section Title & Subtitle -->
+<div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-space-xl">
+<span class="px-space-md py-1 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-bold uppercase tracking-wider mb-space-xs">
+          Kho Mẫu Thiết Kế 2025
+        </span>
+<h2 class="font-headline-xl text-headline-xl md:text-headline-xl font-bold text-on-surface tracking-tight">
+          Bộ Sưu Tập Thiệp Mời Sang Trọng, Miễn Phí
+        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+          Hơn 200+ tác phẩm được các nghệ nhân thiết kế tỉ mỉ. Lựa chọn phong cách yêu thích và cá nhân hoá câu chuyện hạnh phúc của riêng bạn.
+        </p>
+</div>
+<!-- Category Filter Tabs -->
+<div class="flex items-center justify-start lg:justify-center gap-space-xs overflow-x-auto pb-space-sm mb-space-xl no-scrollbar">
+<button class="flex items-center gap-2 px-space-lg py-2.5 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">apps</span>
+<span class="">Tất cả (240+)</span>
+</button>
+<button class="flex items-center gap-2 px-space-lg py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-primary hover:bg-primary-fixed/40 transition-colors font-label-lg text-label-lg whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span class="">Đám cưới (Wedding)</span>
+</button>
+<button class="flex items-center gap-2 px-space-lg py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-primary hover:bg-primary-fixed/40 transition-colors font-label-lg text-label-lg whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">cake</span>
+<span class="">Sinh nhật &amp; Thôi nôi</span>
+</button>
+<button class="flex items-center gap-2 px-space-lg py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-primary hover:bg-primary-fixed/40 transition-colors font-label-lg text-label-lg whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">home</span>
+<span class="">Lễ Tân gia</span>
+</button>
+<button class="flex items-center gap-2 px-space-lg py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-primary hover:bg-primary-fixed/40 transition-colors font-label-lg text-label-lg whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">storefront</span>
+<span class="">Khai trương &amp; Sự kiện</span>
+</button>
+<button class="flex items-center gap-2 px-space-lg py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-primary hover:bg-primary-fixed/40 transition-colors font-label-lg text-label-lg whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">apartment</span>
+<span class="">Thiệp Doanh nghiệp</span>
+</button>
+</div>
+<!-- Template Cards Grid (4 Stunning Designs) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-lg">
+<!-- Card 1: Royal Rose Vintage -->
+<div class="group relative flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_36px_rgba(244,63,94,0.12)] transition-all duration-300 transform hover:-translate-y-1">
+<div class="relative aspect-[3/4] w-full bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Editorial wedding invitation sample card in romantic vintage rose aesthetic, delicate serif calligraphy typography, gold foil accents, pressed floral textures, elegant champagne border." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFDlD73VwQDyLbP_uHOU6cLji9efZfV99Pdp0i5h-f6AgvwGoJvr7wGW_I95YluShfVFEXiIEYVsK1VpqX_fXcAJ14pIOYb7U4SaktYqYWw5qOFvHxDLQDi7ZcuukOkVfIVQnvUK6e2WpAlrUwb1XzlDZt65dmgr7l0fdLJnD2aYiqYOgBsghL0bYSRwt9Rc2Yt-dHz73OjQ29mH_zomU_ljUy_hTDgqQH7UlBXfyJzdDuLaF3k5AFYQ">
+<div class="absolute top-3 left-3 flex gap-1.5">
+<span class="px-2.5 py-1 rounded-full bg-primary-container text-white font-label-sm text-[11px] font-bold shadow-sm">
+                Hot Trend
+              </span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface font-label-sm text-[11px] font-bold">
+                Miễn phí
+              </span>
+</div>
+<!-- Quick hover action overlay -->
+<div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-4">
+<button class="px-4 py-2 rounded-full bg-white text-on-surface font-label-sm text-label-sm shadow hover:bg-surface-container-low transition-colors">
+                Xem thử demo
+              </button>
+</div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1">
+<div>
+<div class="flex items-center justify-between text-xs text-on-surface-variant mb-1">
+<span class="">Phong cách Hoàng Gia</span>
+<span class="flex items-center text-primary font-bold"><span class="material-symbols-outlined text-[14px]">favorite</span> 2.4k</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Vintage Rose Romance</h3>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between">
+<span class="font-label-lg text-primary font-bold">0đ <span class="text-xs text-on-surface-variant line-through font-normal">150.000đ</span></span>
+<button class="px-3.5 py-1.5 rounded-full bg-primary-fixed text-primary hover:bg-primary-container hover:text-white transition-colors font-label-sm text-label-sm font-semibold">
+                Dùng mẫu này
+              </button>
+</div>
+</div>
+</div>
+<!-- Card 2: Minimalist Hàn Quốc Tinh Tế -->
+<div class="group relative flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_36px_rgba(244,63,94,0.12)] transition-all duration-300 transform hover:-translate-y-1">
+<div class="relative aspect-[3/4] w-full bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Korean minimalist wedding invitation aesthetic with modern airy white space, subtle blind deboss texture, delicate cursive script, soft blush pastel accents, portrait of couple in warm natural light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1vU0gGIKltQc671r9rGQy5xLXpJtdoFVAzX0ZAgtZ3fXe_nyhCE93j9L1vj6sf7adQeLM0NOG18b-rzV4QiaIMfwBDRPZ28P4FihYt1dro1mvhswpqpr_dASQX-grrmxGv32M7soxwzjTYwhV8gHsN-st1ubqjk4CS0G__tWukeec8n_TcMTZX8MIdifBDfklyDv7rU19rE4CZhNxV5qHWFteTKN0eFqF8r9Eg3uYJxXozxVSd4Nlrw">
+<div class="absolute top-3 left-3 flex gap-1.5">
+<span class="px-2.5 py-1 rounded-full bg-secondary text-white font-label-sm text-[11px] font-bold shadow-sm">
+                Mới ra mắt
+              </span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface font-label-sm text-[11px] font-bold">
+                Miễn phí
+              </span>
+</div>
+<div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-4">
+<button class="px-4 py-2 rounded-full bg-white text-on-surface font-label-sm text-label-sm shadow hover:bg-surface-container-low transition-colors">
+                Xem thử demo
+              </button>
+</div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1">
+<div>
+<div class="flex items-center justify-between text-xs text-on-surface-variant mb-1">
+<span class="">Minimalist Hàn Quốc</span>
+<span class="flex items-center text-primary font-bold"><span class="material-symbols-outlined text-[14px]">favorite</span> 1.9k</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Seoul Pastel Whisper</h3>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between">
+<span class="font-label-lg text-primary font-bold">0đ</span>
+<button class="px-3.5 py-1.5 rounded-full bg-primary-fixed text-primary hover:bg-primary-container hover:text-white transition-colors font-label-sm text-label-sm font-semibold">
+                Dùng mẫu này
+              </button>
+</div>
+</div>
+</div>
+<!-- Card 3: Luxury Vàng Kim & Trắng Ngọc Trai -->
+<div class="group relative flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_36px_rgba(217,119,6,0.18)] transition-all duration-300 transform hover:-translate-y-1">
+<div class="relative aspect-[3/4] w-full bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Luxury wedding invitation stationery card featuring metallic gold foil stamp lettering, embossed ivory pearl paper, monogram emblem of initials, wax seal ornament, high luxury banquet theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbYriF8-emacHvvoOYe2HHaZiRfjz_eamNcZbocOgEia8lnDaB6DkCP5mLODp9iD8ZmWXobpq40Ku4McUoFe-LKyMzwtdruCBTI8CuCoz7NwRpCzx_KX73KTgwSpgYfghxGWTZ6O-a-xIWrmmqGDiVTi57XlFHjAFwVKj4NbY3NX_T5mk89dA5FV3hJjOBymsmVdRAqArVejqFR8qgPXzHn6VGqbVDUtWr-wtNAGzHI0WCEkoklCQBMg">
+<div class="absolute top-3 left-3 flex gap-1.5">
+<span class="px-2.5 py-1 rounded-full bg-gradient-to-r from-tertiary-container to-tertiary text-white font-label-sm text-[11px] font-bold shadow-sm">
+                VIP Luxury
+              </span>
+</div>
+<div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-4">
+<button class="px-4 py-2 rounded-full bg-white text-on-surface font-label-sm text-label-sm shadow hover:bg-surface-container-low transition-colors">
+                Xem thử demo
+              </button>
+</div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1">
+<div>
+<div class="flex items-center justify-between text-xs text-on-surface-variant mb-1">
+<span class="">Vàng Kim Quý Tộc</span>
+<span class="flex items-center text-tertiary-container font-bold"><span class="material-symbols-outlined text-[14px]">star</span> 3.1k</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Golden Pearl Monogram</h3>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between">
+<span class="font-label-lg text-tertiary-container font-bold">VIP Gói Trọn Đời</span>
+<button class="px-3.5 py-1.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed hover:bg-tertiary-container hover:text-white transition-colors font-label-sm text-label-sm font-semibold">
+                Dùng mẫu này
+              </button>
+</div>
+</div>
+</div>
+<!-- Card 4: Floral Romance & Cánh Hoa Rơi -->
+<div class="group relative flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_36px_rgba(244,63,94,0.12)] transition-all duration-300 transform hover:-translate-y-1">
+<div class="relative aspect-[3/4] w-full bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Blooming botanical floral wedding card mockup with watercolor peony illustrations, organic deckled edge cotton paper, soft pink and sage green aesthetic, romantic music note icon." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYgOxudPQhV7z2BpQHtfl01IUjNnf7vKfe3o8L3r5Jto7lpTR08JEsRjx5osx3ur2NolShThyopJ3FcToaytRyUVah-sDRvgmjzwBFB_JkcUCAXvvwTUAT0GYYV5eGmnfrejCaqV5CVFomKAbPZjLXcd17DyxE-qHWlyWiNttaWCK-b7lq-jm8B27Mnv5TSv61Q1sZiWilJ_BHeRNWuVOV3HeUrrOI-HPCl91CwSCB5OJqp2cVBuKNhA">
+<div class="absolute top-3 left-3 flex gap-1.5">
+<span class="px-2.5 py-1 rounded-full bg-primary-container text-white font-label-sm text-[11px] font-bold shadow-sm">
+                Có Nhạc Nền
+              </span>
+</div>
+<div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-4">
+<button class="px-4 py-2 rounded-full bg-white text-on-surface font-label-sm text-label-sm shadow hover:bg-surface-container-low transition-colors">
+                Xem thử demo
+              </button>
+</div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1">
+<div>
+<div class="flex items-center justify-between text-xs text-on-surface-variant mb-1">
+<span class="">Hoa Cỏ Nhiệt Đới</span>
+<span class="flex items-center text-primary font-bold"><span class="material-symbols-outlined text-[14px]">favorite</span> 1.6k</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Botanical Peony Bliss</h3>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between">
+<span class="font-label-lg text-primary font-bold">0đ</span>
+<button class="px-3.5 py-1.5 rounded-full bg-primary-fixed text-primary hover:bg-primary-container hover:text-white transition-colors font-label-sm text-label-sm font-semibold">
+                Dùng mẫu này
+              </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom View All Action -->
+<div class="flex justify-center mt-space-2xl">
+<a class="inline-flex items-center gap-space-xs px-space-xl py-3.5 rounded-full bg-surface-container-lowest text-on-surface hover:text-primary shadow-sm hover:shadow-md transition-all font-label-lg text-label-lg" href="#">
+<span class="">Xem tất cả 200+ mẫu thiệp đa dạng</span>
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_right</span>
+</a>
+</div>
+</div>
+</section>
+<!-- ==================== NHỮNG TÍNH NĂNG ĐỘT PHÁ ==================== -->
+<section class="w-full py-space-3xl bg-surface-container-low relative">
+<div class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin">
+<!-- Section Header -->
+<div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-space-2xl">
+<span class="px-space-md py-1 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-bold uppercase tracking-wider mb-space-xs">
+          Công Nghệ Tiên Phong
+        </span>
+<h2 class="font-headline-xl text-headline-xl font-bold text-on-surface tracking-tight">
+          Những Điểm Vượt Trội Của meHappy
+        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+          Trải nghiệm gửi thiệp hiện đại, tiết kiệm 90% chi phí in ấn và đem lại cảm xúc trọn vẹn nhất cho khách mời của bạn.
+        </p>
+</div>
+<!-- 6 Glassmorphic Feature Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+<!-- Feature 1 -->
+<div class="group p-space-xl rounded-2xl bg-surface-container-lowest shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(244,63,94,0.08)] transition-all duration-300 flex flex-col">
+<div class="w-14 h-14 rounded-2xl bg-primary-fixed/50 flex items-center justify-center text-primary mb-space-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[28px]">timer</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-space-xs">
+            Tạo thiệp thần tốc trong 3 phút
+          </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            Trình kéo thả trực quan WYSIWYG cực kỳ mượt mà. Thay ảnh cưới, chỉnh sửa font chữ, thêm lời chúc dễ dàng trên điện thoại mà không cần học thiết kế.
+          </p>
+</div>
+<!-- Feature 2 -->
+<div class="group p-space-xl rounded-2xl bg-surface-container-lowest shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(244,63,94,0.08)] transition-all duration-300 flex flex-col">
+<div class="w-14 h-14 rounded-2xl bg-primary-fixed/50 flex items-center justify-center text-primary mb-space-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[28px]">qr_code_2</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-space-xs">
+            Mừng cưới qua mã QR thông minh
+          </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            Tích hợp VietQR, MoMo và ZaloPay tự động điền sẵn số tài khoản, tên cô dâu chú rể và lời chúc mừng, thuận tiện cho bạn bè ở xa mừng cưới tinh tế.
+          </p>
+</div>
+<!-- Feature 3 -->
+<div class="group p-space-xl rounded-2xl bg-surface-container-lowest shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(244,63,94,0.08)] transition-all duration-300 flex flex-col">
+<div class="w-14 h-14 rounded-2xl bg-primary-fixed/50 flex items-center justify-center text-primary mb-space-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[28px]">groups_3</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-space-xs">
+            Quản lý khách mời &amp; RSVP tự động
+          </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            Khách mời xác nhận có tham dự hay không, đăng ký số lượng người đi kèm và gửi lời chúc. Số liệu cập nhật ngay tức thì vào bảng tổng hợp tiệc cưới.
+          </p>
+</div>
+<!-- Feature 4 -->
+<div class="group p-space-xl rounded-2xl bg-surface-container-lowest shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(244,63,94,0.08)] transition-all duration-300 flex flex-col">
+<div class="w-14 h-14 rounded-2xl bg-primary-fixed/50 flex items-center justify-center text-primary mb-space-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[28px]">explore</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-space-xs">
+            Bản đồ thông minh &amp; Thêm vào Lịch
+          </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            Dẫn đường trực tiếp qua Google Maps chỉ với 1 chạm. Khách mời có thể dễ dàng đồng bộ sự kiện vào Google Calendar hoặc Apple Calendar để không bị quên ngày.
+          </p>
+</div>
+<!-- Feature 5 -->
+<div class="group p-space-xl rounded-2xl bg-surface-container-lowest shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(244,63,94,0.08)] transition-all duration-300 flex flex-col">
+<div class="w-14 h-14 rounded-2xl bg-primary-fixed/50 flex items-center justify-center text-primary mb-space-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[28px]">translate</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-space-xs">
+            Đa ngôn ngữ &amp; Nhạc nền lãng mạn
+          </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            Hỗ trợ hiển thị song ngữ Việt - Anh cho bạn bè quốc tế. Tùy chọn bài hát ballad yêu thích làm nhạc nền khi khách mở thiệp, kèm hiệu ứng hoa rơi sống động.
+          </p>
+</div>
+<!-- Feature 6 -->
+<div class="group p-space-xl rounded-2xl bg-surface-container-lowest shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(244,63,94,0.08)] transition-all duration-300 flex flex-col">
+<div class="w-14 h-14 rounded-2xl bg-primary-fixed/50 flex items-center justify-center text-primary mb-space-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[28px]">send</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-space-xs">
+            Gửi thiệp cá nhân hoá đa kênh
+          </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            Gắn tên riêng từng khách mời trên bìa thiệp (vd: "Kính mời Anh Hoàng"). Chia sẻ trực tiếp qua Zalo, Messenger, SMS và Email chỉ bằng 1 cú nhấp chuột.
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== BẢNG GIÁ MINH BẠCH & HẤP DẪN ==================== -->
+<section class="w-full py-space-3xl bg-surface relative">
+<div class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin">
+<!-- Section Header -->
+<div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-space-xl">
+<span class="px-space-md py-1 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-bold uppercase tracking-wider mb-space-xs">
+          Bảng Giá Minh Bạch
+        </span>
+<h2 class="font-headline-xl text-headline-xl font-bold text-on-surface tracking-tight">
+          Chi Phí Hợp Lý Cho Mọi Quy Mô Cưới
+        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+          Bắt đầu miễn phí trọn vẹn, nâng cấp dễ dàng khi bạn muốn có thêm tên miền riêng và hiệu ứng đỉnh cao.
+        </p>
+<!-- Toggle Mode -->
+<div class="inline-flex items-center p-1.5 rounded-full bg-surface-container-high mt-space-lg shadow-inner">
+<button class="px-space-lg py-2 rounded-full bg-surface-container-lowest text-primary font-label-lg text-label-lg font-bold shadow-sm">
+            Tự thiết kế trực tuyến
+          </button>
+<button class="px-space-lg py-2 rounded-full text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg transition-colors">
+            meHappy Thiết kế trọn gói A-Z
+          </button>
+</div>
+</div>
+<!-- 3 Tier Pricing Cards Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg items-stretch">
+<!-- Tier 1: BASIC -->
+<div class="flex flex-col justify-between p-space-xl rounded-3xl bg-surface-container-lowest shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="px-3 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface font-bold">CƠ BẢN</span>
+<span class="text-label-sm font-label-sm text-secondary font-bold">Dùng thử</span>
+</div>
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">BASIC</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Dành cho các thông báo tin vui đơn giản</p>
+<div class="my-space-lg">
+<span class="font-display text-headline-xl font-extrabold text-on-surface">Miễn phí</span>
+<span class="text-body-sm text-on-surface-variant block">Trải nghiệm không giới hạn</span>
+</div>
+<ul class="flex flex-col gap-3 font-body-sm text-body-sm text-on-surface">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">check_circle</span>
+<span class="">Trình thiết kế cơ bản nhanh gọn</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">check_circle</span>
+<span class="">Lưu trữ thiệp 6 tháng an toàn</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">check_circle</span>
+<span class="">Tối đa 50 lượt xác nhận RSVP</span>
+</li>
+<li class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[18px]">close</span>
+<span class="">Mã QR mừng cưới tích hợp</span>
+</li>
+<li class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[18px]">close</span>
+<span class="">Hiệu ứng mở phong bì sáp độc quyền</span>
+</li>
+</ul>
+</div>
+<div class="mt-space-2xl">
+<button class="w-full py-3.5 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-label-lg text-label-lg font-bold">
+              Tạo thiệp miễn phí
+            </button>
+</div>
+</div>
+<!-- Tier 2: PRO (POPULAR) -->
+<div class="relative flex flex-col justify-between p-space-xl rounded-3xl bg-surface-container-lowest shadow-[0_12px_40px_rgba(244,63,94,0.12)] transform lg:-translate-y-2">
+<!-- Floating badge -->
+<div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary-container text-white font-label-sm text-[12px] font-bold shadow-md">
+            Gói Phổ Biến Nhất
+          </div>
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="px-3 py-1 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-bold">PHỔ BIẾN</span>
+<span class="px-2.5 py-0.5 rounded-full bg-error-container text-error font-label-sm text-[11px] font-bold">-49%</span>
+</div>
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">PRO SPECIAL</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Lựa chọn lý tưởng cho 90% cặp đôi</p>
+<div class="my-space-lg">
+<div class="flex items-baseline gap-2">
+<span class="font-display text-headline-xl font-extrabold text-primary">190.000đ</span>
+<span class="text-body-sm text-on-surface-variant line-through">375.000đ</span>
+</div>
+<span class="text-body-sm text-on-surface-variant block">Thanh toán một lần duy nhất</span>
+</div>
+<ul class="flex flex-col gap-3 font-body-sm text-body-sm text-on-surface">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">check_circle</span>
+<span class="">Toàn quyền chỉnh sửa mẫu PRO cao cấp</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">check_circle</span>
+<span class="">Lưu trữ thiệp 2 năm trọn vẹn</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">check_circle</span>
+<span class="">RSVP không giới hạn khách mời</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">check_circle</span>
+<span class="">Mừng cưới qua mã QR VietQR &amp; MoMo</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">check_circle</span>
+<span class="">Nhạc nền lãng mạn &amp; hiệu ứng cánh hoa</span>
+</li>
+</ul>
+</div>
+<div class="mt-space-2xl">
+<button class="w-full py-4 rounded-full bg-primary-container hover:bg-primary text-white shadow-[0_8px_20px_rgba(220,44,79,0.3)] transition-all font-label-lg text-label-lg font-bold">
+              Chọn gói PRO ngay
+            </button>
+</div>
+</div>
+<!-- Tier 3: VIP LUXURY -->
+<div class="flex flex-col justify-between p-space-xl rounded-3xl bg-surface-container-lowest shadow-[0_12px_36px_rgba(217,119,6,0.12)]">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">workspace_premium</span> VIP LUXURY
+              </span>
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary-fixed-dim text-on-tertiary-fixed font-label-sm text-[11px] font-bold">-52%</span>
+</div>
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">VIP TRỌN ĐỜI</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Trải nghiệm thượng lưu và độc quyền nhất</p>
+<div class="my-space-lg">
+<div class="flex items-baseline gap-2">
+<span class="font-display text-headline-xl font-extrabold text-tertiary-container">290.000đ</span>
+<span class="text-body-sm text-on-surface-variant line-through">599.000đ</span>
+</div>
+<span class="text-body-sm text-on-surface-variant block">Lưu giữ kỷ niệm vĩnh viễn</span>
+</div>
+<ul class="flex flex-col gap-3 font-body-sm text-body-sm text-on-surface">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-tertiary-container">check_circle</span>
+<span class=""><strong>Lưu trữ vĩnh viễn trọn đời</strong></span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-tertiary-container">check_circle</span>
+<span class="">Mở khóa 100% thư viện mẫu VIP</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-tertiary-container">check_circle</span>
+<span class="">Tên miền riêng (vd: tuankiet.blisscard.vn)</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-tertiary-container">check_circle</span>
+<span class="">Hiệu ứng mở phong bì sáp vàng dập nổi</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-tertiary-container">check_circle</span>
+<span class="">Chuyên viên hỗ trợ chỉnh sửa riêng 1-1</span>
+</li>
+</ul>
+</div>
+<div class="mt-space-2xl">
+<button class="w-full py-3.5 rounded-full bg-gradient-to-r from-tertiary-container to-tertiary text-white shadow-[0_8px_20px_rgba(217,119,6,0.25)] hover:opacity-95 transition-all font-label-lg text-label-lg font-bold">
+              Nâng cấp VIP ngay
+            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== CẢM NHẬN CẶP ĐÔI THỰC TẾ ==================== -->
+<section class="w-full py-space-3xl bg-surface-container-low">
+<div class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin">
+<!-- Section Header -->
+<div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-space-2xl">
+<span class="px-space-md py-1 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-bold uppercase tracking-wider mb-space-xs">
+          Hạnh Phúc Lan Toả
+        </span>
+<h2 class="font-headline-xl text-headline-xl font-bold text-on-surface tracking-tight">
+          Cảm Nhận Từ Các Cặp Đôi
+        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+          Cùng lắng nghe những chia sẻ hạnh phúc từ hơn 65.000 cô dâu chú rể đã đồng hành cùng BlissCard / meHappy.
+        </p>
+</div>
+<!-- Testimonial Bento Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+<!-- Story 1 -->
+<div class="p-space-xl rounded-2xl bg-surface-container-lowest shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1 text-tertiary-container mb-space-sm">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface italic">
+              "Khách mời ai cũng khen tấm tắc vì thiệp mở phong bì quá đẹp! Bạn bè ở xa hay nước ngoài đều mừng cưới qua mã VietQR cực nhanh. Tiết kiệm cho tụi mình gần 6 triệu tiền in ấn thiệp giấy!"
+            </p>
+</div>
+<div class="flex items-center gap-space-sm mt-space-lg pt-space-sm">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Close-up portrait of Vietnamese bride and groom in white bridal dress smiling warmly on their wedding day." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVGlL-OUSzXGljNWAT5bF1YHoCWKpubf58FEmLRcosx0jVMQiq9Iiq9EiHwbbAVJzwOlAo4eo8hFtTjDn_DVPN9O_b1GIqsOAQANck9vQaCAMQX1kkITtCSDcKrzHcfst6nz8iF4kLXQZ-4-14Bufq1Fa_zhw5rMg3QhV9vd2N5TwOQikpbQzRWY-WQAShh-JMw-QVjXxyiMz5hiXM-OjFJB0HY_Vm6IS6txjhYdzJJbBEFN8O8KZLAw">
+<div>
+<h4 class="font-label-lg text-label-lg font-bold text-on-surface">Minh Trí &amp; Thảo Vy</h4>
+<span class="text-xs text-on-surface-variant">Lễ cưới tại White Palace, TP.HCM</span>
+</div>
+</div>
+</div>
+<!-- Story 2 -->
+<div class="p-space-xl rounded-2xl bg-surface-container-lowest shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1 text-tertiary-container mb-space-sm">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface italic">
+              "Tính năng RSVP giúp hai vợ chồng mình chốt danh sách bàn tiệc cực kỳ chuẩn xác, không bị dư thừa bàn tiệc nào. Bản đồ dẫn đường Google Maps rất tiện lợi cho bạn bè không rành đường."
+            </p>
+</div>
+<div class="flex items-center gap-space-sm mt-space-lg pt-space-sm">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Young Vietnamese wedding couple holding hands in wedding attire outdoor sunset portrait with gentle natural lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBUQuYxxEizuZmu_PzsXvTCpAmF4EmKnkogBdxjLO4qIFOz0rs3GUp9npvaNSQjD5z7SThDo51Ti8k3qX--whIWPda2oVx1PEHhy3aXuxTAIPX5gbsU4uUIqhph_2Beu0YdkA_n6miVKGiaCN0JSvPAa-er3eapSU9ZTWiV-CPI-UZv1ag3x2J4bRPuN2JQ7GWGsSoApGOfmA656vwlN5mGVsozR27Kb_E3ZP9RoP9D28zQHUtcDfeAg">
+<div>
+<h4 class="font-label-lg text-label-lg font-bold text-on-surface">Đình Văn &amp; Thuỳ Hoài</h4>
+<span class="text-xs text-on-surface-variant">Lễ cưới tại JW Marriott Hà Nội</span>
+</div>
+</div>
+</div>
+<!-- Story 3 -->
+<div class="p-space-xl rounded-2xl bg-surface-container-lowest shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1 text-tertiary-container mb-space-sm">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface italic">
+              "Mình dùng mẫu song ngữ Việt - Anh vì chú rể là người nước ngoài. Bạn bè quốc tế rất ấn tượng vì giao diện chuyển đổi mượt mà và bài hát nền lãng mạn. Rất đáng giá từng đồng!"
+            </p>
+</div>
+<div class="flex items-center gap-space-sm mt-space-lg pt-space-sm">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Romantic inter-cultural wedding couple laughing joyfully together on a sandy beach during destination wedding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNoP0IhgIUSzVeP7WNykmUQZiMB34XsIYn3es4O1FCBXJkrFqdVbC7wgY2_HNUMjm0asb74xY7xmRvpYdfULLrJkxngURJSTJfLvOuED5ndavI_VZbpzBDxahpBgNuqHsetKS8Ry8muv8ahIk5FIzdmhVuPSiLzRDrNhmv1UATkxZjck9VK7fpTIihLcux2sTAYMpZnyfDW17i8cIhQxCohNQdQry4a86uZfBPcfMtRB6SiPiwdkBRNg">
+<div>
+<h4 class="font-label-lg text-label-lg font-bold text-on-surface">Elena &amp; Hoàng Nam</h4>
+<span class="text-xs text-on-surface-variant">Lễ cưới bãi biển tại Đà Nẵng</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== FINAL CALL TO ACTION ==================== -->
+<section class="w-full py-space-3xl bg-surface relative overflow-hidden">
+<div class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin">
+<div class="relative rounded-3xl bg-gradient-to-br from-primary via-primary-container to-tertiary-container p-space-xl md:p-space-3xl text-center text-on-primary shadow-[0_20px_50px_rgba(185,5,56,0.3)] overflow-hidden">
+<!-- Decorative Ambient Rings -->
+<div class="pointer-events-none absolute -top-24 -right-24 w-80 h-80 rounded-full bg-white/10 blur-2xl"></div>
+<div class="pointer-events-none absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-black/10 blur-2xl"></div>
+
+</div>
+</div>
+</section>
+</div></main><footer class="w-full bg-surface-container-low pt-space-2xl pb-space-xl"><div class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-space-xl mb-space-2xl"><div class="lg:col-span-4 flex flex-col gap-space-sm"><div class="flex items-center gap-space-sm"><img alt="Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7XWIHErcPyZykvpptmILGOFEqE_3Eqk_P2jUzqGZeSHu4jIacplITNUWA2EnmU_eLOc3_qtvS_hYkiFsNigFQJsl6_-Qkg-_kxn3vbcgDPL17U4wn-Q6h22hGrbcHXi2ogzJEXVFMbVIVHKzs4Ds9ccEqaVk8JnhTd2AA1AntEdk01W7zHDi44fEn-Lr894C2Q4sY388aE05dpr5XLXPnoDO0uAm033OzI6xL_OG2PFkNPgJNNGEDRQ"><span class="font-headline-md text-headline-md text-primary font-bold tracking-tight">BlissCard</span></div><p class="font-body-md text-body-md text-on-surface-variant max-w-sm">Nền tảng tạo thiệp điện tử và thiệp cưới thông minh số 1 Việt Nam. Đồng hành cùng hàng triệu cặp đôi và sự kiện trọng đại với thiết kế lãng mạn, tinh tế và tương tác vượt trội.</p><div class="flex items-center gap-space-sm pt-space-sm"><span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-surface-container-lowest text-primary shadow-[0_1px_4px_rgba(0,0,0,0.06)]"><span class="material-symbols-outlined text-[18px]">favorite</span></span><span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-surface-container-lowest text-primary shadow-[0_1px_4px_rgba(0,0,0,0.06)]"><span class="material-symbols-outlined text-[18px]">share</span></span><span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-surface-container-lowest text-primary shadow-[0_1px_4px_rgba(0,0,0,0.06)]"><span class="material-symbols-outlined text-[18px]">mail</span></span></div></div><div class="lg:col-span-2 flex flex-col gap-space-sm"><h4 class="font-label-lg text-label-lg text-on-surface font-bold uppercase tracking-wider">Danh mục thiệp</h4><ul class="flex flex-col gap-space-xs"><li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors"><a href="#" class="">Thiệp cưới sang trọng</a></li><li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors"><a href="#" class="">Thiệp sinh nhật rực rỡ</a></li><li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors"><a href="#" class="">Thiệp chúc mừng khai trương</a></li><li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors"><a href="#" class="">Thiệp tân gia ấm cúng</a></li><li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors"><a href="#" class="">Sự kiện doanh nghiệp</a></li></ul></div><div class="lg:col-span-3 flex flex-col gap-space-sm"><h4 class="font-label-lg text-label-lg text-on-surface font-bold uppercase tracking-wider">Tính năng nổi bật</h4><ul class="flex flex-col gap-space-xs"><li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors"><a href="#" class="">Xác nhận RSVP tự động</a></li><li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors"><a href="#" class="">Mừng cưới qua QR MoMo &amp; Ngân hàng</a></li><li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors"><a href="#" class="">Tích hợp Google Map &amp; Thêm lịch</a></li><li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors"><a href="#" class="">Âm nhạc &amp; Lời chúc tương tác</a></li><li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors"><a href="#" class="">Hỗ trợ đa ngôn ngữ linh hoạt</a></li></ul></div><div class="lg:col-span-3 flex flex-col gap-space-sm"><h4 class="font-label-lg text-label-lg text-on-surface font-bold uppercase tracking-wider">Hỗ trợ &amp; Liên hệ</h4><div class="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[18px] text-primary">support_agent</span><span class="">Hotline 24/7: 1900 8888</span></div><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[18px] text-primary">chat</span><span class="">Zalo hỗ trợ CSKH: 0988 888 xxx</span></div><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[18px] text-primary">alternate_email</span><span class="">Email: support@blisscard.vn</span></div></div><div class="pt-space-xs flex flex-wrap gap-space-sm font-label-sm text-label-sm text-on-surface-variant"><a class="hover:text-primary" href="#">Điều khoản dịch vụ</a><span class="">•</span><a class="hover:text-primary" href="#">Chính sách bảo mật</a></div></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-on-surface-variant"><p class="">© 2025 BlissCard / meHappy Platform. Bản quyền được bảo lưu toàn diện.</p><p class="text-label-sm font-label-sm text-outline">Crafted with pure love &amp; celebratory elegance</p></div></div></footer></body></html>
