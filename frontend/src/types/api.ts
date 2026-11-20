@@ -97,7 +97,32 @@ export interface PublicCardResponse {
   viewCount: number;
 }
 
-export type AttendanceStatus = 'ATTENDING' | 'NOT_ATTENDING' | 'MAYBE';
+export type AttendanceStatus = 'ATTENDING' | 'DECLINED' | 'MAYBE';
+
+export interface SubmitWishPayload {
+  guestName: string;
+  attendanceStatus: AttendanceStatus;
+  guestCount: number;
+  message?: string;
+}
+
+export interface WishItemResponse {
+  id: number;
+  guestName: string;
+  attendanceStatus: AttendanceStatus;
+  guestCount: number;
+  message?: string | null;
+  createdAt: string;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  last: boolean;
+}
 
 export interface WishResponse {
   id: string;

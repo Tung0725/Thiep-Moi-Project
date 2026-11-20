@@ -1,4 +1,7 @@
 import { PageSchema } from '@/types/schema';
+import { pinTemplate } from '@/templates/registry';
+import minimalismTemplate from './templates/minimalism-do-dam.json';
+import songHyTemplate from './templates/song-hy-xanh.json';
 
 export interface TemplateDefinition {
   id: string;
@@ -25,7 +28,9 @@ export interface TemplateDefinition {
   schema: PageSchema;
 }
 
-export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
+const templates: TemplateDefinition[] = [
+  songHyTemplate as TemplateDefinition,
+  minimalismTemplate as TemplateDefinition,
   {
     id: 'hb04-basic',
     category: 'wedding',
@@ -50,7 +55,7 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
       coverImageUrl: '/templates/hb04/assets/77f50417-11dc-4fe7-aa0e-05bbe6d27a4f-full.webp',
     },
     schema: {
-      version: 1,
+      version: 2,
       layoutMode: 'STACK',
       theme: {
         primaryColor: '#A80606',
@@ -59,13 +64,14 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
         bodyFont: 'sans-serif',
       },
       effects: {
-        fallingType: 'PETALS',
+        fallingType: 'SNOW',
         musicUrl: '/templates/hb04/audio/4360425c-05a9-4611-8ba7-45da2c47ab1d.mp3',
         openingEffect: {
           enabled: true,
           leftImage: '/templates/hb04/opening/left-thiep.webp',
           rightImage: '/templates/hb04/opening/right-thiep.webp',
-          delayMs: 1200,
+          delayMs: 500,
+          durationMs: 1350,
         },
       },
       blocks: [
@@ -73,8 +79,8 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
           id: 'hero-1',
           type: 'HERO',
           props: {
-            title: 'SAVE THE DATE',
-            subtitle: 'Trân trọng kính mời quý khách đến dự lễ thành hôn của',
+            title: 'Save The Date',
+            subtitle: 'For The Wedding Of',
             groomName: 'Văn Bách',
             brideName: 'Khánh Ly',
             eventDate: '25 . 12 . 2026',
@@ -86,37 +92,31 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
           type: 'COUPLE',
           props: {
             sectionTitle: 'Chú Rể & Cô Dâu',
+            weddingDateText: 'Ngày 25 Tháng 12 Năm 2026',
             quote:
-              'Hôn nhân không phải là nơi thuyền tình cập bến, mà là nơi hai người quyết định cùng giăng buồm vượt sóng ra khơi.',
+              'Hôn nhân không phải là nơi thuyền tình cập bến,mà là nơi hai người quyết định cùng giăng buồm vượt sóng ra khơi.',
             groom: {
               name: 'Hà Văn Bách',
+              displayName: 'Văn Bách',
               role: 'GROOM',
               photoUrl: '/templates/hb04/assets/59d63e36-3928-4799-8298-717958d7a52e-full.webp',
               fatherName: 'Hà Văn Nam',
               motherName: 'Bùi Thị Như',
-              address: 'Thôn Trong, Xã Đông Phú, Huyện Lục Nam, Tỉnh Bắc Giang',
+              address: 'Thôn Trong, Xã Đông Phú Huyện Lục Nam, Tỉnh Bắc Giang',
               storyQuote:
-                'Anh chưa từng nghĩ mình có thể dành nhiều cảm xúc cho một người đến thế, rồi anh nhận ra điều đó khi gặp và yêu em. Yêu em và chung đôi bên cạnh em là cảm giác tuyệt vời nhất đối với anh.',
+                'Anh chưa từng nghĩ mình có thể dành nhiều cảm xúc cho một người đến thế, rồi anh nhận ra điều đó khi gặp và yêu em. Yêu em và chung đôi bên cạnh em là cảm giác tuyệt vời nhất đối với anh. Em chính là nguồn động lực tích cực để anh luôn cố gắng cho tương lai hai đứa mình. Nhân sinh là vô thường. Không cầu sẽ ổn định, chỉ cầu được sống là chính mình, cùng em.',
             },
             bride: {
               name: 'Lưu Khánh Ly',
+              displayName: 'Khánh Ly',
               role: 'BRIDE',
               photoUrl: '/templates/hb04/assets/c5528130-cef8-4fdc-8a0b-1aac3443e480-full.webp',
               fatherName: 'Lưu Hoàng Hải',
               motherName: 'Đỗ Thị Hảo',
-              address: 'Xã Tam Dị, Huyện Lục Nam, Tỉnh Bắc Giang',
+              address: 'Xã Tam Dị, Huyện Lục Nam Tỉnh Bắc Giang',
               storyQuote:
-                'Có điều này chắc chắn anh chưa bao giờ nghĩ tới, đó là lúc chúng ta mới bắt đầu em đã biết mình sẽ về chung một nhà. Ở thời điểm phù hợp nhất, mặc lên người bộ váy cưới đẹp nhất, gả cho người đáng tin cậy nhất, người đó chỉ có thể… là anh.',
+                'Có điều này chắc chắn anh chưa bao giờ nghĩ tới, đó là lúc chúng ta mới bắt đầu em đã biết mình sẽ về chung một nhà. Chưa bao giờ em cảm thấy mình được yêu, mình được thương và được trân trọng khi ở cạnh một người như thế! Ngày chung đôi là ngày em hạnh phúc nhất!\nỞ thời điểm phù hợp nhất, mặc lên người bộ váy cưới đẹp nhất, gả cho người đáng tin cậy nhất, người đó chỉ có thể… là anh.',
             },
-          },
-        },
-        {
-          id: 'countdown-1',
-          type: 'COUNTDOWN',
-          props: {
-            title: 'Cùng Đếm Ngược Ngày Chung Đôi',
-            description: 'Từng giây từng phút hướng về ngày hạnh phúc nhất của hai đứa mình',
-            targetDate: '2026-12-25T16:00:00',
           },
         },
         {
@@ -126,37 +126,37 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
             title: 'Sự Kiện Cưới',
             groomEvents: [
               {
-                title: 'Tiệc Cưới Nhà Trai',
+                title: 'TIỆC CƯỚI NHÀ TRAI',
                 timeText: 'Vào Lúc 16:00 Thứ Bảy',
                 dateText: 'Ngày 24/12/2026',
                 locationName: 'Tư Gia Nhà Trai',
-                address: 'Thôn Trong, Xã Đông Phú, Huyện Lục Nam, Tỉnh Bắc Giang',
+                address: 'Thôn Trong, Xã Đông Phú\nHuyện Lục Nam Tỉnh Bắc Giang',
                 illustrationUrl: '/templates/hb04/assets/83f091a9-45ce-4560-8ac8-085190c752cd-full.webp',
               },
               {
-                title: 'Lễ Thành Hôn',
+                title: 'LỄ THÀNH HÔN',
                 timeText: 'Vào Lúc 16:00 Thứ Bảy',
                 dateText: 'Ngày 24/12/2026',
                 locationName: 'Tư Gia Nhà Trai',
-                address: 'Thôn Trong, Xã Đông Phú, Huyện Lục Nam, Tỉnh Bắc Giang',
+                address: 'Thôn Trong, Xã Đông Phú\nHuyện Lục Nam Tỉnh Bắc Giang',
                 illustrationUrl: '/templates/hb04/assets/74f60f44-0ddd-4624-a57b-864692d07b67-full.webp',
               },
             ],
             brideEvents: [
               {
-                title: 'Tiệc Cưới Nhà Gái',
+                title: 'TIỆC CƯỚI NHÀ GÁI',
                 timeText: 'Vào Lúc 16:00 Thứ Bảy',
                 dateText: 'Ngày 24/12/2026',
-                locationName: 'Tư Gia Nhà Gái',
-                address: 'Xã Tam Dị, Huyện Lục Nam, Tỉnh Bắc Giang',
+                locationName: 'Tư Gia Nhà Trai',
+                address: 'Thôn Trong, Xã Đông Phú\nHuyện Lục Nam Tỉnh Bắc Giang',
                 illustrationUrl: '/templates/hb04/assets/83f091a9-45ce-4560-8ac8-085190c752cd-full.webp',
               },
               {
-                title: 'Lễ Vu Quy',
+                title: 'LỄ VU QUY',
                 timeText: 'Vào Lúc 16:00 Thứ Bảy',
                 dateText: 'Ngày 24/12/2026',
-                locationName: 'Tư Gia Nhà Gái',
-                address: 'Xã Tam Dị, Huyện Lục Nam, Tỉnh Bắc Giang',
+                locationName: 'Tư Gia Nhà Trai',
+                address: 'Thôn Trong, Xã Đông Phú\nHuyện Lục Nam Tỉnh Bắc Giang',
                 illustrationUrl: '/templates/hb04/assets/74f60f44-0ddd-4624-a57b-864692d07b67-full.webp',
               },
             ],
@@ -167,16 +167,15 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
           type: 'GALLERY',
           props: {
             title: 'Album Ảnh Cưới',
-            subtitle: 'Khoảnh khắc ngọt ngào ghi dấu tình yêu đôi lứa',
             images: [
               '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
               '/templates/hb04/assets/52f38fef-91a8-49b5-bff3-bb7303e1a59b-full.webp',
-              '/templates/hb04/assets/77f50417-11dc-4fe7-aa0e-05bbe6d27a4f-full.webp',
-              '/templates/hb04/assets/59d63e36-3928-4799-8298-717958d7a52e-full.webp',
-              '/templates/hb04/assets/c5528130-cef8-4fdc-8a0b-1aac3443e480-full.webp',
-              '/templates/hb04/assets/125452c0-c29d-4f76-a9a9-ce5a1bc158c9-full.webp',
-              '/templates/hb04/assets/75c863c2-a372-4fca-8fa5-335d3a30795e-full.webp',
-              '/templates/hb04/assets/83f091a9-45ce-4560-8ac8-085190c752cd-full.webp',
+              '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
+              '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
+              '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
+              '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
+              '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
+              '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
             ],
           },
         },
@@ -185,20 +184,21 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
           type: 'GIFTBOX',
           props: {
             title: 'Hộp Mừng Cưới',
-            subtitle: 'Gửi món quà chúc phúc cho ngày vui của chúng mình',
+            groomPhotoUrl: '/templates/hb04/assets/59d63e36-3928-4799-8298-717958d7a52e-full.webp',
+            bridePhotoUrl: '/templates/hb04/assets/c5528130-cef8-4fdc-8a0b-1aac3443e480-full.webp',
             groomAccount: {
               ownerName: 'HÀ VĂN BÁCH',
               bankName: 'MB Bank (Quân Đội)',
               accountNumber: '0988123456',
               qrCodeUrl: '/templates/hb04/assets/c5fb8762-18cf-4bf1-97cb-483930f0c75b.webp',
-              label: 'Mừng Cưới Chú Rể',
+              label: 'MỪNG CƯỚI CHÚ RỂ',
             },
             brideAccount: {
               ownerName: 'LƯU KHÁNH LY',
               bankName: 'Techcombank',
               accountNumber: '190366889988',
               qrCodeUrl: '/templates/hb04/assets/c5fb8762-18cf-4bf1-97cb-483930f0c75b.webp',
-              label: 'Mừng Cưới Cô Dâu',
+              label: 'MỪNG CƯỚI CÔ DÂU',
             },
           },
         },
@@ -248,7 +248,7 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
       coverImageUrl: '/templates/hb04/assets/77f50417-11dc-4fe7-aa0e-05bbe6d27a4f-full.webp',
     },
     schema: {
-      version: 1,
+      version: 2,
       layoutMode: 'STACK',
       theme: {
         primaryColor: '#A80606',
@@ -257,13 +257,14 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
         bodyFont: 'sans-serif',
       },
       effects: {
-        fallingType: 'PETALS',
+        fallingType: 'SNOW',
         musicUrl: '/templates/hb04/audio/4360425c-05a9-4611-8ba7-45da2c47ab1d.mp3',
         openingEffect: {
           enabled: true,
           leftImage: '/templates/hb04/opening/left-thiep.webp',
           rightImage: '/templates/hb04/opening/right-thiep.webp',
-          delayMs: 1200,
+          delayMs: 500,
+          durationMs: 1350,
         },
       },
       blocks: [
@@ -271,8 +272,8 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
           id: 'hero-145',
           type: 'HERO',
           props: {
-            title: 'SAVE THE DATE',
-            subtitle: 'Trân trọng kính mời quý khách đến dự lễ thành hôn của',
+            title: 'Save The Date',
+            subtitle: 'For The Wedding Of',
             groomName: 'Văn Bách',
             brideName: 'Khánh Ly',
             eventDate: '25 . 12 . 2026',
@@ -284,37 +285,31 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
           type: 'COUPLE',
           props: {
             sectionTitle: 'Chú Rể & Cô Dâu',
+            weddingDateText: 'Ngày 25 Tháng 12 Năm 2026',
             quote:
-              'Hôn nhân không phải là nơi thuyền tình cập bến, mà là nơi hai người quyết định cùng giăng buồm vượt sóng ra khơi.',
+              'Hôn nhân không phải là nơi thuyền tình cập bến,mà là nơi hai người quyết định cùng giăng buồm vượt sóng ra khơi.',
             groom: {
               name: 'Hà Văn Bách',
+              displayName: 'Văn Bách',
               role: 'GROOM',
               photoUrl: '/templates/hb04/assets/59d63e36-3928-4799-8298-717958d7a52e-full.webp',
               fatherName: 'Hà Văn Nam',
               motherName: 'Bùi Thị Như',
-              address: 'Thôn Trong, Xã Đông Phú, Huyện Lục Nam, Tỉnh Bắc Giang',
+              address: 'Thôn Trong, Xã Đông Phú Huyện Lục Nam, Tỉnh Bắc Giang',
               storyQuote:
-                'Anh chưa từng nghĩ mình có thể dành nhiều cảm xúc cho một người đến thế, rồi anh nhận ra điều đó khi gặp và yêu em. Yêu em và chung đôi bên cạnh em là cảm giác tuyệt vời nhất đối với anh.',
+                'Anh chưa từng nghĩ mình có thể dành nhiều cảm xúc cho một người đến thế, rồi anh nhận ra điều đó khi gặp và yêu em. Yêu em và chung đôi bên cạnh em là cảm giác tuyệt vời nhất đối với anh. Em chính là nguồn động lực tích cực để anh luôn cố gắng cho tương lai hai đứa mình. Nhân sinh là vô thường. Không cầu sẽ ổn định, chỉ cầu được sống là chính mình, cùng em.',
             },
             bride: {
               name: 'Lưu Khánh Ly',
+              displayName: 'Khánh Ly',
               role: 'BRIDE',
               photoUrl: '/templates/hb04/assets/c5528130-cef8-4fdc-8a0b-1aac3443e480-full.webp',
               fatherName: 'Lưu Hoàng Hải',
               motherName: 'Đỗ Thị Hảo',
-              address: 'Xã Tam Dị, Huyện Lục Nam, Tỉnh Bắc Giang',
+              address: 'Xã Tam Dị, Huyện Lục Nam Tỉnh Bắc Giang',
               storyQuote:
-                'Có điều này chắc chắn anh chưa bao giờ nghĩ tới, đó là lúc chúng ta mới bắt đầu em đã biết mình sẽ về chung một nhà. Ở thời điểm phù hợp nhất, mặc lên người bộ váy cưới đẹp nhất, gả cho người đáng tin cậy nhất, người đó chỉ có thể… là anh.',
+                'Có điều này chắc chắn anh chưa bao giờ nghĩ tới, đó là lúc chúng ta mới bắt đầu em đã biết mình sẽ về chung một nhà. Chưa bao giờ em cảm thấy mình được yêu, mình được thương và được trân trọng khi ở cạnh một người như thế! Ngày chung đôi là ngày em hạnh phúc nhất!\nỞ thời điểm phù hợp nhất, mặc lên người bộ váy cưới đẹp nhất, gả cho người đáng tin cậy nhất, người đó chỉ có thể… là anh.',
             },
-          },
-        },
-        {
-          id: 'countdown-145',
-          type: 'COUNTDOWN',
-          props: {
-            title: 'Cùng Đếm Ngược Ngày Chung Đôi',
-            description: 'Từng giây từng phút hướng về ngày hạnh phúc nhất của hai đứa mình',
-            targetDate: '2026-12-25T16:00:00',
           },
         },
         {
@@ -324,37 +319,37 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
             title: 'Sự Kiện Cưới',
             groomEvents: [
               {
-                title: 'Tiệc Cưới Nhà Trai',
+                title: 'TIỆC CƯỚI NHÀ TRAI',
                 timeText: 'Vào Lúc 16:00 Thứ Bảy',
                 dateText: 'Ngày 24/12/2026',
                 locationName: 'Tư Gia Nhà Trai',
-                address: 'Thôn Trong, Xã Đông Phú, Huyện Lục Nam, Tỉnh Bắc Giang',
+                address: 'Thôn Trong, Xã Đông Phú\nHuyện Lục Nam Tỉnh Bắc Giang',
                 illustrationUrl: '/templates/hb04/assets/83f091a9-45ce-4560-8ac8-085190c752cd-full.webp',
               },
               {
-                title: 'Lễ Thành Hôn',
+                title: 'LỄ THÀNH HÔN',
                 timeText: 'Vào Lúc 16:00 Thứ Bảy',
                 dateText: 'Ngày 24/12/2026',
                 locationName: 'Tư Gia Nhà Trai',
-                address: 'Thôn Trong, Xã Đông Phú, Huyện Lục Nam, Tỉnh Bắc Giang',
+                address: 'Thôn Trong, Xã Đông Phú\nHuyện Lục Nam Tỉnh Bắc Giang',
                 illustrationUrl: '/templates/hb04/assets/74f60f44-0ddd-4624-a57b-864692d07b67-full.webp',
               },
             ],
             brideEvents: [
               {
-                title: 'Tiệc Cưới Nhà Gái',
+                title: 'TIỆC CƯỚI NHÀ GÁI',
                 timeText: 'Vào Lúc 16:00 Thứ Bảy',
                 dateText: 'Ngày 24/12/2026',
-                locationName: 'Tư Gia Nhà Gái',
-                address: 'Xã Tam Dị, Huyện Lục Nam, Tỉnh Bắc Giang',
+                locationName: 'Tư Gia Nhà Trai',
+                address: 'Thôn Trong, Xã Đông Phú\nHuyện Lục Nam Tỉnh Bắc Giang',
                 illustrationUrl: '/templates/hb04/assets/83f091a9-45ce-4560-8ac8-085190c752cd-full.webp',
               },
               {
-                title: 'Lễ Vu Quy',
+                title: 'LỄ VU QUY',
                 timeText: 'Vào Lúc 16:00 Thứ Bảy',
                 dateText: 'Ngày 24/12/2026',
-                locationName: 'Tư Gia Nhà Gái',
-                address: 'Xã Tam Dị, Huyện Lục Nam, Tỉnh Bắc Giang',
+                locationName: 'Tư Gia Nhà Trai',
+                address: 'Thôn Trong, Xã Đông Phú\nHuyện Lục Nam Tỉnh Bắc Giang',
                 illustrationUrl: '/templates/hb04/assets/74f60f44-0ddd-4624-a57b-864692d07b67-full.webp',
               },
             ],
@@ -365,16 +360,15 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
           type: 'GALLERY',
           props: {
             title: 'Album Ảnh Cưới',
-            subtitle: 'Khoảnh khắc ngọt ngào ghi dấu tình yêu đôi lứa',
             images: [
               '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
               '/templates/hb04/assets/52f38fef-91a8-49b5-bff3-bb7303e1a59b-full.webp',
-              '/templates/hb04/assets/77f50417-11dc-4fe7-aa0e-05bbe6d27a4f-full.webp',
-              '/templates/hb04/assets/59d63e36-3928-4799-8298-717958d7a52e-full.webp',
-              '/templates/hb04/assets/c5528130-cef8-4fdc-8a0b-1aac3443e480-full.webp',
-              '/templates/hb04/assets/125452c0-c29d-4f76-a9a9-ce5a1bc158c9-full.webp',
-              '/templates/hb04/assets/75c863c2-a372-4fca-8fa5-335d3a30795e-full.webp',
-              '/templates/hb04/assets/83f091a9-45ce-4560-8ac8-085190c752cd-full.webp',
+              '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
+              '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
+              '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
+              '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
+              '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
+              '/templates/hb04/assets/21f2743d-5a44-43b0-ab13-41653668eefb-full.webp',
             ],
           },
         },
@@ -383,20 +377,21 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
           type: 'GIFTBOX',
           props: {
             title: 'Hộp Mừng Cưới',
-            subtitle: 'Gửi món quà chúc phúc cho ngày vui của chúng mình',
+            groomPhotoUrl: '/templates/hb04/assets/59d63e36-3928-4799-8298-717958d7a52e-full.webp',
+            bridePhotoUrl: '/templates/hb04/assets/c5528130-cef8-4fdc-8a0b-1aac3443e480-full.webp',
             groomAccount: {
               ownerName: 'HÀ VĂN BÁCH',
               bankName: 'MB Bank (Quân Đội)',
               accountNumber: '0988123456',
               qrCodeUrl: '/templates/hb04/assets/c5fb8762-18cf-4bf1-97cb-483930f0c75b.webp',
-              label: 'Mừng Cưới Chú Rể',
+              label: 'MỪNG CƯỚI CHÚ RỂ',
             },
             brideAccount: {
               ownerName: 'LƯU KHÁNH LY',
               bankName: 'Techcombank',
               accountNumber: '190366889988',
               qrCodeUrl: '/templates/hb04/assets/c5fb8762-18cf-4bf1-97cb-483930f0c75b.webp',
-              label: 'Mừng Cưới Cô Dâu',
+              label: 'MỪNG CƯỚI CÔ DÂU',
             },
           },
         },
@@ -585,3 +580,5 @@ export const DEFAULT_TEMPLATES: TemplateDefinition[] = [
     },
   },
 ];
+
+export const DEFAULT_TEMPLATES = templates.map(template => ({ ...template, schema: pinTemplate(template.schema) }));

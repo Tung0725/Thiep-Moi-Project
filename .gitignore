@@ -72,6 +72,13 @@ dist/
 *.tsbuildinfo
 next-env.d.ts
 
+# Python extractor caches and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
 # Package manager logs
 npm-debug.log*
 yarn-debug.log*
@@ -92,5 +99,18 @@ lerna-debug.log*
 # ==========================================
 # 5. Project Specific Exclusions
 # ==========================================
-web_cloned/
-.agents/
+/web_cloned/
+/.agents/
+/my-archiving-session/
+/extracted_templates/*
+
+# Keep reusable source-capture tools; captures, archives and browser profiles stay local.
+!/extracted_templates/capture-blueprint.mjs
+!/extracted_templates/capture-trees.mjs
+
+# Generated file-by-file cleanup inventories
+/.local-inventory/
+*.warc
+*.warc.gz
+*.wacz
+# tools/ contains maintained extraction/import scripts and documentation; keep it in Git.

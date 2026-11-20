@@ -70,7 +70,7 @@ export default function PublicInvitationPage({ params }: PublicInvitationPagePro
         if (matchedTemplate) {
           setSchema(matchedTemplate.schema);
         } else {
-          setSchema(DEFAULT_TEMPLATES[0].schema);
+          setSchema(null);
         }
         setIsLoading(false);
       }
@@ -121,10 +121,10 @@ export default function PublicInvitationPage({ params }: PublicInvitationPagePro
   }
 
   return (
-    <div className="min-h-screen w-full relative flex flex-col items-center justify-start bg-[#1a1c23]">
-      {/* Centered Mobile Canvas Viewport Container */}
-      <div className="w-full max-w-md mx-auto min-h-screen bg-white dark:bg-[#121420] shadow-2xl relative flex flex-col pb-20">
-        <PageRenderer schema={schema} slug={slug} />
+    <div className="min-h-screen w-full relative flex flex-col items-center justify-start bg-white">
+      {/* Centered 400px Mobile Canvas Viewport Container (matching meHappy mobilePageBackgroundColor: #ffffff) */}
+      <div className="w-full mx-auto min-h-screen relative flex flex-col pb-20">
+        <PageRenderer schema={schema} slug={slug}  />
       </div>
 
       {/* Floating Bottom Social Action Bar */}

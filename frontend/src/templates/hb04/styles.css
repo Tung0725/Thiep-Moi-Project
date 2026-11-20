@@ -1,0 +1,83 @@
+/* ==============================================================================
+ * Wedding Calligraphy & Script Fonts (Authentic cloned meHappy typography)
+ * ============================================================================== */
+@font-face {
+  font-family: 'GreatVibes';
+  src: url('/templates/hb04/fonts/GreatVibes-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UVNHoaTay1';
+  src: url('/templates/hb04/fonts/UVNHoaTay1.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UVNHoaTay1';
+  src: url('/templates/hb04/fonts/UVNHoaTay1.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UVNMoiHong';
+  src: url('/templates/hb04/fonts/UVNMoiHong.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SVNMagellin';
+  src: url('/templates/hb04/fonts/SVN-Magellin.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ballet';
+  src: url('/templates/hb04/fonts/Ballet_60pt-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Wedding Font Utilities */
+.hb04-template .font-greatvibes {
+  font-family: var(--hb04-heading, 'GreatVibes'), cursive, serif !important;
+}
+
+.hb04-template .font-hoatay {
+  font-family: 'UVNHoaTay1', cursive, serif !important;
+}
+
+.hb04-template .font-moihong {
+  font-family: 'UVNMoiHong', cursive, serif !important;
+}
+
+.hb04-template .font-magellin {
+  font-family: 'SVNMagellin', serif !important;
+}
+
+.hb04-template .font-ballet {
+  font-family: 'Ballet', cursive, serif !important;
+}
+
+.hb04-template .font-quicksand {
+  font-family: 'Quicksand', sans-serif !important;
+}
+
+.hb04-template .font-sourcesans {
+  font-family: var(--hb04-body, 'Source Sans 3'), sans-serif !important;
+}
+
+.hb04-template [class~="bg-[#A80606]"] { background-color: var(--template-primary) !important; }
+.hb04-template [class~="text-[#A80606]"] { color: var(--template-primary) !important; }
+.hb04-template [class~="bg-white"] { background-color: var(--hb04-background, white); }

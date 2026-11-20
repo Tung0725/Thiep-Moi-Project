@@ -16,7 +16,8 @@ export type BlockType =
   | 'COUPLE'
   | 'EVENTS'
   | 'GIFTBOX'
-  | 'THANKYOU';
+  | 'THANKYOU'
+  | (string & {});
 
 export interface ElementLayout {
   x?: number;
@@ -64,6 +65,7 @@ export interface GalleryBlockProps {
 
 export interface CoupleMemberInfo {
   name: string;
+  displayName?: string;
   role: 'GROOM' | 'BRIDE';
   photoUrl: string;
   fatherName?: string;
@@ -77,6 +79,7 @@ export interface CoupleBlockProps {
   bride: CoupleMemberInfo;
   quote?: string;
   sectionTitle?: string;
+  weddingDateText?: string;
 }
 
 export interface SingleEventItem {
@@ -94,6 +97,9 @@ export interface EventsBlockProps {
   title?: string;
   groomEvents: SingleEventItem[];
   brideEvents: SingleEventItem[];
+  receptionTime?: string;
+  dressCodeColors?: string[];
+  timeline?: { time: string; label: string }[];
 }
 
 export interface BankAccountInfo {
@@ -109,6 +115,8 @@ export interface GiftBoxBlockProps {
   subtitle?: string;
   groomAccount?: BankAccountInfo;
   brideAccount?: BankAccountInfo;
+  groomPhotoUrl?: string;
+  bridePhotoUrl?: string;
 }
 
 export interface ThankYouBlockProps {
@@ -138,6 +146,7 @@ export interface UIBlock<T = Record<string, unknown>> {
 }
 
 export interface ThemeConfig {
+  design?: 'MINIMALISM_DARK_RED';
   primaryColor: string;
   backgroundColor: string;
   headingFont: string;
@@ -159,6 +168,7 @@ export interface EffectsConfig {
 }
 
 export interface PageSchema {
+  template?: { id: string; version: number };
   version: number;
   layoutMode: LayoutMode;
   theme: ThemeConfig;
