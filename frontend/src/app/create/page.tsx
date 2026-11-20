@@ -9,8 +9,11 @@ import { slugify } from '@/lib/utils';
 import { invitationService } from '@/services/invitationService';
 import BrandLogo from '@/components/common/BrandLogo';
 import { PageRenderer } from '@/components/renderer/PageRenderer';
+import { pinTemplate, resolveTemplate } from '@/templates/registry';
+import TemplateControls from '@/templates/TemplateControls';
+import { templateService } from '@/services/templateService';
 
-interface FormDataState {
+interface FormDataState extends Record<string, string> {
   groomName: string;
   brideName: string;
   groomPhone: string;
@@ -22,6 +25,7 @@ interface FormDataState {
   coverImageUrl: string;
 }
 
+/** Package fields and personalization drive the editor; state holds loaded defaults, live edits and submission feedback. */
 function CreateInvitationContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,6 +34,7 @@ function CreateInvitationContent() {
   const [template, setTemplate] = useState<TemplateDefinition>(DEFAULT_TEMPLATES[0]);
   const [activeMobileTab, setActiveMobileTab] = useState<'form' | 'preview'>('form');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const [formData, setFormData] = useState<FormDataState>({
     groomName: '',
@@ -43,78 +48,41 @@ function CreateInvitationContent() {
     coverImageUrl: '',
   });
 
-  // Load template and initialize form
-  useEffect(() => {
-    const matched = DEFAULT_TEMPLATES.find((t) => t.id.toLowerCase() === templateId.toLowerCase());
-    const current = matched || DEFAULT_TEMPLATES[0];
-    setTemplate(current);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
+  const templatePackage = resolveTemplate(template.schema);
 
-    setFormData({
-      groomName: current.defaultData.groomName,
-      brideName: current.defaultData.brideName,
-      groomPhone: current.defaultData.groomPhone,
-      bridePhone: current.defaultData.bridePhone,
-      eventDate: current.defaultData.eventDate,
-      eventTime: current.defaultData.eventTime,
-      venueName: current.defaultData.venueName,
-      venueAddress: current.defaultData.venueAddress,
-      coverImageUrl: current.defaultData.coverImageUrl,
-    });
+  useEffect(() => {
+    let active = true;
+    setIsLoading(true);
+    setLoadError('');
+    async function load() {
+      const local = DEFAULT_TEMPLATES.find(item => item.id.toLowerCase() === templateId.toLowerCase());
+      try {
+        const detail = await templateService.getTemplateByCodeOrId(templateId);
+        const current = { ...local, ...detail, id: detail.code, schema: JSON.parse(detail.contentSchema), defaultData: JSON.parse(detail.defaultData || '{}') } as TemplateDefinition;
+        if (!active) return;
+        setTemplate(current);
+        setFormData(current.defaultData);
+      } catch {
+        if (!active) return;
+        if (local) { setTemplate(local); setFormData(local.defaultData); }
+        else setLoadError('Không thể tải mẫu thiệp đã chọn.');
+      } finally { if (active) setIsLoading(false); }
+    }
+    load();
+    return () => { active = false; };
   }, [templateId]);
 
-  // Compute live preview schema in real-time
   const liveSchema = useMemo<PageSchema>(() => {
-    const originalSchema = template.schema;
-    const formattedDate = formData.eventDate
-      ? formData.eventDate.split('-').reverse().join(' . ')
-      : '28 . 12 . 2026';
-    const fullTargetDate = `${formData.eventDate || '2026-12-28'}T${formData.eventTime || '11:30'}:00`;
-
-    const updatedBlocks = originalSchema.blocks.map((block) => {
-      if (block.type === 'HERO') {
-        return {
-          ...block,
-          props: {
-            ...block.props,
-            groomName: formData.groomName || 'Chú rể',
-            brideName: formData.brideName || 'Cô dâu',
-            eventDate: formattedDate,
-            coverImageUrl: formData.coverImageUrl || template.defaultData.coverImageUrl,
-          },
-        };
-      }
-      if (block.type === 'COUNTDOWN') {
-        return {
-          ...block,
-          props: {
-            ...block.props,
-            targetDate: fullTargetDate,
-          },
-        };
-      }
-      if (block.type === 'LOCATION') {
-        return {
-          ...block,
-          props: {
-            ...block.props,
-            ceremonyVenue: formData.venueName || 'Trung Tâm Tiệc Cưới',
-            address: formData.venueAddress || 'Địa chỉ sảnh tiệc',
-            eventTime: `${formData.eventTime || '11:30'} - Ngày ${formattedDate}`,
-          },
-        };
-      }
-      return block;
-    });
-
-    return {
-      ...originalSchema,
-      blocks: updatedBlocks,
-    };
-  }, [template, formData]);
+    if (!templatePackage) return template.schema;
+    return pinTemplate(templatePackage.personalize(template.schema, formData, template.defaultData));
+  }, [template, templatePackage, formData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError('');
 
     let targetSlug = `${slugify(formData.groomName || 'chu-re')}-${slugify(formData.brideName || 'co-dau')}`;
 
@@ -123,8 +91,10 @@ function CreateInvitationContent() {
       if (result && result.slug) {
         targetSlug = result.slug;
       }
-    } catch {
-      // Local development fallback
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Không thể tạo thiệp. Vui lòng thử lại.');
+      setIsSubmitting(false);
+      return;
     }
 
     try {
@@ -142,8 +112,11 @@ function CreateInvitationContent() {
     router.push(`/t/${targetSlug}`);
   };
 
+  if (isLoading) return <div role="status" className="p-12 text-center">Đang tải mẫu thiệp…</div>;
+  if (loadError || !templatePackage) return <div role="alert" className="p-12 text-center">{loadError || 'Phiên bản mẫu chưa được hỗ trợ.'}<Link href="/#kho-thiep" className="block underline">Quay lại kho mẫu</Link></div>;
+
   return (
-    <div className="min-h-screen w-screen bg-[#fafafa] dark:bg-[#0c0e17] text-neutral-800 dark:text-neutral-100 flex flex-col">
+    <div className="min-h-screen w-full overflow-x-clip bg-[#fafafa] dark:bg-[#0c0e17] text-neutral-800 dark:text-neutral-100 flex flex-col">
       {/* Top Application Header */}
       <header className="w-full bg-white dark:bg-[#151724] border-b border-neutral-200/80 dark:border-neutral-800 sticky top-0 z-40 px-4 sm:px-8 py-3 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
@@ -221,165 +194,18 @@ function CreateInvitationContent() {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Section 1: Groom & Bride Names */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-mh-primary flex items-center gap-1.5 pb-2 border-b border-neutral-100 dark:border-neutral-800">
-                    <span className="material-symbols-outlined text-[18px]">favorite</span>
-                    <span>1. Thông Tin Cô Dâu &amp; Chú Rể</span>
-                  </h3>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Groom */}
-                    <div className="space-y-3 p-4 rounded-2xl bg-[#fafafa] dark:bg-[#1a1c2b] border border-neutral-100 dark:border-neutral-800">
-                      <div>
-                        <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
-                          Họ và tên Chú Rể <span className="text-mh-primary">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.groomName}
-                          onChange={(e) => setFormData({ ...formData, groomName: e.target.value })}
-                          placeholder="VD: Tuấn Kiệt"
-                          className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-[#2d2d2d] dark:text-white focus:outline-none focus:ring-2 focus:ring-mh-primary/30"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
-                          Số điện thoại Chú Rể
-                        </label>
-                        <input
-                          type="tel"
-                          value={formData.groomPhone}
-                          onChange={(e) => setFormData({ ...formData, groomPhone: e.target.value })}
-                          placeholder="VD: 0901 234 567"
-                          className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-[#2d2d2d] dark:text-white focus:outline-none focus:ring-2 focus:ring-mh-primary/30"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Bride */}
-                    <div className="space-y-3 p-4 rounded-2xl bg-[#fafafa] dark:bg-[#1a1c2b] border border-neutral-100 dark:border-neutral-800">
-                      <div>
-                        <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
-                          Họ và tên Cô Dâu <span className="text-mh-primary">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.brideName}
-                          onChange={(e) => setFormData({ ...formData, brideName: e.target.value })}
-                          placeholder="VD: Mai Phương"
-                          className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-[#2d2d2d] dark:text-white focus:outline-none focus:ring-2 focus:ring-mh-primary/30"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
-                          Số điện thoại Cô Dâu
-                        </label>
-                        <input
-                          type="tel"
-                          value={formData.bridePhone}
-                          onChange={(e) => setFormData({ ...formData, bridePhone: e.target.value })}
-                          placeholder="VD: 0909 888 999"
-                          className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-[#2d2d2d] dark:text-white focus:outline-none focus:ring-2 focus:ring-mh-primary/30"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Section 2: Date, Time & Venue */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-mh-primary flex items-center gap-1.5 pb-2 border-b border-neutral-100 dark:border-neutral-800">
-                    <span className="material-symbols-outlined text-[18px]">event</span>
-                    <span>2. Thời Gian &amp; Địa Điểm Tổ Chức Tiệc</span>
-                  </h3>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
-                        Ngày cử hành hôn lễ <span className="text-mh-primary">*</span>
-                      </label>
-                      <input
-                        type="date"
-                        required
-                        value={formData.eventDate}
-                        onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-[#2d2d2d] dark:text-white focus:outline-none focus:ring-2 focus:ring-mh-primary/30"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
-                        Giờ đón khách / Khai tiệc <span className="text-mh-primary">*</span>
-                      </label>
-                      <input
-                        type="time"
-                        required
-                        value={formData.eventTime}
-                        onChange={(e) => setFormData({ ...formData, eventTime: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-[#2d2d2d] dark:text-white focus:outline-none focus:ring-2 focus:ring-mh-primary/30"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
-                      Tên Trung tâm Tiệc cưới / Tư gia <span className="text-mh-primary">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.venueName}
-                      onChange={(e) => setFormData({ ...formData, venueName: e.target.value })}
-                      placeholder="VD: Trung Tâm Tiệc Cưới Riverside Palace"
-                      className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-[#2d2d2d] dark:text-white focus:outline-none focus:ring-2 focus:ring-mh-primary/30"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
-                      Địa chỉ cụ thể sảnh tiệc <span className="text-mh-primary">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.venueAddress}
-                      onChange={(e) => setFormData({ ...formData, venueAddress: e.target.value })}
-                      placeholder="VD: 360D Bến Vân Đồn, Phường 1, Quận 4, TP. Hồ Chí Minh"
-                      className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-[#2d2d2d] dark:text-white focus:outline-none focus:ring-2 focus:ring-mh-primary/30"
-                    />
-                  </div>
-                </div>
-
-                {/* Section 3: Wedding Photo */}
-                <div className="space-y-3">
-                  <h3 className="text-sm font-bold text-mh-primary flex items-center gap-1.5 pb-2 border-b border-neutral-100 dark:border-neutral-800">
-                    <span className="material-symbols-outlined text-[18px]">photo_camera</span>
-                    <span>3. Hình Ảnh Bìa Thiệp Cưới</span>
-                  </h3>
-
-                  <div>
-                    <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
-                      Đường dẫn ảnh bìa cưới (URL ảnh)
-                    </label>
-                    <input
-                      type="url"
-                      value={formData.coverImageUrl}
-                      onChange={(e) => setFormData({ ...formData, coverImageUrl: e.target.value })}
-                      placeholder="https://example.com/anh-cuoi.jpg"
-                      className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-[#2d2d2d] dark:text-white focus:outline-none focus:ring-2 focus:ring-mh-primary/30"
-                    />
-                    <p className="text-[11px] text-neutral-400 mt-1">
-                      Mặc định hệ thống đã chọn sẵn bức ảnh cưới mẫu cao cấp chuẩn tỷ lệ.
-                    </p>
-                  </div>
-                </div>
+                {templatePackage?.fields.map(field => (
+                  <label key={field.key} className="block space-y-1 text-sm font-semibold">
+                    <span>{field.label}{field.required ? ' *' : ''}</span>
+                    <input name={field.key} type={field.type} required={field.required} value={formData[field.key] || ''}
+                      onChange={event => setFormData({ ...formData, [field.key]: event.target.value })}
+                      className="w-full rounded-lg border border-neutral-300 bg-white p-3 text-neutral-900" />
+                  </label>
+                ))}
+                <TemplateControls schema={template.schema} onChange={schema => setTemplate({ ...template, schema })} />
 
                 {/* Submit Action Bar */}
+                {submitError && <p role="alert" className="text-sm text-red-700">{submitError}</p>}
                 <div className="pt-4 flex items-center justify-between gap-4">
                   <Link
                     href="/#kho-thiep"
@@ -429,8 +255,13 @@ function CreateInvitationContent() {
                 </div>
 
                 {/* Live Rendered Content */}
-                <div className="flex-1 overflow-y-auto max-h-[560px] select-text no-scrollbar">
-                  <PageRenderer schema={liveSchema} slug={template.id} containerClassName="max-w-full" />
+                <div className="relative flex-1 overflow-y-auto max-h-[560px] select-text no-scrollbar">
+                  <PageRenderer
+                    schema={liveSchema}
+                    slug={template.id}
+                    containerClassName="max-w-full"
+                    embedded
+                  />
                 </div>
 
                 {/* Bottom Bar */}

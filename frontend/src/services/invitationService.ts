@@ -1,5 +1,6 @@
 import api from './api';
 import { PageSchema } from '@/types/schema';
+import { PageResponse, SubmitWishPayload, WishItemResponse } from '@/types/api';
 
 export interface CustomWeddingData {
   groomName: string;
@@ -71,6 +72,27 @@ export const invitationService = {
    */
   async getPublicCard(slug: string): Promise<PublicCardResult> {
     const response = await api.get<PublicCardResult>(`/public/invitations/${slug}`);
+    return response.data;
+  },
+
+  /**
+   * Gửi phản hồi xác nhận tham dự tiệc cưới (RSVP) và lời chúc mới cho thiệp
+   */
+  async submitWish(slug: string, payload: SubmitWishPayload): Promise<WishItemResponse> {
+    const response = await api.post<WishItemResponse>(
+      `/public/invitations/${encodeURIComponent(slug)}/wishes`,
+      payload
+    );
+    return response.data;
+  },
+
+  /**
+   * Lấy danh sách lời chúc phân trang của thiệp cưới theo slug
+   */
+  async getWishes(slug: string, page = 0, size = 10): Promise<PageResponse<WishItemResponse>> {
+    const response = await api.get<PageResponse<WishItemResponse>>(
+      `/public/invitations/${encodeURIComponent(slug)}/wishes?page=${page}&size=${size}`
+    );
     return response.data;
   },
 };

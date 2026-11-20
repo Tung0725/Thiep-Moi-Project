@@ -1,0 +1,201 @@
+{
+  "id": "minimalism-do-dam",
+  "category": "wedding",
+  "title": "Minimalism Đỏ Đậm",
+  "style": "Tối giản · Đỏ đô & hoa mẫu đơn",
+  "views": "0",
+  "likes": "0",
+  "badge": "Miễn phí",
+  "categoryLabel": "Cưới",
+  "imageUrl": "/templates/minimalism-do-dam/archive/images/minimalism_darkred.webp",
+  "description": "Thiệp cưới nền giấy kem, tông đỏ đô, hoa mẫu đơn và dấu triện chữ Hỷ. Phong bì mở thiệp, album ảnh, lịch cưới, lịch trình và sổ lưu bút.",
+  "defaultData": {
+    "groomName": "Đặng Hoàng Long",
+    "brideName": "Vũ Bảo Ngọc",
+    "groomPhone": "",
+    "bridePhone": "",
+    "eventDate": "2026-01-03",
+    "eventTime": "18:00",
+    "venueName": "Trung Tâm Hội Nghị White Palace",
+    "venueAddress": "Trung Tâm Hội Nghị White Palace, 194 Hoàng Văn Thụ, Phường 9, Quận Phú Nhuận, TP. Hồ Chí Minh",
+    "coverImageUrl": "/templates/minimalism-do-dam/archive/images/cdecf6cfe2eeb3cfd63829abde62f1066f10a364ec27d4c997c0f51012c8803e.webp"
+  },
+  "schema": {
+    "version": 1,
+    "layoutMode": "STACK",
+    "theme": {
+      "design": "MINIMALISM_DARK_RED",
+      "primaryColor": "#511419",
+      "backgroundColor": "#fff7eb",
+      "headingFont": "Viaoda Libre",
+      "bodyFont": "Times New Roman"
+    },
+    "effects": {
+      "fallingType": "NONE",
+      "musicUrl": "/templates/minimalism-do-dam/archive/audio/50-nam-ve-sau.mp3"
+    },
+    "blocks": [
+      {
+        "id": "hero-1",
+        "type": "HERO",
+        "props": {
+          "title": "SAVE THE DATE",
+          "groomName": "Hoàng Long",
+          "brideName": "Bảo Ngọc",
+          "eventDate": "2026-01-03",
+          "coverImageUrl": "/templates/minimalism-do-dam/archive/images/cdecf6cfe2eeb3cfd63829abde62f1066f10a364ec27d4c997c0f51012c8803e.webp"
+        }
+      },
+      {
+        "id": "couple-1",
+        "type": "COUPLE",
+        "props": {
+          "sectionTitle": "THÔNG TIN LỄ CƯỚI",
+          "weddingDateText": "2026-01-03",
+          "groom": {
+            "name": "Đặng Hoàng Long",
+            "displayName": "Hoàng Long",
+            "role": "GROOM",
+            "photoUrl": "/templates/minimalism-do-dam/archive/images/cdecf6cfe2eeb3cfd63829abde62f1066f10a364ec27d4c997c0f51012c8803e.webp",
+            "fatherName": "Đặng Văn Thắng",
+            "motherName": "Bùi Thị Mai",
+            "address": "Quận 1, TP. Hồ Chí Minh"
+          },
+          "bride": {
+            "name": "Vũ Bảo Ngọc",
+            "displayName": "Bảo Ngọc",
+            "role": "BRIDE",
+            "photoUrl": "/templates/minimalism-do-dam/archive/images/cdecf6cfe2eeb3cfd63829abde62f1066f10a364ec27d4c997c0f51012c8803e.webp",
+            "fatherName": "Vũ Đức Trung",
+            "motherName": "Ngô Thị Hạnh",
+            "address": "Quận 3, TP. Hồ Chí Minh"
+          }
+        }
+      },
+      {
+        "id": "ceremony-1",
+        "type": "EVENTS",
+        "props": {
+          "title": "LỄ THÀNH HÔN",
+          "groomEvents": [
+            {
+              "id": "ceremony",
+              "title": "LỄ THÀNH HÔN ĐƯỢC CỬ HÀNH TẠI",
+              "dateText": "2026-01-03",
+              "timeText": "09:00",
+              "locationName": "TƯ GIA",
+              "address": "Quận 1, TP. Hồ Chí Minh"
+            }
+          ],
+          "brideEvents": []
+        }
+      },
+      {
+        "id": "gallery-1",
+        "type": "GALLERY",
+        "props": {
+          "title": "ALBUM ẢNH",
+          "images": [
+            "/templates/minimalism-do-dam/archive/images/abd329aeb24dfdb5db34be2cd39ccbe4b5b0f943f66a89f8c855b2d615cc4e24.webp",
+            "/templates/minimalism-do-dam/archive/images/09c78712bd94460430a8a633a8e72a0576016ea56e183d89d97c551649ee9ece.webp",
+            "/templates/minimalism-do-dam/archive/images/d7695e2fed94d3347e78455624c26164a088b3a365bce422de1ef752fdcab2c1.webp",
+            "/templates/minimalism-do-dam/archive/images/07db56b959aa4410010132a54bfbedd0518e911389a0c6623b946096377bbb97.webp",
+            "/templates/minimalism-do-dam/archive/images/a054d52f9d4d1ed606a4226463f555e359dee874ba7138eab94e10a18b39ddda.webp",
+            "/templates/minimalism-do-dam/archive/images/1cfc881768c6a5c42054d40c4239f4f56b59a159692734f3deb8e79fc55499d2.webp",
+            "/templates/minimalism-do-dam/archive/images/e13655d0de07f307824d9dd1ad5a399434ebc0c016d86aaa4c1bde7452a4abb1.webp"
+          ]
+        }
+      },
+      {
+        "id": "banquet-1",
+        "type": "EVENTS",
+        "props": {
+          "title": "THÔNG TIN TIỆC CƯỚI",
+          "groomEvents": [
+            {
+              "id": "banquet",
+              "title": "TIỆC CƯỚI SẼ DIỄN RA VÀO LÚC",
+              "dateText": "2026-01-03",
+              "timeText": "18:00",
+              "locationName": "Trung Tâm Hội Nghị White Palace",
+              "address": "Trung Tâm Hội Nghị White Palace, 194 Hoàng Văn Thụ, Phường 9, Quận Phú Nhuận, TP. Hồ Chí Minh"
+            }
+          ],
+          "brideEvents": [],
+          "receptionTime": "17:30",
+          "dressCodeColors": [
+            "#511419",
+            "#8C3A3F",
+            "#C9A24A",
+            "#ECE4D8"
+          ],
+          "timeline": [
+            {
+              "time": "17:00",
+              "label": "Đón khách"
+            },
+            {
+              "time": "18:00",
+              "label": "Khai tiệc"
+            },
+            {
+              "time": "18:30",
+              "label": "Nghi thức cưới"
+            },
+            {
+              "time": "19:00",
+              "label": "Cắt bánh & nâng ly"
+            },
+            {
+              "time": "20:30",
+              "label": "Kết thúc tiệc"
+            }
+          ]
+        }
+      },
+      {
+        "id": "wishes-1",
+        "type": "WISHES",
+        "props": {
+          "title": "Sổ lưu bút",
+          "subtitle": "Gửi lời chúc và xác nhận tham dự cùng cô dâu, chú rể",
+          "allowRsvp": true
+        }
+      },
+      {
+        "id": "giftbox-1",
+        "type": "GIFTBOX",
+        "props": {
+          "title": "Hộp Quà Mừng",
+          "groomAccount": {
+            "ownerName": "TRAN TUAN KIET",
+            "bankName": "Vietcombank",
+            "accountNumber": "1023456789",
+            "qrCodeUrl": "/templates/minimalism-do-dam/archive/images/qr-png_2.png",
+            "label": "Chú Rể"
+          },
+          "brideAccount": {
+            "ownerName": "LE MINH ANH",
+            "bankName": "Techcombank",
+            "accountNumber": "9988776655",
+            "qrCodeUrl": "/templates/minimalism-do-dam/archive/images/qr-png.png",
+            "label": "Cô Dâu"
+          }
+        }
+      },
+      {
+        "id": "thankyou-1",
+        "type": "THANKYOU",
+        "props": {
+          "title": "Trân trọng cảm ơn",
+          "message": "Sự hiện diện của bạn là niềm vinh hạnh của gia đình chúng tôi.",
+          "imageUrl": "/templates/minimalism-do-dam/archive/images/abd329aeb24dfdb5db34be2cd39ccbe4b5b0f943f66a89f8c855b2d615cc4e24.webp"
+        }
+      }
+    ],
+    "template": {
+      "id": "minimalism-dark-red",
+      "version": 2
+    }
+  }
+}

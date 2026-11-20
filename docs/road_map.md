@@ -39,7 +39,7 @@
 **Mục tiêu cô lập:** Không đụng vào trang quản trị hay logic tạo thiệp. Sử dụng 1 thiệp mẫu đã có sẵn trong Database (ví dụ slug = `"hb04-demo"` hoặc `"test-thiep"`) để làm nơi gửi và hiển thị lời chúc theo thời gian thực.
 
 ### 1.1. Tầng Database (PostgreSQL)
-- [ ] **Viết script DDL tạo bảng `wishes`:**
+- [x] **Viết script DDL tạo bảng `wishes`:**
   - `id`: `BIGSERIAL` (hoặc `UUID DEFAULT gen_random_uuid()`) làm Primary Key.
   - `invitation_id`: `BIGINT NOT NULL REFERENCES invitations(id) ON DELETE CASCADE`.
   - `guest_name`: `VARCHAR(100) NOT NULL` (Tên khách mời).
@@ -47,38 +47,38 @@
   - `guest_count`: `INT NOT NULL DEFAULT 1` (Số lượng người đi cùng; gán = 0 nếu `DECLINED`).
   - `message`: `VARCHAR(500)` (Nội dung lời chúc, cho phép NULL nếu khách chỉ xác nhận dự tiệc).
   - `created_at`: `TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP`.
-- [ ] **Tạo Index truy vấn hiệu năng cao:**
+- [x] **Tạo Index truy vấn hiệu năng cao:**
   - `CREATE INDEX idx_wishes_invitation_created ON wishes(invitation_id, created_at DESC);`
 
 ### 1.2. Tầng Backend (Spring Boot 3 - Java 21)
-- [ ] **Tạo Entity & Repository:**
+- [x] **Tạo Entity & Repository:**
   - Thực thể `com.wedding.wish.entity.Wish.java` (Lombok, JpaRepository).
   - Khai báo `com.wedding.wish.repository.WishRepository.java` với hàm:
     - `Page<Wish> findByInvitationIdOrderByCreatedAtDesc(Long invitationId, Pageable pageable);`
     - `long countByInvitationId(Long invitationId);`
-- [ ] **Tạo DTOs chuẩn cấu trúc (`dto.request` & `dto.response`):**
+- [x] **Tạo DTOs chuẩn cấu trúc (`dto.request` & `dto.response`):**
   - `dto.request.SubmitWishRequest`:
     - `@NotBlank(message = "Tên khách mời không được để trống") @Size(max = 100) String guestName;`
     - `@NotBlank @Pattern(regexp = "ATTENDING|DECLINED|MAYBE") String attendanceStatus;`
     - `@Min(0) @Max(10) Integer guestCount;`
     - `@Size(max = 500, message = "Lời chúc không vượt quá 500 ký tự") String message;`
   - `dto.response.WishResponseDto`: `id`, `guestName`, `attendanceStatus`, `guestCount`, `message`, `createdAt`.
-- [ ] **Tạo Service `WishService.java` (Không dùng interface/impl):**
+- [x] **Tạo Service `WishService.java` (Không dùng interface/impl):**
   - Sử dụng Constructor Injection.
   - Hàm `WishResponseDto submitWish(String slug, SubmitWishRequest request)`: Tìm `invitation` theo `slug` (nếu không thấy ném `ResourceNotFoundException(404)`). Lưu `Wish` mới vào DB và trả về DTO.
   - Hàm `Page<WishResponseDto> getWishesBySlug(String slug, Pageable pageable)`: Trả về danh sách phân trang sắp xếp mới nhất.
-- [ ] **Tạo Controller `WishController.java` & Cấu hình Security:**
+- [x] **Tạo Controller `WishController.java` & Cấu hình Security:**
   - Annotation `@RestController`, `@RequestMapping("/public/invitations/{slug}/wishes")` (nằm trong nhánh `/public/**` đã được `permitAll()` tại `SecurityConfig.java`, đồng bộ với `PublicInvitationController`).
   - **API 1 (Public):** `POST /api/v1/public/invitations/{slug}/wishes` $\rightarrow$ Trả về `201 Created` kèm `ApiResponse<WishResponseDto>`.
   - **API 2 (Public):** `GET /api/v1/public/invitations/{slug}/wishes?page=0&size=10` $\rightarrow$ Trả về `200 OK` kèm `ApiResponse<Page<WishResponseDto>>`.
 
 ### 1.3. Tầng Frontend (Next.js 14)
-- [ ] **Cập nhật Service & Types:**
+- [x] **Cập nhật Service & Types:**
   - Bổ sung interface `SubmitWishPayload` và `WishItemResponse` vào `frontend/src/types/api.ts`.
   - Thêm 2 hàm gọi API vào `frontend/src/services/invitationService.ts`:
     - `submitWish(slug: string, payload: SubmitWishPayload): Promise<WishItemResponse>`
     - `getWishes(slug: string, page?: number, size?: number): Promise<PageResponse<WishItemResponse>>`
-- [ ] **Nâng cấp `frontend/src/components/renderer/blocks/WishesBlock.tsx`:**
+- [x] **Nâng cấp `frontend/src/components/renderer/blocks/WishesBlock.tsx`:**
   - Đọc `slug` từ props truyền xuống từ `PageRenderer`.
   - **Khu vực Form nhập liệu:**
     - Input nhập Tên khách mời (`guestName`, bắt buộc).
@@ -92,7 +92,7 @@
     - Khi submit thành công: Tự động chèn ngay lời chúc mới lên đầu danh sách (Optimistic UI) kèm thông báo thành công.
 
 ### 1.4. Kiểm Định Độc Lập (QA Gate 1)
-- [ ] **Test Postman (Backend API - Không truyền JWT Token):**
+- [x] **Test Postman / MockMvc (Backend API - Không truyền JWT Token):**
   - Gửi request `POST` để trống `guestName` $\rightarrow$ Nhận đúng mã `400 Bad Request` kèm message lỗi cụ thể.
   - Gửi request `POST` với slug không tồn tại (`/public/invitations/slug-fake-123/wishes`) $\rightarrow$ Nhận đúng mã `404 Not Found`.
   - Gửi request `POST` hợp lệ $\rightarrow$ Nhận đúng mã `201 Created` và dữ liệu trả về nằm trong wrapper `ApiResponse<T>`.

@@ -69,7 +69,7 @@ sequenceDiagram
 ## 3. Chi Tiết Triển Khai Từng Bước (Step-by-Step Checklist)
 
 ### Bước 1: Tạo nhánh Git cô lập
-- [ ] Chuyển sang nhánh mới từ `develop`:
+- [x] Chuyển sang nhánh mới từ `develop`:
   ```bash
   git checkout -b feat/module-rsvp
   ```
@@ -79,9 +79,9 @@ sequenceDiagram
 ### Bước 2: Xây dựng Tầng Database & Entity (`com.wedding.wish.entity`)
 *(Lưu ý: `application-dev.yml` đang bật `ddl-auto: update`, Hibernate sẽ tự động tạo bảng `wishes` và index từ `@Table(indexes = ...)` của Entity, đồng thời kèm câu lệnh SQL chuẩn để chạy tay nếu cần).*
 
-- [ ] **2.1. Tạo Enum `AttendanceStatus.java`:**
+- [x] **2.1. Tạo Enum `AttendanceStatus.java`:**
   - Giá trị: `ATTENDING` (Sẽ tham dự), `DECLINED` (Không thể tham dự), `MAYBE` (Chưa chắc chắn).
-- [ ] **2.2. Tạo Entity `Wish.java`:**
+- [x] **2.2. Tạo Entity `Wish.java`:**
   - Bảng `@Table(name = "wishes", indexes = @Index(name = "idx_wishes_invitation_created", columnList = "invitation_id, created_at DESC"))`.
   - Các trường:
     - `id`: `Long` (`@Id @GeneratedValue(strategy = GenerationType.IDENTITY)`).
@@ -91,21 +91,21 @@ sequenceDiagram
     - `guestCount`: `@Column(name = "guest_count", nullable = false) Integer` (Mặc định `1` nếu tham dự, `0` nếu báo bận).
     - `message`: `@Column(name = "message", length = 500) String` (Cho phép `null` khi khách chỉ xác nhận RSVP).
     - `createdAt`: `@Column(name = "created_at", nullable = false, updatable = false) Instant` (Gán `Instant.now()` trong `@PrePersist`).
-- [ ] **2.3. Tạo Repository `WishRepository.java`:**
+- [x] **2.3. Tạo Repository `WishRepository.java`:**
   - `Page<Wish> findByInvitationIdOrderByCreatedAtDesc(Long invitationId, Pageable pageable);`
   - `long countByInvitationId(Long invitationId);`
 
 ---
 
 ### Bước 3: Xây dựng DTOs, Service & Controller (`com.wedding.wish`)
-- [ ] **3.1. Tạo `SubmitWishRequest.java` (`dto.request`):**
+- [x] **3.1. Tạo `SubmitWishRequest.java` (`dto.request`):**
   - `guestName`: `@NotBlank(message = "Tên khách mời không được để trống") @Size(max = 100, message = "Tên khách mời tối đa 100 ký tự")`
   - `attendanceStatus`: `@NotBlank(message = "Trạng thái tham dự không được để trống") @Pattern(regexp = "ATTENDING|DECLINED|MAYBE", message = "Trạng thái tham dự chỉ nhận ATTENDING, DECLINED hoặc MAYBE")`
   - `guestCount`: `@Min(value = 0, message = "Số người tham dự không hợp lệ") @Max(value = 10, message = "Số người đi cùng tối đa là 10")`
   - `message`: `@Size(max = 500, message = "Lời chúc không được vượt quá 500 ký tự")`
-- [ ] **3.2. Tạo `WishResponseDto.java` (`dto.response`):**
+- [x] **3.2. Tạo `WishResponseDto.java` (`dto.response`):**
   - Các trường: `Long id`, `String guestName`, `AttendanceStatus attendanceStatus`, `Integer guestCount`, `String message`, `Instant createdAt`.
-- [ ] **3.3. Tạo `WishService.java` (Constructor Injection, có Javadoc chuẩn):**
+- [x] **3.3. Tạo `WishService.java` (Constructor Injection, có Javadoc chuẩn):**
   - **`submitWish(String slug, SubmitWishRequest request)` (`@Transactional`):**
     1. Tìm `Invitation` qua `invitationRepository.findBySlug(slug)` $\rightarrow$ Nếu không có, ném `new AppException(HttpStatus.NOT_FOUND, "Không tìm thấy thiệp mời với đường dẫn yêu cầu.")`.
     2. Parse `AttendanceStatus`:
@@ -115,7 +115,7 @@ sequenceDiagram
   - **`getWishesBySlug(String slug, Pageable pageable)` (`@Transactional(readOnly = true)`):**
     1. Tìm `Invitation` qua `slug` (ném `404` nếu không tồn tại).
     2. Gọi `wishRepository.findByInvitationIdOrderByCreatedAtDesc(invitation.getId(), pageable)` và map sang `Page<WishResponseDto>`.
-- [ ] **3.4. Tạo `WishController.java`:**
+- [x] **3.4. Tạo `WishController.java`:**
   - `@RestController`
   - `@RequestMapping("/public/invitations/{slug}/wishes")` *(Nằm trong `/public/**` nên được `SecurityConfig` cho phép truy cập không cần JWT)*.
   - `POST ""` $\rightarrow$ Gọi `wishService.submitWish(slug, request)` $\rightarrow$ Trả về `HttpStatus.CREATED (201)` bọc trong `ApiResponse<WishResponseDto>`.
@@ -124,10 +124,10 @@ sequenceDiagram
 ---
 
 ### Bước 4: Kiểm Định Backend Độc Lập (QA Gate 1A - Trước khi chạm vào Frontend)
-- [ ] **4.1. Đảm bảo có ít nhất 1 thiệp mẫu trong DB:**
+- [x] **4.1. Đảm bảo có ít nhất 1 thiệp mẫu trong DB:**
   - Nếu DB chưa có thiệp nào, gọi `POST /api/v1/public/invitations/quick-create` để tạo 1 thiệp test (ví dụ lấy `slug` trả về).
-- [ ] **4.2. Chạy 4 kịch bản kiểm thử API:**
-  1. **Test 400 Validation:** Gửi `POST /api/v1/public/invitations/{slug}/wishes` với `guestName: ""` $\rightarrow$ Phải trả về `400 Bad Request` và message `"Tên khách mời không được để trống"`.
+- [x] **4.2. Chạy 4 kịch bản kiểm thử API (`WishControllerTest` & `WishServiceTest` - 8/8 PASS):**
+  1. **Test 400 Validation:** Gửi `POST /api/v1/public/invitations/{slug}/wishes` với `guestName: ""` $\rightarrow$ Phải trả về `400 Bad Request` kèm message `"Tên khách mời không được để trống"`.
   2. **Test 404 Not Found:** Gửi `POST /api/v1/public/invitations/slug-khong-ton-tai/wishes` $\rightarrow$ Phải trả về `404 Not Found`.
   3. **Test 201 Created (Chuẩn hóa `guestCount`):**
      - Gửi 1 request `ATTENDING`, `guestCount: 3`, `message: "Chúc hai bạn trăm năm hạnh phúc!"` $\rightarrow$ Nhận `201 Created`, `guestCount = 3`.
@@ -137,7 +137,7 @@ sequenceDiagram
 ---
 
 ### Bước 5: Tích Hợp Tầng Frontend (`frontend/src`)
-- [ ] **5.1. Cập nhật `frontend/src/types/api.ts`:**
+- [x] **5.1. Cập nhật `frontend/src/types/api.ts`:**
   - Định nghĩa:
     ```ts
     export type AttendanceStatus = 'ATTENDING' | 'DECLINED' | 'MAYBE';
@@ -167,10 +167,10 @@ sequenceDiagram
       last: boolean;
     }
     ```
-- [ ] **5.2. Cập nhật `frontend/src/services/invitationService.ts`:**
+- [x] **5.2. Cập nhật `frontend/src/services/invitationService.ts`:**
   - Thêm hàm `getWishes(slug: string, page = 0, size = 10): Promise<PageResponse<WishItemResponse>>` gọi `GET /public/invitations/${slug}/wishes?page=${page}&size=${size}`.
   - Thêm hàm `submitWish(slug: string, payload: SubmitWishPayload): Promise<WishItemResponse>` gọi `POST /public/invitations/${slug}/wishes`.
-- [ ] **5.3. Nâng cấp `frontend/src/components/renderer/blocks/WishesBlock.tsx`:**
+- [x] **5.3. Nâng cấp `frontend/src/components/renderer/blocks/WishesBlock.tsx`:**
   - Nhận prop `slug` từ `PageRenderer`.
   - **Khi ở chế độ xem mẫu/Studio** (chưa phải thiệp thật trong DB hoặc API trả 404 cho mã template mẫu như `hb04-basic`): Fallback êm ái về danh sách lời chúc mẫu (`DEFAULT_WISHES`) để giao diện xem mẫu không bị báo lỗi đỏ.
   - **Khi mở thiệp thật (`/t/{slug}`)**:

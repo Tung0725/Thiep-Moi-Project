@@ -1,63 +1,14 @@
-import React, { Suspense } from 'react';
-import { PageSchema } from '@/types/schema';
-import { COMPONENT_REGISTRY } from './ComponentRegistry';
-import { ErrorBoundary } from '@/components/common/ErrorBoundary';
-import { FallingEffects } from '@/components/common/FallingEffects';
-import { BackgroundMusic } from '@/components/common/BackgroundMusic';
-import { OpeningEnvelope } from '@/components/common/OpeningEnvelope';
+import React from 'react';
+import { resolveTemplate } from '@/templates/registry';
+import { TemplateRendererProps } from '@/templates/types';
 
-/**
- * PageRenderer Component
- * Purpose: Bộ máy duyệt mảng blocks từ JSON Schema và dựng giao diện động
- * Props:
- *   - schema: Cấu trúc PageSchema
- *   - slug: Đường dẫn slug duy nhất của thiệp
- * Key States: Không có (stateless engine)
- */
-interface PageRendererProps {
-  schema: PageSchema;
-  slug?: string;
-  containerClassName?: string;
+/** Routes a pinned schema to its template package; layout and styling belong to that package. */
+export function PageRenderer(props: TemplateRendererProps) {
+  const template = resolveTemplate(props.schema);
+  if (!template) return <div role="alert" className="p-6 text-center">Phiên bản mẫu thiệp này chưa được hỗ trợ.</div>;
+  if (!template.layoutModes.includes(props.schema.layoutMode)) return <div role="alert" className="p-6 text-center">Mẫu thiệp không hỗ trợ chế độ bố cục {props.schema.layoutMode}.</div>;
+  const unsupported = props.schema.blocks.find(block => !block.isHidden && !template.supportedBlocks.includes(block.type));
+  if (unsupported) return <div role="alert" className="p-6 text-center">Mẫu thiệp không hỗ trợ khối {unsupported.type}.</div>;
+  const Renderer = template.Renderer;
+  return <Renderer {...props} />;
 }
-
-export function PageRenderer({ schema, slug, containerClassName }: PageRendererProps) {
-  const { theme, effects, blocks = [] } = schema;
-
-  return (
-    <main
-      style={{
-        backgroundColor: theme?.backgroundColor,
-        color: theme?.primaryColor,
-      }}
-      className="relative min-h-screen w-full"
-    >
-      {/* Opening Envelope Split-Panels Animation */}
-      {effects?.openingEffect?.enabled && (
-        <OpeningEnvelope config={effects.openingEffect} />
-      )}
-
-      {/* Floating Background Music Player */}
-      {effects?.musicUrl && <BackgroundMusic musicUrl={effects.musicUrl} />}
-
-      {/* Falling Particle Overlay */}
-      {effects?.fallingType && <FallingEffects type={effects.fallingType} />}
-
-      {/* Dynamic Blocks Container */}
-      <div className={`w-full ${containerClassName || 'max-w-3xl sm:max-w-4xl'} mx-auto flex flex-col`}>
-        {blocks.map((block) => {
-          const Component = COMPONENT_REGISTRY[block.type];
-          if (!Component) return null;
-
-          return (
-            <ErrorBoundary key={block.id}>
-              <Suspense fallback={<div className="h-24 w-full bg-neutral-100 animate-pulse my-2" />}>
-                <Component {...block.props} slug={slug} />
-              </Suspense>
-            </ErrorBoundary>
-          );
-        })}
-      </div>
-    </main>
-  );
-}
-
