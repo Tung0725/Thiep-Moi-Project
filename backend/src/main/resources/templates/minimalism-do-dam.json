@@ -16,19 +16,34 @@
     "bridePhone": "",
     "eventDate": "2026-01-03",
     "eventTime": "18:00",
+    "ceremonyTime": "09:00",
+    "groomFather": "Đặng Văn Thắng",
+    "groomMother": "Bùi Thị Mai",
+    "brideFather": "Vũ Đức Trung",
+    "brideMother": "Ngô Thị Hạnh",
     "venueName": "Trung Tâm Hội Nghị White Palace",
     "venueAddress": "Trung Tâm Hội Nghị White Palace, 194 Hoàng Văn Thụ, Phường 9, Quận Phú Nhuận, TP. Hồ Chí Minh",
     "coverImageUrl": "/templates/minimalism-do-dam/archive/images/cdecf6cfe2eeb3cfd63829abde62f1066f10a364ec27d4c997c0f51012c8803e.webp"
   },
   "schema": {
-    "version": 1,
+    "version": 3,
     "layoutMode": "STACK",
     "theme": {
       "design": "MINIMALISM_DARK_RED",
       "primaryColor": "#511419",
       "backgroundColor": "#fff7eb",
+      "accentColor": "#c9a24a",
       "headingFont": "Viaoda Libre",
-      "bodyFont": "Times New Roman"
+      "bodyFont": "Times New Roman",
+      "heroVariant": "polaroid",
+      "decorations": {
+        "flowerUrl": "/templates/minimalism-do-dam/archive/images/flower2-decoration.webp",
+        "envelopeUrl": "/templates/minimalism-do-dam/archive/images/envelope-cover.webp",
+        "paperUrl": "/templates/minimalism-do-dam/archive/images/paper.webp",
+        "castleUrl": "/templates/minimalism-do-dam/archive/images/castle-background.webp",
+        "sealText": "囍",
+        "inviteMessage": "Thân Mời"
+      }
     },
     "effects": {
       "fallingType": "NONE",
@@ -43,6 +58,7 @@
           "groomName": "Hoàng Long",
           "brideName": "Bảo Ngọc",
           "eventDate": "2026-01-03",
+          "variant": "polaroid",
           "coverImageUrl": "/templates/minimalism-do-dam/archive/images/cdecf6cfe2eeb3cfd63829abde62f1066f10a364ec27d4c997c0f51012c8803e.webp"
         }
       },
@@ -52,10 +68,13 @@
         "props": {
           "sectionTitle": "THÔNG TIN LỄ CƯỚI",
           "weddingDateText": "2026-01-03",
+          "announcementLine1": "TRÂN TRỌNG BÁO TIN",
+          "announcementLine2": "LỄ THÀNH HÔN CỦA CON CHÚNG TÔI",
           "groom": {
             "name": "Đặng Hoàng Long",
             "displayName": "Hoàng Long",
             "role": "GROOM",
+            "titleLabel": "TRƯỞNG NAM",
             "photoUrl": "/templates/minimalism-do-dam/archive/images/cdecf6cfe2eeb3cfd63829abde62f1066f10a364ec27d4c997c0f51012c8803e.webp",
             "fatherName": "Đặng Văn Thắng",
             "motherName": "Bùi Thị Mai",
@@ -65,6 +84,7 @@
             "name": "Vũ Bảo Ngọc",
             "displayName": "Bảo Ngọc",
             "role": "BRIDE",
+            "titleLabel": "ÚT NỮ",
             "photoUrl": "/templates/minimalism-do-dam/archive/images/cdecf6cfe2eeb3cfd63829abde62f1066f10a364ec27d4c997c0f51012c8803e.webp",
             "fatherName": "Vũ Đức Trung",
             "motherName": "Ngô Thị Hạnh",
@@ -130,26 +150,11 @@
             "#ECE4D8"
           ],
           "timeline": [
-            {
-              "time": "17:00",
-              "label": "Đón khách"
-            },
-            {
-              "time": "18:00",
-              "label": "Khai tiệc"
-            },
-            {
-              "time": "18:30",
-              "label": "Nghi thức cưới"
-            },
-            {
-              "time": "19:00",
-              "label": "Cắt bánh & nâng ly"
-            },
-            {
-              "time": "20:30",
-              "label": "Kết thúc tiệc"
-            }
+            { "time": "17:00", "label": "Đón khách" },
+            { "time": "18:00", "label": "Khai tiệc" },
+            { "time": "18:30", "label": "Nghi thức cưới" },
+            { "time": "19:00", "label": "Cắt bánh & nâng ly" },
+            { "time": "20:30", "label": "Kết thúc tiệc" }
           ]
         }
       },
@@ -194,8 +199,8 @@
       }
     ],
     "template": {
-      "id": "minimalism-dark-red",
-      "version": 2
+      "id": "classic-envelope",
+      "version": 1
     }
   }
 }

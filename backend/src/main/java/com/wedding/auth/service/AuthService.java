@@ -11,11 +11,14 @@ import com.wedding.auth.entity.User;
 import com.wedding.auth.entity.UserStatus;
 import com.wedding.auth.repository.EmailVerificationTokenRepository;
 import com.wedding.auth.repository.UserRepository;
+import com.wedding.auth.service.EmailService.VerificationEmailRequested;
+import com.wedding.auth.service.GoogleIdentityService.GoogleIdentity;
 import com.wedding.common.exception.AppException;
 import com.wedding.common.exception.ConflictException;
 import com.wedding.common.exception.UnauthorizedException;
 import com.wedding.config.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,7 +43,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
     private final LoginAttemptService loginAttemptService;
-    private final EmailService emailService;
+    private final ApplicationEventPublisher events;
 
     /**
      * Tiếp nhận yêu cầu đăng ký tài khoản mới, tạo người dùng với trạng thái PENDING_VERIFICATION
@@ -77,7 +80,7 @@ public class AuthService {
                 .build();
         emailVerificationTokenRepository.save(verificationToken);
 
-        emailService.sendVerificationEmail(savedUser.getEmail(), savedUser.getFullName(), verificationToken.getToken());
+        events.publishEvent(new VerificationEmailRequested(savedUser.getEmail(), savedUser.getFullName(), verificationToken.getToken()));
 
         return UserResponse.fromEntity(savedUser);
     }
@@ -99,6 +102,9 @@ public class AuthService {
         }
 
         User user = verificationToken.getUser();
+        if (user.getStatus() != UserStatus.PENDING_VERIFICATION) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Mã kích hoạt không còn hiệu lực.");
+        }
         user.setStatus(UserStatus.ACTIVE);
         user.setEmailVerified(true);
         User activatedUser = userRepository.save(user);
@@ -118,7 +124,7 @@ public class AuthService {
         String normalizedEmail = email.trim().toLowerCase();
         User user = userRepository.findByEmail(normalizedEmail).orElse(null);
 
-        if (user == null || user.isEmailVerified()) {
+        if (user == null || user.isEmailVerified() || user.getStatus() != UserStatus.PENDING_VERIFICATION) {
             return;
         }
 
@@ -131,7 +137,7 @@ public class AuthService {
                 .build();
         emailVerificationTokenRepository.save(verificationToken);
 
-        emailService.sendVerificationEmail(user.getEmail(), user.getFullName(), verificationToken.getToken());
+        events.publishEvent(new VerificationEmailRequested(user.getEmail(), user.getFullName(), verificationToken.getToken()));
     }
 
     /**
@@ -165,6 +171,47 @@ public class AuthService {
         }
 
         loginAttemptService.loginSucceeded(normalizedEmail);
+        return createSession(user);
+    }
+
+    /** Signs in a Google account by subject or creates an active account for a new, verified address. */
+    @Transactional
+    public AuthSessionResult loginWithGoogle(GoogleIdentity identity) {
+        User user = userRepository.findByGoogleSubject(identity.subject()).orElse(null);
+        if (user != null) {
+            if (user.getStatus() != UserStatus.ACTIVE || !user.isEmailVerified()) {
+                throw new AppException(HttpStatus.FORBIDDEN, "Tài khoản hiện không thể đăng nhập.");
+            }
+            return createSession(user);
+        }
+
+        String email = identity.email();
+        if (!identity.authoritativeEmail() || email.length() > 150 || email.indexOf('@') <= 0) {
+            throw new AppException(HttpStatus.FORBIDDEN, "Hãy dùng Gmail, Google Workspace hoặc đăng ký bằng email.");
+        }
+        if (userRepository.existsByEmail(email)) {
+            throw new ConflictException("Email này đã được sử dụng. Vui lòng dùng phương thức đăng nhập ban đầu.");
+        }
+
+        String name = identity.name();
+        if (name == null || name.isBlank()) {
+            name = email.substring(0, email.indexOf('@'));
+        }
+        name = name.strip();
+        name = name.substring(0, name.offsetByCodePoints(0, Math.min(100, name.codePointCount(0, name.length()))));
+        user = userRepository.save(User.builder()
+                .email(email)
+                .googleSubject(identity.subject())
+                .fullName(name)
+                .passwordHash(passwordEncoder.encode(UUID.randomUUID().toString()))
+                .role(Role.ROLE_USER)
+                .status(UserStatus.ACTIVE)
+                .emailVerified(true)
+                .build());
+        return createSession(user);
+    }
+
+    private AuthSessionResult createSession(User user) {
         String accessToken = jwtTokenProvider.generateToken(user.getId(), user.getEmail(), user.getRole().name());
         String refreshToken = refreshTokenService.createRefreshToken(user);
 

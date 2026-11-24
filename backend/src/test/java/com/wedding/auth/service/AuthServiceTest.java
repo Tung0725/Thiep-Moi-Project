@@ -11,6 +11,8 @@ import com.wedding.auth.entity.User;
 import com.wedding.auth.entity.UserStatus;
 import com.wedding.auth.repository.EmailVerificationTokenRepository;
 import com.wedding.auth.repository.UserRepository;
+import com.wedding.auth.service.EmailService.VerificationEmailRequested;
+import com.wedding.auth.service.GoogleIdentityService.GoogleIdentity;
 import com.wedding.common.exception.AppException;
 import com.wedding.common.exception.ConflictException;
 import com.wedding.common.exception.UnauthorizedException;
@@ -20,7 +22,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
@@ -51,13 +55,94 @@ class AuthServiceTest {
     @Mock
     private LoginAttemptService loginAttemptService;
     @Mock
-    private EmailService emailService;
+    private ApplicationEventPublisher events;
 
     private AuthService authService;
 
     @BeforeEach
     void setUp() {
-        authService = new AuthService(userRepository, emailVerificationTokenRepository, passwordEncoder, jwtTokenProvider, refreshTokenService, loginAttemptService, emailService);
+        authService = new AuthService(userRepository, emailVerificationTokenRepository, passwordEncoder, jwtTokenProvider, refreshTokenService, loginAttemptService, events);
+    }
+
+    @Test
+    void googleLoginCreatesVerifiedUserAndIssuesSession() {
+        var identity = new GoogleIdentity("google-subject", "test@gmail.com", "Test User", true);
+        when(passwordEncoder.encode(any())).thenReturn("unusable-generated-password-hash");
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            user.setId(UUID.randomUUID());
+            return user;
+        });
+        when(refreshTokenService.createRefreshToken(any())).thenReturn("refresh");
+
+        assertThat(authService.loginWithGoogle(identity).refreshToken()).isEqualTo("refresh");
+
+        ArgumentCaptor<User> saved = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(saved.capture());
+        assertThat(saved.getValue().getGoogleSubject()).isEqualTo(identity.subject());
+        assertThat(saved.getValue().getEmail()).isEqualTo(identity.email());
+        assertThat(saved.getValue().getStatus()).isEqualTo(UserStatus.ACTIVE);
+        assertThat(saved.getValue().isEmailVerified()).isTrue();
+    }
+
+    @Test
+    void googleLoginFindsReturningUserBySubjectEvenAfterEmailChanges() {
+        User user = User.builder().id(UUID.randomUUID()).email("original@gmail.com").role(Role.ROLE_USER)
+                .emailVerified(true).status(UserStatus.ACTIVE).build();
+        when(userRepository.findByGoogleSubject("google-subject")).thenReturn(Optional.of(user));
+
+        AuthSessionResult session = authService.loginWithGoogle(new GoogleIdentity("google-subject", "changed@gmail.com", null, true));
+
+        assertThat(session.user().getId()).isEqualTo(user.getId());
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void googleLoginDoesNotAutomaticallyLinkExistingEmail() {
+        when(userRepository.existsByEmail("test@gmail.com")).thenReturn(true);
+
+        assertThatThrownBy(() -> authService.loginWithGoogle(new GoogleIdentity("google-subject", "test@gmail.com", null, true)))
+                .isInstanceOf(ConflictException.class);
+
+        verify(refreshTokenService, never()).createRefreshToken(any());
+    }
+
+    @Test
+    void googleLoginDeclinesLockedUsersAndNonAuthoritativeNewEmails() {
+        User locked = User.builder().emailVerified(true).status(UserStatus.LOCKED).build();
+        when(userRepository.findByGoogleSubject("locked-subject")).thenReturn(Optional.of(locked));
+
+        assertThatThrownBy(() -> authService.loginWithGoogle(new GoogleIdentity("locked-subject", "test@gmail.com", null, true)))
+                .isInstanceOf(AppException.class);
+        assertThatThrownBy(() -> authService.loginWithGoogle(new GoogleIdentity("new-subject", "test@example.com", null, false)))
+                .isInstanceOf(AppException.class);
+
+        verify(refreshTokenService, never()).createRefreshToken(any());
+    }
+
+    @Test
+    void resendVerificationPublishesReplacementTokenForPendingAccount() {
+        User user = User.builder().email("test@example.com").fullName("Nguyễn An").build();
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+
+        authService.resendVerification(user.getEmail());
+
+        ArgumentCaptor<EmailVerificationToken> token = ArgumentCaptor.forClass(EmailVerificationToken.class);
+        verify(emailVerificationTokenRepository).deleteAllByUser(user);
+        verify(emailVerificationTokenRepository).save(token.capture());
+        verify(events).publishEvent(new VerificationEmailRequested(user.getEmail(), user.getFullName(), token.getValue().getToken()));
+    }
+
+    @Test
+    void verificationLinkDoesNotUnlockAccount() {
+        User user = User.builder().status(UserStatus.LOCKED).build();
+        EmailVerificationToken token = EmailVerificationToken.builder().user(user).token("token")
+                .expiresAt(Instant.now().plusSeconds(60)).build();
+        when(emailVerificationTokenRepository.findByToken("token")).thenReturn(Optional.of(token));
+
+        assertThatThrownBy(() -> authService.verifyEmail("token")).isInstanceOf(AppException.class);
+        assertThat(user.getStatus()).isEqualTo(UserStatus.LOCKED);
+        verify(userRepository, never()).save(any());
     }
 
     @Test
@@ -79,7 +164,9 @@ class AuthServiceTest {
         assertThat(response.isEmailVerified()).isFalse();
         verify(userRepository).save(any(User.class));
         verify(emailVerificationTokenRepository).save(any(EmailVerificationToken.class));
-        verify(emailService).sendVerificationEmail(eq("test@example.com"), eq("Nguyễn Văn A"), any());
+        ArgumentCaptor<EmailVerificationToken> savedToken = ArgumentCaptor.forClass(EmailVerificationToken.class);
+        verify(emailVerificationTokenRepository).save(savedToken.capture());
+        verify(events).publishEvent(new VerificationEmailRequested("test@example.com", "Nguyễn Văn A", savedToken.getValue().getToken()));
     }
 
     @Test

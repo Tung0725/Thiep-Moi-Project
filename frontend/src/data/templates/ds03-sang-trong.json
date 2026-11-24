@@ -1,0 +1,192 @@
+{
+  "id": "ds03-sang-trong",
+  "category": "wedding",
+  "title": "DS03 - Sang Trọng",
+  "style": "Hiện đại · Hoa lan trắng",
+  "views": "0",
+  "likes": "0",
+  "badge": "VIP",
+  "categoryLabel": "Cưới",
+  "imageUrl": "/templates/ds03-sang-trong/runtime/v1/media/images/d5bd6aba-572f-46de-b3f1-8df1f97fcbd6-full.webp",
+  "description": "Thiệp cưới DS03 với hoa lan trắng, album ảnh cùng hiệu ứng chuyển động khi cuộn.",
+  "defaultData": {
+    "groomName": "Minh Anh",
+    "brideName": "Yến Nhi",
+    "groomPhone": "",
+    "bridePhone": "",
+    "eventDate": "2026-06-18",
+    "eventTime": "11:00",
+    "venueName": "Tư gia nhà trai",
+    "venueAddress": "KDT Vinhomes Oceanpark, Gia Lâm, Hà Nội",
+    "coverImageUrl": "/templates/ds03-sang-trong/runtime/v1/media/images/34cb7f65-3999-4f76-bf0f-a00553c88b35-full.webp"
+  },
+  "schema": {
+    "template": { "id": "modern-editorial", "version": 1 },
+    "version": 4,
+    "layoutMode": "STACK",
+    "theme": {
+      "primaryColor": "#5f6459",
+      "backgroundColor": "#fcf9fe",
+      "accentColor": "#928362",
+      "headingFont": "inherit",
+      "bodyFont": "inherit"
+    },
+    "effects": {
+      "fallingType": "NONE",
+      "musicUrl": "/templates/ds03-sang-trong/runtime/v1/media/audio/ea9168ee-cdb4-4fbd-b7ad-4dcb48f47353.mp3"
+    },
+    "blocks": [
+      {
+        "id": "hero-1",
+        "type": "HERO",
+        "props": {
+          "sectionId": "section-1",
+          "sceneUrl": "/templates/ds03-sang-trong/runtime/v1/scene.json",
+          "title": "WEDDING",
+          "subtitle": "Trân trọng kính mời bạn cùng gia đình đến chứng kiến khoảnh khắc hạnh phúc của chúng tôi.",
+          "groomName": "Minh Anh",
+          "brideName": "Yến Nhi",
+          "eventDate": "2026-06-18",
+          "coverImageUrl": "/templates/ds03-sang-trong/runtime/v1/media/images/34cb7f65-3999-4f76-bf0f-a00553c88b35-full.webp",
+          "photoOverrides": {},
+          "textOverrides": {}
+        }
+      },
+      {
+        "id": "invite-1",
+        "type": "EVENTS",
+        "props": {
+          "sectionId": "SApg6qJVE-",
+          "title": "Thư mời",
+          "groomEvents": [
+            {
+              "id": "main-invite",
+              "title": "Hôn lễ được tổ chức vào lúc",
+              "timeText": "11:00",
+              "dateText": "2026-06-18",
+              "locationName": "Tư gia nhà trai",
+              "address": "KDT Vinhomes Oceanpark, Gia Lâm, Hà Nội"
+            }
+          ],
+          "brideEvents": []
+        }
+      },
+      {
+        "id": "couple-1",
+        "type": "COUPLE",
+        "props": {
+          "sectionId": "qfpaZNhudF",
+          "sectionTitle": "Cô Dâu & Chú Rể",
+          "quote": "Khoảnh khắc tuyệt vời nhất trong đời chính là...",
+          "groom": {
+            "name": "Minh Anh",
+            "role": "GROOM",
+            "photoUrl": "/templates/ds03-sang-trong/runtime/v1/media/images/201d5e88-155e-4deb-a1e2-c03534858b1f-full.webp",
+            "fatherName": "",
+            "motherName": "",
+            "address": ""
+          },
+          "bride": {
+            "name": "Yến Nhi",
+            "role": "BRIDE",
+            "photoUrl": "/templates/ds03-sang-trong/runtime/v1/media/images/74596fe2-2c97-4957-a0f2-3939c3680f0c-full.webp",
+            "fatherName": "",
+            "motherName": "",
+            "address": ""
+          }
+        }
+      },
+      {
+        "id": "story-1",
+        "type": "GALLERY",
+        "props": {
+          "sectionId": "fFDaX7WHAU",
+          "title": "Câu chuyện tình yêu",
+          "subtitle": "My eyes find love in you.",
+          "images": [
+            "/templates/ds03-sang-trong/runtime/v1/media/images/537cceef-5576-4beb-aa78-5589748cc49d-full.webp",
+            "/templates/ds03-sang-trong/runtime/v1/media/images/c965dda0-7902-407d-961b-f60cd22584ad-full.webp",
+            "/templates/ds03-sang-trong/runtime/v1/media/images/0de33790-0cc0-429f-9c16-6adeeef29e07-full.webp"
+          ]
+        }
+      },
+      {
+        "id": "album-1",
+        "type": "GALLERY",
+        "props": {
+          "sectionId": "Non88UDtG_",
+          "title": "Album Ảnh Cưới",
+          "images": [
+            "/templates/ds03-sang-trong/runtime/v1/media/images/70b9b436-ccbd-456a-ae4b-da2e25f6a99b-full.webp",
+            "/templates/ds03-sang-trong/runtime/v1/media/images/97b81eac-0c78-4fbb-9dc4-7e709fa2b413-full.webp",
+            "/templates/ds03-sang-trong/runtime/v1/media/images/daf539e0-112a-4a45-a696-d8120a68bad9-full.webp",
+            "/templates/ds03-sang-trong/runtime/v1/media/images/4640e788-1411-4836-a589-b54d0f8c105b-full.webp",
+            "/templates/ds03-sang-trong/runtime/v1/media/images/7b487820-2ffa-40f7-b36a-1402f58c6b87-full.webp"
+          ]
+        }
+      },
+      {
+        "id": "events-1",
+        "type": "EVENTS",
+        "props": {
+          "sectionId": "29bjUiNkF9",
+          "title": "Sự kiện cưới",
+          "groomEvents": [
+            {
+              "title": "Tiệc Cưới Nhà Trai",
+              "timeText": "11:00",
+              "dateText": "2026-06-18",
+              "locationName": "Tư gia nhà trai",
+              "address": "KDT Vinhomes Oceanpark, Gia Lâm, Hà Nội"
+            }
+          ],
+          "brideEvents": [
+            {
+              "title": "Tiệc Cưới Nhà Gái",
+              "timeText": "10:00",
+              "dateText": "2026-06-18",
+              "locationName": "Tư gia nhà gái",
+              "address": "49 Lò Đúc, Hai Bà Trưng, Hà Nội"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rsvp-1",
+        "type": "WISHES",
+        "props": {
+          "sectionId": "NYOho1zw4b",
+          "title": "Xác nhận tham dự & Bản đồ",
+          "allowRsvp": true
+        }
+      },
+      {
+        "id": "wishes-1",
+        "type": "WISHES",
+        "props": {
+          "sectionId": "vg2BSya7T1",
+          "title": "Lời chúc",
+          "allowRsvp": false
+        }
+      },
+      {
+        "id": "giftbox-1",
+        "type": "GIFTBOX",
+        "props": {
+          "sectionId": "uGQyhq_Pqz",
+          "title": "Hộp mừng cưới"
+        }
+      },
+      {
+        "id": "thankyou-1",
+        "type": "THANKYOU",
+        "props": {
+          "sectionId": "bmqzXEygtx",
+          "title": "Thank you",
+          "message": "The wedding of Minh Anh & Yến Nhi",
+          "imageUrl": "/templates/ds03-sang-trong/runtime/v1/media/images/537cceef-5576-4beb-aa78-5589748cc49d-full.webp"
+        }
+      }
+    ]
+  }
+}

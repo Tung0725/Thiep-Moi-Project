@@ -43,34 +43,34 @@
 
 ## 5. Architectural & Business Mitigation Recommendations (`PROP-xx`)
 
-1. **`PROP-01` (RSVP Integration in Wishes Block):**
-   - Form gửi lời chúc gồm: `sender_name` (bắt buộc), `attendance` (bắt buộc: `ATTENDING` hoặc `DECLINED`), `message` (tùy chọn hoặc tối đa 500 ký tự).
-   - Danh sách lời chúc hiển thị kèm huy hiệu trạng thái tham dự.
-   - *Complexity: Low | Phase: MVP.*
+### `PROP-01` (RSVP Integration in Wishes Block)
+- Form gửi lời chúc gồm: `sender_name` (bắt buộc), `attendance` (bắt buộc: `ATTENDING` hoặc `DECLINED`), `message` (tùy chọn hoặc tối đa 500 ký tự).
+- Danh sách lời chúc hiển thị kèm huy hiệu trạng thái tham dự.
+- *Complexity: Low | Phase: MVP.*
 
-2. **`PROP-02` (User Authentication with Spring Security + JWT):**
-   - Endpoints: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`.
-   - Bảng `users` lưu `id`, `email`, `password_hash`, `full_name`, `created_at`.
-   - API tạo và sửa thiệp yêu cầu Bearer JWT, kiểm tra `user_id` khớp với chủ sở hữu thiệp.
-   - *Complexity: Medium | Phase: MVP.*
+### `PROP-02` (User Authentication with Spring Security + JWT)
+- Endpoints: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`.
+- Bảng `users` lưu `id`, `email`, `password_hash`, `full_name`, `created_at`.
+- API tạo và sửa thiệp yêu cầu Bearer JWT, kiểm tra `user_id` khớp với chủ sở hữu thiệp.
+- *Complexity: Medium | Phase: MVP.*
 
-3. **`PROP-03` (Immutable Slug Lifecycle):**
-   - `slug` sinh ngẫu nhiên dạng chuỗi ngắn thân thiện (ví dụ: `dam-cuoi-minh-lan-a8f2`), lưu trong bảng `invitations`.
-   - Các lần cập nhật schema (`PUT /api/v1/invitations/{id}`) tuyệt đối không thay đổi `slug`.
-   - *Complexity: Low | Phase: MVP.*
+### `PROP-03` (Immutable Slug Lifecycle)
+- `slug` sinh ngẫu nhiên dạng chuỗi ngắn thân thiện (ví dụ: `dam-cuoi-minh-lan-a8f2`), lưu trong bảng `invitations`.
+- Các lần cập nhật schema (`PUT /api/v1/invitations/{id}`) tuyệt đối không thay đổi `slug`.
+- *Complexity: Low | Phase: MVP.*
 
-4. **`PROP-04` (Template Data Seeding):**
-   - Chuẩn bị 3 template JSON hoàn chỉnh: *Mẫu Cưới Tinh Tế (Minimalist Wedding)*, *Mẫu Cưới Cổ Điển (Vintage Floral)*, *Mẫu Tiệc Sinh Nhật (Birthday Modern)*.
-   - Nạp vào bảng `templates` khi boot backend nếu bảng rỗng.
-   - *Complexity: Low | Phase: MVP.*
+### `PROP-04` (Template Data Seeding)
+- Chuẩn bị 3 template JSON hoàn chỉnh: *Mẫu Cưới Tinh Tế (Minimalist Wedding)*, *Mẫu Cưới Cổ Điển (Vintage Floral)*, *Mẫu Tiệc Sinh Nhật (Birthday Modern)*.
+- Nạp vào bảng `templates` khi boot backend nếu bảng rỗng.
+- *Complexity: Low | Phase: MVP.*
 
-5. **`PROP-05` (Spam Protection & Moderation):**
-   - DTO Validation: `@Size(max = 50)` cho tên người gửi, `@Size(max = 500)` cho lời chúc.
-   - Backend Rate Limiter / Bucket4j hoặc kiểm tra tần suất theo IP.
-   - Endpoint: `DELETE /api/v1/invitations/{id}/wishes/{wishId}` dành riêng cho chủ sở hữu thiệp.
-   - *Complexity: Medium | Phase: MVP.*
+### `PROP-05` (Spam Protection & Moderation)
+- DTO Validation: `@Size(max = 50)` cho tên người gửi, `@Size(max = 500)` cho lời chúc.
+- Backend Rate Limiter / Bucket4j hoặc kiểm tra tần suất theo IP.
+- Endpoint: `DELETE /api/v1/invitations/{id}/wishes/{wishId}` dành riêng cho chủ sở hữu thiệp.
+- *Complexity: Medium | Phase: MVP.*
 
-6. **`PROP-06` (Safe Image URL Handling):**
-   - Regex kiểm tra URL ảnh: `^https?://.*`. Báo lỗi nếu người dùng dán chuỗi Base64.
-   - Component `HeroBlock` có hàm fallback ảnh placeholder nội bộ khi kích hoạt sự kiện `onError`.
-   - *Complexity: Low | Phase: MVP.*
+### `PROP-06` (Safe Image URL Handling)
+- Regex kiểm tra URL ảnh: `^https?://.*`. Báo lỗi nếu người dùng dán chuỗi Base64.
+- Component `HeroBlock` có hàm fallback ảnh placeholder nội bộ khi kích hoạt sự kiện `onError`.
+- *Complexity: Low | Phase: MVP.*

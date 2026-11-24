@@ -46,9 +46,7 @@ export default function LandingPage() {
         <HeroSection />
 
         {/* 2. Featured Template Showcase (Immediate Product Exposure) */}
-        <ScrollReveal>
-          <TemplateShowcaseSection />
-        </ScrollReveal>
+        <TemplateShowcaseSection />
 
         {/* 3. Simple 3 Steps How It Works */}
         <ScrollReveal>

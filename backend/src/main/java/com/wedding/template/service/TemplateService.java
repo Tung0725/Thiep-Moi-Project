@@ -164,8 +164,9 @@ public class TemplateService {
      */
     @PostConstruct
     public void seedInitialTemplates() {
-        seedMinimalismTemplate();
-        seedSongHyTemplate();
+        seedPackagedTemplate("minimalism-do-dam");
+        seedPackagedTemplate("song-hy-xanh");
+        seedPackagedTemplate("ds03-sang-trong");
         var existingOpt = templateRepository.findByCodeOrId("hb04-basic");
         if (existingOpt.isEmpty()) {
             Template hb04 = Template.builder()
@@ -194,39 +195,35 @@ public class TemplateService {
         }
     }
 
-    private void seedMinimalismTemplate() {
-        if (templateRepository.existsByCode("minimalism-do-dam")) {
-            return;
-        }
-
-        try (var input = new ClassPathResource("templates/minimalism-do-dam.json").getInputStream()) {
-            var objectMapper = new ObjectMapper();
-            var data = objectMapper.readTree(input);
-            var request = CreateTemplateRequest.builder()
-                    .code(data.path("id").asText())
-                    .title(data.path("title").asText())
-                    .category(data.path("category").asText())
-                    .categoryLabel(data.path("categoryLabel").asText())
-                    .style(data.path("style").asText())
-                    .badge(data.path("badge").asText())
-                    .imageUrl(data.path("imageUrl").asText())
-                    .description(data.path("description").asText())
-                    .defaultData(objectMapper.writeValueAsString(data.path("defaultData")))
-                    .contentSchema(objectMapper.writeValueAsString(data.path("schema")))
-                    .build();
-            createTemplate(request);
-        } catch (IOException exception) {
-            throw new IllegalStateException("Unable to load Minimalism wedding template seed", exception);
-        }
-    }
-
-    private void seedSongHyTemplate() {
-        if (templateRepository.existsByCode("song-hy-xanh")) {
-            return;
-        }
-        try (var input = new ClassPathResource("templates/song-hy-xanh.json").getInputStream()) {
+    private void seedPackagedTemplate(String code) {
+        try (var input = new ClassPathResource("templates/" + code + ".json").getInputStream()) {
             var mapper = new ObjectMapper();
             var data = mapper.readTree(input);
+            String imageUrl = data.path("imageUrl").asText();
+            String defaultData = mapper.writeValueAsString(data.path("defaultData"));
+            var schemaNode = data.path("schema");
+            String contentSchema = mapper.writeValueAsString(schemaNode);
+            int seedSchemaVersion = schemaNode.path("version").asInt(1);
+
+            var existingOpt = templateRepository.findByCodeOrId(code);
+            if (existingOpt.isPresent()) {
+                Template existing = existingOpt.get();
+                int storedSchemaVersion = parseSchemaVersion(mapper, existing.getContentSchema());
+                boolean needsUpgrade = storedSchemaVersion < seedSchemaVersion
+                        || containsLegacyDs03Prefix(existing.getImageUrl())
+                        || containsLegacyDs03Prefix(existing.getDefaultData())
+                        || containsLegacyDs03Prefix(existing.getContentSchema());
+
+                if (needsUpgrade) {
+                    existing.setImageUrl(imageUrl);
+                    existing.setDefaultData(defaultData);
+                    existing.setContentSchema(contentSchema);
+                    existing.setVersion((existing.getVersion() == null ? 1 : existing.getVersion()) + 1);
+                    templateRepository.save(existing);
+                }
+                return;
+            }
+
             createTemplate(CreateTemplateRequest.builder()
                     .code(data.path("id").asText())
                     .title(data.path("title").asText())
@@ -234,14 +231,29 @@ public class TemplateService {
                     .categoryLabel(data.path("categoryLabel").asText())
                     .style(data.path("style").asText())
                     .badge(data.path("badge").asText())
-                    .imageUrl(data.path("imageUrl").asText())
+                    .imageUrl(imageUrl)
                     .description(data.path("description").asText())
-                    .defaultData(mapper.writeValueAsString(data.path("defaultData")))
-                    .contentSchema(mapper.writeValueAsString(data.path("schema")))
+                    .defaultData(defaultData)
+                    .contentSchema(contentSchema)
                     .build());
         } catch (IOException exception) {
-            throw new IllegalStateException("Unable to load Song Hy wedding template seed", exception);
+            throw new IllegalStateException("Unable to load wedding template seed: " + code, exception);
         }
+    }
+
+    private int parseSchemaVersion(ObjectMapper mapper, String contentSchema) {
+        if (contentSchema == null || contentSchema.isBlank()) {
+            return 1;
+        }
+        try {
+            return mapper.readTree(contentSchema).path("version").asInt(1);
+        } catch (IOException ignored) {
+            return 1;
+        }
+    }
+
+    private boolean containsLegacyDs03Prefix(String value) {
+        return value != null && value.contains("/template-designs/ds03/v1/");
     }
 
     private String buildHb04Schema() {

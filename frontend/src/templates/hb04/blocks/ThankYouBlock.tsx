@@ -30,6 +30,7 @@ export default function ThankYouBlock({
           <img
             src={imageUrl}
             alt="Thank You"
+            data-photo-slot="thankyou-bg"
             style={{
               width: '100%',
               height: '131.74%',

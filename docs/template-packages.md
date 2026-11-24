@@ -5,9 +5,11 @@
 It does not prescribe width, fonts, backgrounds, envelope behavior or a global block registry.
 
 Each package owns its renderer, styles, supported blocks, editor fields, font choices and
-personalization function. HB04 owns its existing blocks and opening envelope. Minimalism
-owns its renderer, scoped CSS and guestbook presentation. Both use `useGuestbook` for API
-access and form state. Music and particle behavior remain shared optional components.
+personalization function. The registry includes HB04 v1, Minimalism v1 and v2, Song Hy Green v1, and DS03 v1.
+HB04 and Minimalism's shared guestbook form use `useGuestbook`. The newer Minimalism layout
+adapts its own form through the same hook. Song Hy Green uses its own adapter to the public
+wish API. Its RSVP form saves `ATTENDING` or `DECLINED`, and its standalone guestbook
+form saves messages as `MAYBE` with a guest count of 1.
 
 ## Adding a design
 
@@ -27,13 +29,14 @@ own schema; the create page has no template-specific block mapping.
 
 Existing schemas without a binding resolve through the explicit legacy adapter: the old
 `MINIMALISM_DARK_RED` marker selects Minimalism v1; older schemas select HB04 v1.
-New invitations save a full personalized schema with an explicit renderer binding.
+The Quick Create page sends a full personalized schema with an explicit renderer binding.
 An unknown pinned version displays an error instead of silently rendering another design.
 When changing a published layout incompatibly, keep its old renderer and register a new
 version; a version number alone cannot preserve old output if its renderer or assets are overwritten.
 
-Creation and preview load the backend template; bundled data is a development fallback
-for known templates. Public links that do not exist no longer display an unrelated default.
+Creation and preview prefer the backend template and fall back to bundled data for known templates.
+The public page tries the API, a matching localStorage entry, then a matching bundled template ID.
+If none supplies a schema, it displays an invitation-not-found message.
 
 The current publishing API still accepts wedding data. The package/editor contract supports
 other invitation kinds, but publishing birthdays or business events will require a suitable
@@ -54,3 +57,18 @@ Visual fidelity is a separate acceptance check: compare source and local screens
 the same content, viewport, fonts loaded, scroll position and envelope/dialog state.
 Check envelope opening, family/ceremony, album, banquet/calendar, guestbook and gifts separately.
 Passing functional tests does not establish a 1:1 visual match.
+
+## DS03 runtime
+
+DS03 mounts the captured invitation components and styles inside a sandboxed frame. The
+package keeps the 960 px desktop design and scales it to fit narrower containers. The frame
+scrolls independently so the captured scroll-driven behavior and overlays operate inside it.
+The editor stores only personalized fields and the `ds03@1` binding. The host uses the public
+invitation API for submissions and passes only the data that the frame needs.
+
+The versioned runtime is stored in MinIO (`wedding-media/templates/ds03-sang-trong/runtime/v1`) and served through Next.js rewrites at `/templates/ds03-sang-trong/runtime/v1`. To rebuild and upload it from the verified DS03 extraction, run `node frontend/scripts/import-ds03-runtime.cjs` from the repository root. The input includes `manifest.json` and `extraction-verification.json`. The script checks captured payload hashes and uploads the template's public data, static assets, and runtime adapters.
+
+`node frontend/scripts/test-ds03-browser.mjs` uses a running Chrome debug session, frontend
+and backend to check the catalog template at desktop and mobile widths. Add `--publish` to
+create a local test invitation and verify persisted responses. See the resulting screenshots
+and report under `extracted_templates/browser-check/ds03-integration`.

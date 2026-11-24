@@ -62,6 +62,7 @@ export default function GiftBoxBlock({
         <img
           src={qrSrc}
           alt={heading}
+          data-photo-slot={fileSlug === 'qr-chu-re' ? 'qr-groom' : 'qr-bride'}
           onClick={() => setLightboxSrc(qrSrc)}
           className="w-[145px] h-[140px] rounded-[6px] border border-[#D6D6D6] object-cover cursor-pointer"
           loading="lazy"
@@ -111,6 +112,7 @@ export default function GiftBoxBlock({
             <img
               src={groomPhotoUrl}
               alt="Chú Rể"
+              data-photo-slot="couple-groom"
               style={{
                 width: '100%',
                 height: '128.31%',
@@ -142,6 +144,7 @@ export default function GiftBoxBlock({
             <img
               src={bridePhotoUrl}
               alt="Cô Dâu"
+              data-photo-slot="couple-bride"
               style={{
                 width: '100%',
                 height: '128.31%',

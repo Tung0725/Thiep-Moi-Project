@@ -2,6 +2,7 @@ import { PageSchema } from '@/types/schema';
 import { pinTemplate } from '@/templates/registry';
 import minimalismTemplate from './templates/minimalism-do-dam.json';
 import songHyTemplate from './templates/song-hy-xanh.json';
+import ds03Template from './templates/ds03-sang-trong.json';
 
 export interface TemplateDefinition {
   id: string;
@@ -31,6 +32,7 @@ export interface TemplateDefinition {
 const templates: TemplateDefinition[] = [
   songHyTemplate as TemplateDefinition,
   minimalismTemplate as TemplateDefinition,
+  ds03Template as TemplateDefinition,
   {
     id: 'hb04-basic',
     category: 'wedding',

@@ -115,6 +115,7 @@ export default function EventsBlock({
                 <img
                   src={photoUrl}
                   alt={event.title}
+                  data-photo-slot={activeTab === 'GROOM' ? `event-groom-${index}` : `event-bride-${index}`}
                   style={{
                     width: '100%',
                     height: '159.57%',

@@ -45,7 +45,7 @@ export default function Hb04Renderer({
           '--hb04-body': theme?.bodyFont === 'sans-serif' ? 'Source Sans 3' : theme?.bodyFont,
         } as React.CSSProperties
       }
-      className="hb04-template relative min-h-screen w-full"
+      className={cn('hb04-template relative w-full', !embedded && 'min-h-screen')}
     >
       {/* Falling Particle Overlay */}
       {effects?.fallingType && (

@@ -1,11 +1,13 @@
 package com.wedding.auth.controller;
 
 import com.wedding.auth.dto.request.ChangePasswordRequest;
+import com.wedding.auth.dto.request.GoogleLoginRequest;
 import com.wedding.auth.dto.request.LoginRequest;
 import com.wedding.auth.dto.request.RegisterRequest;
 import com.wedding.auth.dto.response.AuthSessionResult;
 import com.wedding.auth.dto.response.UserResponse;
 import com.wedding.auth.service.AuthService;
+import com.wedding.auth.service.GoogleIdentityService;
 import com.wedding.common.dto.response.ApiResponse;
 import com.wedding.common.exception.UnauthorizedException;
 import com.wedding.common.util.CookieUtils;
@@ -15,7 +17,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 /**
  * REST Controller cung cấp các endpoint xác thực người dùng: Đăng ký, Kích hoạt email,
@@ -38,6 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final GoogleIdentityService googleIdentityService;
 
     @Value("${app.cookie.secure:false}")
     private boolean isCookieSecure;
@@ -46,6 +53,9 @@ public class AuthController {
     private static final String REFRESH_COOKIE_NAME = "refresh_token";
     private static final String API_V1_PATH = "/api/v1";
     private static final String REFRESH_PATH = "/api/v1/auth/refresh";
+    private static final String GOOGLE_NONCE_COOKIE = "google_login_nonce";
+    private static final String GOOGLE_LOGIN_PATH = "/api/v1/auth/google";
+    private static final long GOOGLE_CHALLENGE_MAX_AGE_SECONDS = 15 * 60L;
     private static final long REFRESH_MAX_AGE_SECONDS = 7 * 24 * 60 * 60L;
 
     /**
@@ -99,12 +109,35 @@ public class AuthController {
             HttpServletResponse response
     ) {
         AuthSessionResult session = authService.login(request);
-        long accessMaxAgeSeconds = Math.max(1, session.expiresIn() / 1000);
-
-        CookieUtils.addHttpOnlyCookie(response, ACCESS_COOKIE_NAME, session.accessToken(), accessMaxAgeSeconds, API_V1_PATH, isCookieSecure, "Lax");
-        CookieUtils.addHttpOnlyCookie(response, REFRESH_COOKIE_NAME, session.refreshToken(), REFRESH_MAX_AGE_SECONDS, REFRESH_PATH, isCookieSecure, "Strict");
+        writeSessionCookies(response, session);
 
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Đăng nhập thành công", session.user()));
+    }
+
+    /** Issues a short-lived nonce bound to the browser before the Google popup opens. */
+    @PostMapping(path = "/google/challenge", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<String>> googleChallenge(HttpServletResponse response) {
+        googleIdentityService.requireConfigured();
+        String nonce = UUID.randomUUID().toString();
+        CookieUtils.addHttpOnlyCookie(response, GOOGLE_NONCE_COOKIE, nonce, GOOGLE_CHALLENGE_MAX_AGE_SECONDS,
+                GOOGLE_LOGIN_PATH, isCookieSecure, "Strict");
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(ApiResponse.success(nonce));
+    }
+
+    /** Verifies a Google credential for the browser challenge and issues the application session. */
+    @PostMapping(path = "/google", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<UserResponse>> googleLogin(
+            @Valid @RequestBody GoogleLoginRequest request,
+            HttpServletRequest servletRequest,
+            HttpServletResponse response
+    ) {
+        String nonce = CookieUtils.getCookieValue(servletRequest, GOOGLE_NONCE_COOKIE)
+                .filter(value -> !value.isBlank())
+                .orElseThrow(() -> new UnauthorizedException("Phiên đăng nhập Google đã hết hạn. Vui lòng thử lại."));
+        CookieUtils.addHttpOnlyCookie(response, GOOGLE_NONCE_COOKIE, "", 0, GOOGLE_LOGIN_PATH, isCookieSecure, "Strict");
+        AuthSessionResult session = authService.loginWithGoogle(googleIdentityService.verify(request.credential(), nonce));
+        writeSessionCookies(response, session);
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(ApiResponse.success(session.user()));
     }
 
     /**
@@ -123,10 +156,7 @@ public class AuthController {
                 .orElseThrow(() -> new UnauthorizedException("Phiên làm việc không hợp lệ hoặc đã hết hạn"));
 
         AuthSessionResult session = authService.refreshToken(rawRefreshToken);
-        long accessMaxAgeSeconds = Math.max(1, session.expiresIn() / 1000);
-
-        CookieUtils.addHttpOnlyCookie(response, ACCESS_COOKIE_NAME, session.accessToken(), accessMaxAgeSeconds, API_V1_PATH, isCookieSecure, "Lax");
-        CookieUtils.addHttpOnlyCookie(response, REFRESH_COOKIE_NAME, session.refreshToken(), REFRESH_MAX_AGE_SECONDS, REFRESH_PATH, isCookieSecure, "Strict");
+        writeSessionCookies(response, session);
 
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Làm mới phiên đăng nhập thành công", session.user()));
     }
@@ -186,5 +216,10 @@ public class AuthController {
         }
         authService.changePassword(principal.getId(), request);
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Đổi mật khẩu thành công", null));
+    }
+    private void writeSessionCookies(HttpServletResponse response, AuthSessionResult session) {
+        long accessMaxAgeSeconds = Math.max(1, session.expiresIn() / 1000);
+        CookieUtils.addHttpOnlyCookie(response, ACCESS_COOKIE_NAME, session.accessToken(), accessMaxAgeSeconds, API_V1_PATH, isCookieSecure, "Lax");
+        CookieUtils.addHttpOnlyCookie(response, REFRESH_COOKIE_NAME, session.refreshToken(), REFRESH_MAX_AGE_SECONDS, REFRESH_PATH, isCookieSecure, "Strict");
     }
 }

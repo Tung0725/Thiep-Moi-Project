@@ -1,19 +1,18 @@
 # 📑 Business Requirements Document (BRD)
 
 > **Dự án:** Nền tảng Tạo và Chia sẻ Thiệp Mời Sự Kiện Trực Tuyến (JSON-Driven UI)  
-> **Tài liệu tham chiếu thượng nguồn (Upstream):** [docs/scenario.md](file:///d:/Programing_Language/InteliJ_IDEA/Thiep-Moi-Project/docs/scenario.md) | [docs/source_facts.md](file:///d:/Programing_Language/InteliJ_IDEA/Thiep-Moi-Project/docs/source_facts.md) | [docs/audit_report.md](file:///d:/Programing_Language/InteliJ_IDEA/Thiep-Moi-Project/docs/audit_report.md)  
-> **Người thực hiện:** Lead Software Architect & Business Analyst  
-> **Trạng thái:** Bản Thảo Hoàn Thiện (Ready for Review)
+> **Tài liệu tham chiếu thượng nguồn (Upstream):** [docs/scenario.md](scenario.md) | [docs/source_facts.md](source_facts.md) | [docs/audit_report.md](audit_report.md)
+> **Hiện trạng:** Đối chiếu mã nguồn `679cc41` và [định hướng sản phẩm](../PRODUCT.md). Các mục tiêu và quyết định MVP từ tài liệu nguồn được giữ để theo dõi chênh lệch với triển khai.
 
 ---
 
 ## 1. Global Conventions
 
-- **Kiến trúc mục tiêu (Architecture Style):** **Modular Monolith** (Phân tách rõ ràng giữa Frontend Next.js và Backend Java Spring Boot 4, dùng chung cơ sở dữ liệu PostgreSQL).
+- **Kiến trúc mục tiêu (Architecture Style):** **Modular Monolith** (Frontend Next.js gọi backend Java Spring Boot 4 qua REST. Backend truy cập PostgreSQL).
 - **Hạ tầng Công nghệ (Tech Stack):**
   - **Frontend:** Next.js (TypeScript, Tailwind CSS, Zustand State Management).
-  - **Backend:** Java Spring Boot 4 (Spring Security, Hibernate 6, `@JdbcTypeCode(SqlTypes.JSON)`).
-  - **Database:** PostgreSQL 15+ (Lưu trữ cây giao diện bằng cột `JSONB`).
+  - **Backend:** Java 21, Spring Boot 4, Spring Security và Spring Data JPA.
+  - **Database:** PostgreSQL 16. Schema JSON lưu dưới dạng `TEXT`.
 - **Đơn vị tiền tệ (Target Currency):** VND (Dự phòng cho Phase 3, kiểu số nguyên `BigInt` đơn vị đồng).
 - **Múi giờ chuẩn (Default Timezone):** `UTC` lưu trữ trong cơ sở dữ liệu; hiển thị theo múi giờ Việt Nam (`Asia/Ho_Chi_Minh` - GMT+7).
 - **Ngôn ngữ tài liệu & Giao diện:** Tiếng Việt.
@@ -28,6 +27,8 @@
 - **Khách mời sự kiện (Guests):** Người nhận lời mời qua mạng xã hội (Zalo, Facebook, Messenger) hoặc điện thoại thông minh.
 
 ### 2.2. Rào cản & Nỗi đau cốt lõi (Core Obstacle)
+
+Số liệu chi phí và thời gian trong phần phân tích là giả định lập kế hoạch ban đầu.
 - **Chi phí & Thời gian in thiệp giấy truyền thống:** Tốn từ 3–8 triệu đồng và 2–3 tuần chuẩn bị in ấn; khi phát sinh thay đổi địa điểm hoặc giờ giấc thì không thể chỉnh sửa, buộc phải in lại hoặc đính chính thủ công.
 - **Thiệp ảnh tĩnh thiếu sức sống:** Thiệp ảnh thông thường gửi qua Zalo hay bị nén mờ, không có chức năng dẫn đường (Google Maps), không có đếm ngược ngày cưới và không thu thập được phản hồi.
 - **Khó khăn dự trù cỗ tiệc (Pain point lớn nhất):** Chủ tiệc không thể nắm bắt chính xác bao nhiêu khách sẽ đến, dẫn đến tình trạng thừa cỗ (lãng phí tiền triệu) hoặc thiếu cỗ (gây thất lễ với khách).
@@ -62,13 +63,15 @@ Trở thành nền tảng tạo và chia sẻ thiệp mời sự kiện trực t
 
 ---
 
+Các số liệu và thời hạn trên là mục tiêu hoặc giả định đặt khi lập kế hoạch. Chưa có nguồn đo trong đợt đối chiếu này. `OBJ-03` là mục tiêu trải nghiệm tổng quát. Ngưỡng riêng của API khi kiểm thử tải nằm ở `NFR-PERF-01`.
+
 ## 4. Stakeholder Register (Danh Sách Các Bên Liên Quan)
 
 | Role | Nhóm / Vai trò | Trách Nhiệm Chính | Mối Quan Tâm Cốt Lõi |
 |:---|:---|:---|:---|
 | **Host / Author** | Khách hàng tạo thiệp (Cặp đôi cưới, chủ tiệc) | Chọn mẫu, tùy biến nội dung chữ/ảnh, xuất bản link, quản lý danh sách lời chúc & RSVP | Giao diện sửa dễ dùng, xem trước trên điện thoại giống thật 100%, bảo mật quyền sửa thiệp |
 | **Guest** | Khách mời sự kiện | Mở link trên điện thoại, xem lộ trình Google Maps, gửi lời chúc & xác nhận có đi hay không | Tải nhanh, không giật lag, giao diện trang trọng, thao tác gửi lời chúc đơn giản |
-| **System Operator / Tech Lead** | Quản trị kỹ thuật & Vận hành | Giám sát hiệu năng Database JSONB, kiểm soát anti-spam, phát hành các block mới | Kiến trúc dễ mở rộng, code sạch không lỗi thời, chịu tải cao trong mùa cưới |
+| **System Operator / Tech Lead** | Quản trị kỹ thuật & Vận hành | Giám sát hiệu năng lưu trữ và truy vấn, kiểm soát anti-spam, phát hành các block mới | Kiến trúc dễ mở rộng, code sạch không lỗi thời, chịu tải cao trong mùa cưới |
 | **Product Owner / Business Sponsor** | Ban điều hành & Nhà đầu tư | Định hướng sản phẩm, kiểm soát chi phí hạ tầng (VPS, R2), tối ưu hóa doanh thu | ROI, tỷ lệ giữ chân người dùng, tự động hóa quy trình thanh toán |
 
 ---
@@ -79,19 +82,19 @@ Trở thành nền tảng tạo và chia sẻ thiệp mời sự kiện trực t
 
 | ID | Tên Năng Lực Nghiệp Vụ | Mô Tả Chi Tiết Năng Lực | Mức Độ Ưu Tiên (MoSCoW) | Truy Vết Mục Tiêu |
 |:---|:---|:---|:---|:---|
-| `CAP-01` | **Xác thực Tài khoản Người dùng (User Auth)** | Đăng ký, đăng nhập tài khoản bằng JWT (kèm mở rộng Google OAuth2 ở Phase 2). Quản lý danh sách các thiệp thuộc quyền sở hữu của người dùng. | **Must** (MVP) | `OBJ-01`, `OBJ-04` |
-| `CAP-02` | **Kho Mẫu Thiệp Động (Template Catalog)** | Cung cấp danh mục 3 mẫu JSON khởi tạo sẵn (`Wedding Romantic`, `Minimalist Luxury`, `Birthday Modern`) để người dùng xem trước và nhân bản tạo thiệp mới. | **Must** (MVP) | `OBJ-01` |
-| `CAP-03` | **Trình Biên Tập Hai Cột (Visual Live Editor)** | Màn hình Editor chia 2 cột: Cột trái nhập liệu form và theme; Cột phải giả lập màn hình điện thoại render trực tiếp từ JSON State theo thời gian thực. Hỗ trợ đổi vị trí khối Lên/Xuống (chế độ `STACK`). | **Must** (MVP) | `OBJ-01`, `OBJ-04` |
-| `CAP-04` | **Bộ Khối Giao Diện Cốt Lõi (4 Core Blocks)** | Khả năng dựng hình động 4 khối: `HeroBlock` (ảnh bìa & tên dâu rể), `CountdownBlock` (đếm ngược), `LocationBlock` (thời gian & Google Maps), `WishesBlock` (lời chúc & RSVP). | **Must** (MVP) | `OBJ-01`, `OBJ-04` |
-| `CAP-05` | **Thu Thập & Quản Lý RSVP / Lời Chúc (Wishes Management)** | Khách mời gửi lời chúc và báo tham dự (`ATTENDING` / `DECLINED`). Chủ tiệc có giao diện xem danh sách phản hồi và có nút **Xóa lời chúc rác**. | **Must** (MVP) | `OBJ-02` |
-| `CAP-06` | **Xuất Bản & Định Danh Bất Biến (Publishing & Slug)** | Lưu cấu trúc cây JSON vào cột `content_schema` (`JSONB`). Cấp phát đường dẫn duy nhất `/t/{slug}` cố định vĩnh viễn và hỗ trợ thẻ Meta OpenGraph khi share Zalo/Facebook. | **Must** (MVP) | `OBJ-01`, `OBJ-03` |
-| `CAP-07` | **Lưu trữ Ảnh Đám Cưới & Hộp Mừng Cưới (Phase 2)** | Tích hợp upload ảnh trực tiếp lên Cloudflare R2 / S3 cho `GalleryBlock` và tự động sinh mã VietQR nhận tiền mừng cho `GiftQrBlock`. | **Should** (Phase 2) | `OBJ-01` |
-| `CAP-08` | **Hiệu Ứng Cao Cấp & Thanh Toán Tự Động (Phase 3)** | Thêm nhạc nền xoay, hiệu ứng hoa rơi phủ màn hình; tích hợp cổng PayOS/SePay quét mã VietQR tự động xóa Watermark bản nháp. | **Could** (Phase 3) | `OBJ-05` |
+| `CAP-01` | **Xác thực tài khoản** | Có đăng ký, xác minh email và quản lý phiên. Google OAuth2 và danh sách thiệp của chủ sở hữu còn trong backlog. | **Must** (MVP) | `OBJ-01`, `OBJ-04` |
+| `CAP-02` | **Kho mẫu thiệp và Studio** | Có HB04 Basic, Minimalism Đỏ Đậm và Song Hỷ Xanh để xem trước và tạo thiệp. Studio có luồng tạo, nhân bản và sửa mẫu. Nguồn seed `PROP-04`. | **Must** (MVP) | `OBJ-01` |
+| `CAP-03` | **Cá nhân hóa và xem trước** | Người tạo nhập nội dung cưới, chỉnh giao diện và xem preview. Điều khiển thứ tự và ẩn section tùy package. | **Must** (MVP) | `OBJ-01`, `OBJ-04` |
+| `CAP-04` | **Dựng giao diện theo package mẫu** | Giữ bố cục, nội dung và hành vi của mẫu đã chọn. Snapshot mới gắn phiên bản renderer để thiệp đã chia sẻ có thể tiếp tục dùng cùng phiên bản. | **Must** (MVP) | `OBJ-01`, `OBJ-04` |
+| `CAP-05` | **Thu thập và quản lý RSVP, lời chúc** | Khách gửi phản hồi và đọc sổ lưu bút. Quản lý cho chủ thiệp, xóa lời chúc và CSV còn trong backlog. | **Must** (MVP) | `OBJ-02` |
+| `CAP-06` | **Xuất bản và chia sẻ** | Quick Create tạo thiệp cưới công khai với đường dẫn `/t/{slug}`. Quản lý nháp và OpenGraph theo từng thiệp còn trong backlog. | **Must** (MVP) | `OBJ-01`, `OBJ-03` |
+| `CAP-07` | **Album và hộp mừng cưới** | Mẫu có thể có album, hộp quà và QR. Upload ảnh người dùng và phạm vi sinh QR cấu hình thuộc phần mở rộng. | **Should** (Phase 2) | `OBJ-01` |
+| `CAP-08` | **Hiệu ứng và thương mại hóa** | Nhạc và hiệu ứng đã có theo mẫu. Thanh toán và watermark thuộc lộ trình thương mại hóa. | **Could** (Phase 3) | `OBJ-05` |
 
 ### 5.2. Ranh giới loại trừ nghiêm ngặt (Strict Out-of-Scope cho Phase 1 MVP)
 - ❌ **Không làm cổng thanh toán trực tuyến:** Chưa tích hợp VietQR tự động, chưa phân quyền gói VIP/trả phí ở MVP (mọi tính năng MVP đều được sử dụng miễn phí để thông luồng).
 - ❌ **Không làm kéo thả tọa độ tự do ($x, y$):** Không làm giao diện Free-form Canvas (chỉ làm dạng xếp chồng `STACK` cuộn dọc từ trên xuống với nút Lên/Xuống).
-- ❌ **Không làm hạ tầng upload ảnh lên S3/R2:** Người dùng tạm thời dán link URL ảnh trực tiếp từ internet để kiểm thử luồng dữ liệu.
+- ❌ **Upload ảnh người dùng nằm ngoài phạm vi MVP:** Người dùng có thể dùng URL ảnh. Tài nguyên dựng sẵn của mẫu được lưu bằng object storage.
 
 ---
 
@@ -99,20 +102,20 @@ Trở thành nền tảng tạo và chia sẻ thiệp mời sự kiện trực t
 
 | ID | Tên Quy Tắc | Điều Kiện (Condition) | Kích Hoạt (Trigger) | Kết Quả Nghiệp Vụ (Outcome) | Ngoại Lệ (Exceptions) |
 |:---|:---|:---|:---|:---|:---|
-| `BR-01` | **Bảo vệ Quyền Sở Hữu Thiệp** | Người dùng gửi yêu cầu sửa hoặc xóa dữ liệu thiệp | API nhận request `PUT /api/v1/invitations/{id}` | Hệ thống kiểm tra `user_id` trong JWT phải trùng với chủ sở hữu thiệp trong DB; nếu sai trả mã `403 Forbidden`. | Không có ngoại lệ. |
-| `BR-02` | **Tính Bất Biến của Slug Xuất Bản** | Thiệp đã được xuất bản lần đầu và đã có `slug` | Chủ thiệp tiếp tục sửa nội dung trong Editor và bấm Lưu | Hệ thống chỉ cập nhật `content_schema` và `updated_at`, tuyệt đối giữ nguyên giá trị `slug` cũ để không làm gãy liên kết đã chia sẻ. | Chỉ có Admin mới có quyền can thiệp cấp DB nếu phát hiện slug vi phạm thuần phong mỹ tục. |
-| `BR-03` | **Chuẩn Hóa Đường Dẫn Ảnh & Cấm Base64** | Người dùng dán dữ liệu vào ô link ảnh của `HeroBlock` | Người dùng submit form hoặc blur khỏi ô input | Dữ liệu phải bắt đầu bằng `http://` hoặc `https://`. Nghiêm cấm chuỗi bắt đầu bằng `data:image/` (Base64). Nếu vi phạm, từ chối lưu và báo lỗi trực quan. | Không có. |
-| `BR-04` | **Kiểm Soát Spam Lời Chúc (Anti-Spam)** | Khách mời gửi lời chúc qua form công khai `/api/v1/public/cards/{slug}/wishes` | Khách bấm nút "Gửi lời chúc" | Kiểm tra: Tên người gửi $\le 50$ ký tự, Lời chúc $\le 500$ ký tự. Mỗi địa chỉ IP chỉ được gửi tối đa 5 lời chúc trong 60 giây. Nếu vượt quá, trả lỗi `429 Too Many Requests`. | Không có. |
-| `BR-05` | **Xác Nhận Tham Dự Nhị Phân (Binary RSVP)** | Khách mời điền form xác nhận tham dự | Khách bấm gửi phản hồi | Thuộc tính `attendance` bắt buộc phải là `ATTENDING` (Sẽ tham dự) hoặc `DECLINED` (Không thể đến). | Nếu khách không chọn, mặc định coi là `ATTENDING`. |
-| `BR-06` | **Bộ Dựng Hình An Toàn (Fault-Tolerant Rendering)** | Thuộc tính trong JSON bị thiếu hoặc URL ảnh bìa bị lỗi 404/chặn hotlink | Trình duyệt thực hiện render cây JSON | Component tự động sử dụng giá trị mặc định (`Default Props`) và kích hoạt ảnh placeholder trang nhã, tuyệt đối không văng lỗi trắng trang (`White Screen of Death`). | Không có. |
+| `BR-01` | **Quyền sở hữu thiệp** | Tài khoản yêu cầu sửa thiệp hoặc quản lý phản hồi | Khi gọi thao tác của chủ thiệp | Quyết định MVP yêu cầu kiểm tra quyền sở hữu. Hiện Quick Create gắn ID khi đã xác thực và chấp nhận khách vãng lai. | Chính sách nhận quyền với thiệp tạo ẩn danh chờ quyết định. Nguồn `PROP-02`. |
+| `BR-02` | **Bảo toàn slug** | Thiệp có link công khai | Khi cập nhật thiệp đã xuất bản | Giữ slug đã cấp để link chia sẻ tiếp tục hoạt động. Quick Create sinh slug ngay lúc lưu. | Luồng cập nhật thiệp đã lưu còn trong backlog. Nguồn `PROP-03`. |
+| `BR-03` | **Xử lý URL ảnh** | Người dùng nhập URL ảnh | Khi lưu và khi ảnh tải lỗi | Quyết định MVP yêu cầu URL HTTP(S) cho ảnh nhập ngoài, chặn ảnh Base64 và có fallback khi phù hợp. | Media đi kèm mẫu có thể dùng đường dẫn nội bộ. Backend chưa cưỡng chế quy tắc trên schema. Nguồn `PROP-06`. |
+| `BR-04` | **Kiểm soát spam lời chúc** | Khách gửi lời chúc trên trang công khai | Khi gửi form | API hiện kiểm tra tên tối đa 100 và lời chúc tối đa 500 ký tự. Quyết định MVP dùng tên tối đa 50 ký tự và 5 lượt/phút/IP. | Rate limit còn trong backlog. Cần xác nhận chênh lệch giới hạn tên. Nguồn `PROP-05`. |
+| `BR-05` | **Trạng thái RSVP** | Khách gửi phản hồi | Khi validate và lưu RSVP | API yêu cầu `ATTENDING`, `DECLINED` hoặc `MAYBE`. `DECLINED` lưu 0 người. Trạng thái khác mặc định 1 khi thiếu hoặc gửi 0. | `MAYBE` là phần mở rộng của quyết định RSVP nhị phân `PROP-01`. Song Hỷ Xanh dùng `MAYBE` cho lời chúc từ form của mẫu. |
+| `BR-06` | **Tương thích khi dựng thiệp** | Thiệp cũ hoặc mới được đưa vào renderer | Khi xem thử hoặc mở link thiệp | Thiệp có binding dùng đúng renderer version. Schema cũ đi qua adapter. Version lạ hiển thị lỗi. | Fallback cho thuộc tính và ảnh lỗi cần kiểm tra theo package. Nguồn `PROP-06`. |
 
 ---
 
 ## 7. Constraints, Assumptions & Risks
 
 ### 7.1. Ràng buộc kỹ thuật & kiến trúc (Constraints)
-- **Framework & Runtime:** Java 17+ kết hợp Spring Boot 4; Node.js 18+ kết hợp Next.js 14+ (App Router).
-- **Cơ sở dữ liệu:** Bắt buộc sử dụng PostgreSQL hỗ trợ kiểu dữ liệu `JSONB` và Hibernate 6 `@JdbcTypeCode(SqlTypes.JSON)`.
+- **Framework và runtime** dùng Java 21, Spring Boot 4.1.1 và Next.js 14 App Router theo cấu hình dự án.
+- **Lưu trữ** dùng PostgreSQL, với schema JSON lưu dưới dạng `TEXT` trong entity hiện tại. MinIO phục vụ tài nguyên mẫu. Thiết kế ban đầu dùng JSONB theo `FACT-TECH-03`.
 - **Thiết bị hiển thị:** Ưu tiên số 1 cho màn hình điện thoại di động (Mobile-First Viewport $375\text{px} - 430\text{px}$).
 
 ### 7.2. Giả định cần kiểm chứng (Assumptions)
@@ -124,8 +127,8 @@ Trở thành nền tảng tạo và chia sẻ thiệp mời sự kiện trực t
 | Risk ID | Mô Tả Rủi Ro | Khả Năng (Likelihood) | Mức Độ Tác Động (Impact) | Kế Hoạch Giảm Thiểu (Mitigation Plan) |
 |:---|:---|:---|:---|:---|
 | `RSK-01` | **Bot spam lời chúc rác / phá hoại thiệp cưới công khai** | Medium | High | Áp dụng Rate Limiting theo IP (`BR-04`), kiểm tra độ dài input và cấp nút **Xóa lời chúc** tức thì cho chủ thiệp trong Editor. |
-| `RSK-02` | **Phình to dung lượng cột JSONB làm chậm truy vấn** | Low | High | Cấm tuyệt đối nhét chuỗi ảnh Base64 vào JSON (`BR-03`), đánh chỉ mục GIN Index trên PostgreSQL cho các trường tìm kiếm thường xuyên. |
-| `RSK-03` | **Ảnh bìa sự kiện bị chết link (404) làm xấu thiệp** | Medium | Medium | Bắt sự kiện `onError` tại component thẻ `<img>` của Next.js để tự động thay thế bằng ảnh placeholder mặc định trang nhã (`BR-06`). |
+| `RSK-02` | **Schema quá lớn hoặc chứa dữ liệu media nhúng** | Low | High | Kiểm soát đường dẫn và giới hạn kích thước ở `BR-03` và `TASK-17`. |
+| `RSK-03` | **Ảnh bìa bị lỗi hoặc thiếu media** | Medium | Medium | Kiểm tra fallback theo mẫu và đồng bộ tài nguyên object storage khi triển khai. |
 | `RSK-04` | **Sai lệch múi giờ đếm ngược giữa các thiết bị** | Medium | Medium | Mọi mốc thời gian sự kiện trong JSON bắt buộc lưu theo định dạng chuẩn ISO 8601 kèm múi giờ (`+07:00` hoặc UTC). |
 
 ---
@@ -139,9 +142,4 @@ Trở thành nền tảng tạo và chia sẻ thiệp mời sự kiện trực t
 
 ---
 
-## ✅ Definition of Done (DoD) - BRD
-
-- [x] Tất cả các Objectives (`OBJ-01` đến `OBJ-05`) đều đạt chuẩn SMART với Baseline, Target định lượng và Thời hạn cụ thể. *(Bằng chứng: 5/5 OBJs đạt chuẩn)*
-- [x] Đã phân tích Nguyên nhân gốc rễ (Root Cause Analysis - 5 Whys) thay vì chỉ nêu triệu chứng bên ngoài. *(Bằng chứng: Mục 2.3)*
-- [x] Ranh giới ngoài phạm vi (Strict Out-of-Scope) được phân định rõ ràng 3 mục loại trừ. *(Bằng chứng: Mục 5.2)*
-- [x] Mọi Business Rule (`BR-01` đến `BR-06`) đều có thể kiểm thử độc lập và 100% Capabilities (`CAP-01` đến `CAP-08`) đều truy vết về ít nhất một Objective. *(Bằng chứng: 8 CAPs $\rightarrow$ 5 OBJs tại Mục 5.1)*
+Các năng lực hiện có tập trung vào thiệp cưới. Các loại sự kiện khác cần hợp đồng tạo thiệp và validation phù hợp. Xem [PRD](PRD.md) và [báo cáo nhất quán](CONSISTENCY_REPORT.md) để theo dõi các yêu cầu còn mở.

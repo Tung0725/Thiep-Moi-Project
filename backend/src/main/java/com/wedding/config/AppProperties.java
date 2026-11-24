@@ -14,6 +14,7 @@ public class AppProperties {
     private Jwt jwt = new Jwt();
     private Cors cors = new Cors();
     private Storage storage = new Storage();
+    private Admin admin = new Admin();
 
     @Getter
     @Setter
@@ -36,5 +37,13 @@ public class AppProperties {
         private String secretKey;
         private String bucketName = "wedding-media";
         private String region = "us-east-1";
+    }
+
+    @Getter
+    @Setter
+    public static class Admin {
+        private String email;
+        private String password;
+        private String fullName = "System Administrator";
     }
 }

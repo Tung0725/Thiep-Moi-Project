@@ -9,5 +9,5 @@ export const weddingFields: TemplateField[] = [
   { key: 'eventTime', label: 'Giờ khai tiệc', type: 'time', required: true },
   { key: 'venueName', label: 'Địa điểm tổ chức', type: 'text', required: true },
   { key: 'venueAddress', label: 'Địa chỉ', type: 'text', required: true },
-  { key: 'coverImageUrl', label: 'Đường dẫn ảnh bìa', type: 'text' },
+  { key: 'coverImageUrl', label: 'Ảnh bìa thiệp cưới', type: 'image' },
 ];

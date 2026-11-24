@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { PageSchema } from '@/types/schema';
 import { DEFAULT_TEMPLATES } from '@/data/defaultTemplates';
 import { invitationService } from '@/services/invitationService';
-import { PageRenderer } from '@/components/renderer/PageRenderer';
+import { PageRenderer } from '@/templates/PageRenderer';
 
 interface PublicInvitationPageProps {
   params: {

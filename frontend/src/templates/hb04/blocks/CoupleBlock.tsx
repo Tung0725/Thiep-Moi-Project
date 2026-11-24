@@ -136,6 +136,7 @@ export default function CoupleBlock({
               <img
                 src={groomPhoto}
                 alt={groom.name}
+                data-photo-slot="couple-groom"
                 style={{
                   width: '100%',
                   height: '141.94%',
@@ -179,6 +180,7 @@ export default function CoupleBlock({
               <img
                 src={bridePhoto}
                 alt={bride.name}
+                data-photo-slot="couple-bride"
                 style={{
                   width: '100%',
                   height: '141.94%',

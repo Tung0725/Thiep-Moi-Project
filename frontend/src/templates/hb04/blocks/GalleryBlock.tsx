@@ -50,6 +50,7 @@ export default function GalleryBlock({
                 <img
                   src={imgUrl}
                   alt={`Ảnh cưới ${idx + 1}`}
+                  data-photo-slot={`gallery-${idx}`}
                   className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
                   loading="lazy"
                 />

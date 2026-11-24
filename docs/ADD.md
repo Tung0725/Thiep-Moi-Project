@@ -1,325 +1,112 @@
-# 🏛️ Architecture Design Document (ADD) - [Modular Monolith]
+# Architecture Design Document (ADD)
 
-> **Dự án:** Nền tảng Tạo và Chia sẻ Thiệp Mời Sự Kiện Trực Tuyến (JSON-Driven UI)  
-> **Tài liệu tham chiếu thượng nguồn (Upstream):** [docs/Event_Storming.md](file:///d:/Programing_Language/InteliJ_IDEA/Thiep-Moi-Project/docs/Event_Storming.md) | [docs/PRD.md](file:///d:/Programing_Language/InteliJ_IDEA/Thiep-Moi-Project/docs/PRD.md) | [docs/BRD.md](file:///d:/Programing_Language/InteliJ_IDEA/Thiep-Moi-Project/docs/BRD.md)  
-> **Người thực hiện:** Lead Software Architect & Tech Lead  
-> **Trạng thái:** Hoàn tất (DoD Certified)
+> Modular monolith Spring Boot và ứng dụng Next.js. Baseline mã nguồn `679cc41`. Xem [PRD](PRD.md) và [Event Storming](Event_Storming.md).
 
----
+## 1. Thành phần và ranh giới
 
-## 1. Technology Stack (Ngăn Xếp Công Nghệ Chuẩn Hóa)
+- Frontend dùng Next.js 14 App Router, React 18, TypeScript và Tailwind 3. App gọi backend qua các module trong [services](../frontend/src/services). `NEXT_PUBLIC_API_URL` cấu hình địa chỉ API.
+- Backend dùng Java 21, Spring Boot 4.1.1, Spring Security, Spring Data JPA và Maven. Các package nghiệp vụ `auth`, `template`, `invitation`, `wish` dùng controller, DTO, service và repository trong cùng một ứng dụng. `WishService` truy vấn Invitation repository để xác định thiệp rồi đọc hoặc ghi Wish repository. [pom.xml](../backend/pom.xml)
+- PostgreSQL 16 lưu dữ liệu ứng dụng. MinIO lưu ảnh, font, nhạc và tài nguyên của mẫu. Next.js rewrite vùng URL media `/templates/:template/:directory/:path*` sang bucket theo `STORAGE_ENDPOINT` và `STORAGE_BUCKET_NAME`. CSS template có thể nằm trong `frontend/public/template-designs`. [Compose](../docker-compose.yml), [Next config](../frontend/next.config.mjs), [quy trình nhập mẫu](templete/quy-trinh-chuyen-doi-mau-thiep.md)
+- Compose hiện đóng gói backend, PostgreSQL và MinIO. Frontend chạy riêng. Hibernate dùng `ddl-auto: update` ở dev và `validate` ở prod, nên môi trường prod cần schema phù hợp trước khi backend khởi động. [Dev](../backend/src/main/resources/application-dev.yml), [Prod](../backend/src/main/resources/application-prod.yml)
 
-| Hạng Mục | Công Nghệ Lựa Chọn | Phiên Bản | Lý Do Lựa Chọn (Rationale) |
-|:---|:---|:---|:---|
-| **Ngôn ngữ Backend** | Java (LTS) | 21 LTS | Hỗ trợ Virtual Threads, Pattern Matching, Record Classes giúp code gọn gàng, hiệu năng cao. |
-| **Backend Framework** | Spring Boot | 4.x / 3.3.x | Framework tiêu chuẩn doanh nghiệp, tích hợp Spring Security, Spring Data JPA, Hibernate 6 native JSONB. |
-| **Cơ sở dữ liệu** | PostgreSQL | 16+ | Khả năng xử lý kiểu dữ liệu `JSONB` vượt trội, hỗ trợ đánh chỉ mục GIN Index cho truy vấn schema cực nhanh. |
-| **Frontend Framework** | Next.js (App Router) | 14+ / 15 | Hỗ trợ Server-Side Rendering (SSR) tối ưu thẻ Meta OpenGraph cho Zalo/Facebook và Code-splitting (`next/dynamic`). |
-| **Frontend Styling** | Tailwind CSS | 3.4+ | Tiện ích CSS hiện đại, tối ưu dung lượng bundle xuất xưởng, tương thích tuyệt đối với Mobile-first design. |
-| **Quản lý State** | Zustand | 4.5+ | Quản lý cây JSON Schema của Editor gọn nhẹ hơn Redux, không gây re-render dư thừa giữa Form và Phone Preview. |
-| **Định danh & Bảo mật** | JJWT (Java JWT) | 0.12+ | Triển khai Stateless JWT Authentication chuẩn RFC 7519, chữ ký HMAC-SHA256 an toàn. |
-
----
-
-## 2. Modular Architecture & Component Structure (Cấu Trúc Đơn Khối Phân Tầng)
-
-### 2.1. Cấu trúc Gói Chuẩn Hóa (Backend Package Layout)
-Tuân thủ nghiêm ngặt **Quy chuẩn Không sử dụng Impl (No-Impl Pattern)** và **Phân tách DTO chuẩn (`dto.request` / `dto.response`)**, mỗi file giới hạn dưới 300 dòng:
-
-```
-backend/src/main/java/com/wedding/
-├── config/                         # SecurityConfig, WebMvcConfig, CorsConfig
-├── common/                         # Lớp dùng chung toàn hệ thống
-│   ├── exception/                  # GlobalExceptionHandler, ApiException
-│   └── dto/response/               # ApiResponse<T> Wrapper chuẩn
-├── auth/                           # Bounded Context: User Identity
-│   ├── controller/AuthController.java
-│   ├── service/AuthService.java    # Concrete class trực tiếp (Không dùng interface AuthServiceImpl)
-│   ├── repository/UserRepository.java
-│   ├── entity/User.java
-│   └── dto/
-│       ├── request/RegisterRequest.java, LoginRequest.java
-│       └── response/AuthResponse.java
-├── template/                       # Bounded Context: Template Catalog
-│   ├── controller/TemplateController.java
-│   ├── service/TemplateService.java
-│   ├── repository/TemplateRepository.java
-│   ├── entity/Template.java
-│   └── dto/response/TemplateResponse.java
-├── invitation/                     # Bounded Context: Invitation Core (JSON-Driven UI)
-│   ├── controller/InvitationController.java, PublicCardController.java
-│   ├── service/InvitationService.java, SlugGeneratorService.java
-│   ├── repository/InvitationRepository.java
-│   ├── entity/Invitation.java
-│   └── dto/
-│       ├── request/CreateInvitationRequest.java, UpdateSchemaRequest.java
-│       └── response/InvitationResponse.java, PublicCardResponse.java
-└── wish/                           # Bounded Context: Wishes & RSVP
-    ├── controller/WishController.java
-    ├── service/WishService.java
-    ├── repository/WishRepository.java
-    ├── entity/Wish.java
-    └── dto/
-        ├── request/SubmitWishRequest.java
-        └── response/WishResponse.java, RsvpSummaryResponse.java
+```mermaid
+flowchart LR
+    Browser["Trình duyệt"] --> Next["Next.js và template registry"]
+    Browser --> API["Spring Boot REST API"]
+    Next --> Media["MinIO media"]
+    API --> DB["PostgreSQL"]
+    API --> Mail["Dịch vụ gửi email"]
 ```
 
-### 2.2. Quy tắc Phụ thuộc Ranh giới Module (Dependency Rules)
-1. **Giao tiếp In-Process:** Các module giao tiếp qua **Public Service method** của module đó hoặc qua **Spring `ApplicationEventPublisher`**.
-2. **Cấm Cross-Repository:** Module `Wish` tuyệt đối KHÔNG được inject `InvitationRepository`. Nếu cần xác thực thiệp tồn tại, `WishService` phải gọi thông qua `InvitationService`.
-3. **Cấm SQL Join liên module ở tầng Database:** Mỗi repository chỉ truy vấn entity thuộc module của chính nó.
+## 2. Dữ liệu lưu trữ
 
----
+| Bảng | Khóa và quan hệ | Dữ liệu chính |
+|---|---|---|
+| `users` | UUID, unique email | Password hash, tên, role, trạng thái xác minh |
+| `email_verification_tokens` | UUID, FK `user_id`, unique token | Thời điểm hết hạn |
+| `refresh_tokens` | UUID, FK `user_id`, unique token hash | Hết hạn, thu hồi và hash token thay thế |
+| `templates` | ID số, unique `code` | Trạng thái, version của bản ghi, `forked_from_id`, `default_data` và `content_schema` kiểu `TEXT` |
+| `invitations` | ID số, unique `slug`, `user_id` UUID nullable, `template_id` chuỗi | Thông tin cưới, trạng thái, `content_schema TEXT NOT NULL`, dấu thời gian tạo và sửa |
+| `wishes` | ID số, FK `invitation_id`, index `(invitation_id, created_at DESC)` | `guest_name` tối đa 100, `attendance_status`, `guest_count`, `message` tối đa 500, `created_at` |
 
-## 3. Database Schema & ERD (Mô Hình Cơ Sở Dữ Liệu)
+`Invitation.userId` và `Invitation.templateId` là trường scalar. Renderer ghi `PageSchema.template = { id, version }` vào snapshot khi dùng luồng tạo mới từ frontend. Phiên bản package, `PageSchema.version` và version của bản ghi mẫu phục vụ các mục đích riêng. [Invitation entity](../backend/src/main/java/com/wedding/invitation/entity/Invitation.java), [Template entity](../backend/src/main/java/com/wedding/template/entity/Template.java), [Wish entity](../backend/src/main/java/com/wedding/wish/entity/Wish.java), [Registry](../frontend/src/templates/registry.ts)
 
 ```mermaid
 erDiagram
-    USERS ||--o{ INVITATIONS : "sở hữu (owns)"
-    INVITATIONS ||--o{ WISHES : "nhận (receives)"
-    TEMPLATES ||--o{ INVITATIONS : "khởi tạo từ (instantiates)"
-
-    USERS {
-        uuid id PK "Khóa chính UUID v4"
-        varchar email UK "Email người dùng duy nhất"
-        varchar password_hash "Mật khẩu mã hóa BCrypt"
-        varchar full_name "Họ và tên chủ tài khoản"
-        varchar role "Vai trò: USER, ADMIN"
-        timestamp created_at "Thời điểm đăng ký (UTC)"
-        timestamp updated_at "Thời điểm cập nhật (UTC)"
-    }
-
-    TEMPLATES {
-        uuid id PK "Khóa chính UUID v4"
-        varchar name "Tên mẫu thiệp"
-        varchar thumbnail_url "Link ảnh bìa mẫu"
-        varchar category "Phân loại: WEDDING, BIRTHDAY..."
-        jsonb default_schema "Cấu trúc JSON mặc định của mẫu"
-        timestamp created_at "Thời điểm nạp mẫu (UTC)"
-    }
-
-    INVITATIONS {
-        uuid id PK "Khóa chính UUID v4"
-        uuid user_id FK "Khóa ngoại liên kết bảng USERS"
-        varchar slug UK "Định danh duy nhất (Index) trên URL"
-        varchar status "Trạng thái: DRAFT, PUBLISHED, ARCHIVED"
-        jsonb content_schema "Cây giao diện JSON-Driven UI"
-        timestamp published_at "Thời điểm xuất bản lần đầu"
-        timestamp created_at "Thời điểm khởi tạo (UTC)"
-        timestamp updated_at "Thời điểm sửa đổi gần nhất (UTC)"
-    }
-
-    WISHES {
-        uuid id PK "Khóa chính UUID v4"
-        uuid invitation_id FK "Khóa ngoại liên kết bảng INVITATIONS"
-        varchar sender_name "Tên khách mời gửi lời chúc"
-        varchar attendance "Xác nhận: ATTENDING, DECLINED"
-        varchar message "Nội dung lời chúc mừng"
-        timestamp created_at "Thời điểm gửi (UTC)"
-    }
+    USERS ||--o{ EMAIL_VERIFICATION_TOKENS : verifies
+    USERS ||--o{ REFRESH_TOKENS : authenticates
+    INVITATIONS ||--o{ WISHES : receives
 ```
 
-### 3.1. Đặc tả chi tiết các Bảng và Chỉ mục (DDL Specifications)
+## 3. Hợp đồng REST
 
-#### Bảng `invitations` (Trọng tâm JSON-Driven UI)
-```sql
-CREATE TABLE invitations (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    slug VARCHAR(100) UNIQUE,
-    status VARCHAR(20) NOT NULL DEFAULT 'DRAFT',
-    content_schema JSONB NOT NULL,
-    published_at TIMESTAMP WITH TIME ZONE,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+Tiền tố các đường dẫn trong bảng là `/api/v1`. JSON dùng `ApiResponse<T>` với `code`, `message` và `data`. DTO yêu cầu được validate tại controller. [ApiResponse](../backend/src/main/java/com/wedding/common/dto/response/ApiResponse.java)
 
--- Đánh chỉ mục tìm kiếm thiệp theo Slug siêu tốc
-CREATE INDEX idx_invitations_slug ON invitations(slug);
+| API ID | Method và path | Quyền hiện tại | Kết quả thành công |
+|---|---|---|---|
+| `API-01` | `POST /auth/register` | Public | `201`, thông tin đăng ký |
+| `API-02` | `POST /auth/login` | Public | `200`, thông tin người dùng và cookie phiên |
+| `API-03` | `GET /templates?category=...` | Public | `200`, mẫu đã xuất bản. Category tùy chọn |
+| `API-08` | `GET /public/invitations/{slug}` | Public | `200`, metadata thiệp và `contentSchema` kiểu string |
+| `API-09` | `POST /public/invitations/{slug}/wishes` | Public | `201`, bản ghi lời chúc và RSVP |
+| `API-12` | `POST /public/invitations/quick-create` | Public, có thể nhận principal | `201`, thiệp `PUBLISHED`, slug và `publicUrl` |
+| `API-13` | `GET /public/invitations/{slug}/wishes?page=0&size=10` | Public | `200`, Spring Data Page, mới nhất trước. Page tối thiểu 0, size từ 1 đến 50 |
+| `API-14` | `GET /templates/{codeOrId}` | Public | `200`, chi tiết mẫu, schema và dữ liệu mặc định |
+| `API-15` | `POST /templates` | Public | `201`, mẫu mới |
+| `API-16` | `POST /templates/{id}/clone` | Public | `201`, mẫu nhân bản |
+| `API-17` | `PUT /templates/{id}` | Public | `200`, mẫu cập nhật |
+| `API-18` | `POST /auth/verify-email`, `POST /auth/resend-verification` | Public | `200`, xác minh hoặc xử lý yêu cầu gửi lại |
+| `API-19` | `POST /auth/refresh`, `POST /auth/logout` | Public ở tầng route, xử lý phiên dựa trên cookie | `200`, làm mới hoặc kết thúc phiên |
+| `API-20` | `GET /auth/me`, `PUT /auth/password` | Yêu cầu xác thực ở tầng method | `200`, thông tin người dùng hoặc xác nhận đổi mật khẩu |
 
--- Đánh chỉ mục GIN cho cột content_schema để truy vấn sâu trong JSONB nếu cần
-CREATE INDEX idx_invitations_schema_gin ON invitations USING gin(content_schema);
-```
+| API ID | Hợp đồng dự kiến | Điều kiện trước khi triển khai |
+|---|---|---|
+| `API-04` | Khởi tạo bản nháp từ mẫu | Chốt vòng đời nháp và quyền sở hữu tại `FR-08` |
+| `API-05` | Đọc chi tiết thiệp để chỉnh sửa | Kiểm tra quyền theo `BR-01` |
+| `API-06` | Cập nhật schema thiệp đã lưu | Bảo toàn slug và kiểm tra quyền theo `BR-01`, `BR-02` |
+| `API-07` | Xuất bản bản nháp | Chốt trạng thái và hành vi khi gọi lại |
+| `API-10` | Xóa lời chúc theo ID thiệp và ID lời chúc | Cả bản ghi lời chúc và quyền chủ thiệp phải khớp |
+| `API-11` | Tải báo cáo RSVP dạng CSV | Chốt cột và encoding theo `Q-PRD-02` |
 
-#### Bảng `wishes` (Lời chúc & RSVP)
-```sql
-CREATE TABLE wishes (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    invitation_id UUID NOT NULL REFERENCES invitations(id) ON DELETE CASCADE,
-    sender_name VARCHAR(50) NOT NULL,
-    attendance VARCHAR(20) NOT NULL DEFAULT 'ATTENDING',
-    message VARCHAR(500) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+Hợp đồng hiện hành đối chiếu theo [AuthController](../backend/src/main/java/com/wedding/auth/controller/AuthController.java), [TemplateController](../backend/src/main/java/com/wedding/template/controller/TemplateController.java), [PublicInvitationController](../backend/src/main/java/com/wedding/invitation/controller/PublicInvitationController.java) và [WishController](../backend/src/main/java/com/wedding/wish/controller/WishController.java). Một số helper trong `services/api.ts` còn dùng đường dẫn cũ. Luồng đang chạy gọi các đường dẫn trên qua `services/invitationService.ts`.
 
--- Tối ưu hóa truy vấn lấy danh sách lời chúc mới nhất theo thiệp
-CREATE INDEX idx_wishes_invitation_created ON wishes(invitation_id, created_at DESC);
-```
+### Quick Create và đọc thiệp
 
----
+`API-12` yêu cầu `groomName`, `brideName`, `eventDate`, `venueName` và `contentSchema` khác rỗng. Các trường tùy chọn gồm `templateId`, `phoneNumber`, `eventTime`, `venueAddress` và `coverImageUrl`. Frontend serialize snapshot thành chuỗi JSON. Renderer đọc ảnh bìa từ snapshot.
 
-## 4. Interface Contracts (RESTful API Design)
+`InvitationService` lưu thiệp trong transaction tại thời điểm tạo. Khi slug cơ sở trùng, service thêm hậu tố ngẫu nhiên. Unique constraint là hàng rào cuối cho ghi đồng thời. Service hiện chưa thử lại khi ghi trùng. `API-08` tìm theo slug và trả `404` nếu thiếu bản ghi. Frontend có fallback cùng trình duyệt và fallback theo mã mẫu. [Service](../backend/src/main/java/com/wedding/invitation/service/InvitationService.java), [Public route](../frontend/src/app/t/%5Bslug%5D/page.tsx)
 
-Toàn bộ API trả về cấu trúc wrapper chuẩn `ApiResponse<T>`:
+### Gửi lời chúc và RSVP
+
+Ví dụ payload `API-09`:
+
 ```json
 {
-  "code": 200,
-  "message": "Thành công",
-  "data": { ... }
+  "guestName": "Nguyễn An",
+  "attendanceStatus": "ATTENDING",
+  "guestCount": 2,
+  "message": "Chúc hai bạn hạnh phúc!"
 }
 ```
 
-### Danh mục Chi tiết Các Endpoint
+DTO yêu cầu tên khác rỗng và tối đa 100 ký tự, trạng thái `ATTENDING`, `DECLINED` hoặc `MAYBE`, số người từ 0 đến 10 nếu gửi và lời chúc tối đa 500 ký tự. `WishService` lưu 0 người cho `DECLINED`, mặc định 1 cho trạng thái khác khi bỏ trống hoặc gửi 0. Tên và lời chúc được trim. Lời chúc trống lưu null. Thiếu slug trả `404`, payload vi phạm validation trả `400`. Mỗi lượt gửi hợp lệ tạo một bản ghi. Song Hỷ Xanh chuyển lựa chọn của form RSVP thành `ATTENDING` hoặc `DECLINED` qua adapter, còn form lời chúc gửi `MAYBE`. [Adapter Song Hỷ Xanh](../frontend/src/services/songHySourceService.ts) [DTO](../backend/src/main/java/com/wedding/wish/dto/request/SubmitWishRequest.java), [Service](../backend/src/main/java/com/wedding/wish/service/WishService.java)
 
-| API ID | Phương Thức | Endpoint | Quyền Hạn | Mô Tả Nghiệp Vụ | HTTP Success |
-|:---|:---:|:---|:---|:---|:---:|
-| `API-01` | `POST` | `/api/v1/auth/register` | Public | Đăng ký tài khoản mới (`RegisterRequest`) | `201 Created` |
-| `API-02` | `POST` | `/api/v1/auth/login` | Public | Đăng nhập nhận JWT Token (`LoginRequest`) | `200 OK` |
-| `API-03` | `GET` | `/api/v1/templates` | Public | Lấy danh sách kho mẫu thiệp có sẵn | `200 OK` |
-| `API-04` | `POST` | `/api/v1/invitations` | `ROLE_USER` | Khởi tạo thiệp mới từ `templateId` | `201 Created` |
-| `API-05` | `GET` | `/api/v1/invitations/{id}` | Owner | Lấy chi tiết JSON Schema để nạp vào Editor | `200 OK` |
-| `API-06` | `PUT` | `/api/v1/invitations/{id}` | Owner | Cập nhật bản nháp JSON Schema của thiệp | `200 OK` |
-| `API-07` | `POST` | `/api/v1/invitations/{id}/publish` | Owner | Xuất bản thiệp, sinh `slug` bất biến | `200 OK` |
-| `API-08` | `GET` | `/api/v1/public/cards/{slug}` | Public | Khách mời lấy JSON Schema để vẽ thiệp | `200 OK` |
-| `API-09` | `POST` | `/api/v1/public/cards/{slug}/wishes`| Public | Khách mời gửi lời chúc mừng & RSVP | `201 Created` |
-| `API-10` | `DELETE`| `/api/v1/invitations/{id}/wishes/{wishId}`| Owner | Chủ thiệp xóa lời chúc rác | `200 OK` |
-| `API-11` | `GET` | `/api/v1/invitations/{id}/wishes/export-csv`| Owner | Tải file CSV danh sách khách và RSVP | `200 OK` (File) |
+## 4. Xác thực, quyền và vận hành
 
----
+- `NFR-SEC-01` dùng BCrypt cost 12. `NFR-SEC-02` dùng JWT và cookie phiên HttpOnly. Refresh token lưu dạng hash, xoay khi refresh. Frontend gửi credentials và có nhánh refresh khi nhận `401` ngoài route auth. [SecurityConfig](../backend/src/main/java/com/wedding/config/SecurityConfig.java), [CookieUtils](../backend/src/main/java/com/wedding/common/util/CookieUtils.java)
+- `SecurityConfig` cho phép truy cập `/auth/**`, `/public/**`, `/templates/**`. Auth có giới hạn số lần đăng nhập sai theo email trong bộ nhớ. `NFR-SEC-04` cần cơ chế riêng cho API lời chúc. Phân quyền ghi mẫu và vòng đời chủ thiệp được theo dõi trong [Backlog](BACKLOG.md).
+- `NFR-SEC-03` và `NFR-SCAL-01` cần kiểm tra theo adapter/renderer và ở biên API. Quick Create hiện chỉ yêu cầu chuỗi schema khác rỗng. `BR-03` và giới hạn kích thước vẫn cần kiểm chứng.
+- `NFR-PERF-01`, `NFR-PERF-02`, `NFR-PERF-03` và `NFR-AVAIL-01` cần số đo theo các điều kiện trong PRD. `NFR-USAB-01` và `NFR-COMP-01` cần browser test theo mẫu và thiết bị mục tiêu. [Báo cáo kiểm tra](CONSISTENCY_REPORT.md)
 
-### Mẫu Hợp Đồng Dữ Liệu Đại Diện (Payload Samples)
+## 5. Quyết định kiến trúc
 
-#### `[API-06]` Cập Nhật JSON Schema (`PUT /api/v1/invitations/{id}`)
-- **Request Body:**
-```json
-{
-  "contentSchema": {
-    "version": 1,
-    "layoutMode": "STACK",
-    "theme": {
-      "primaryColor": "#D4AF37",
-      "backgroundColor": "#FCFBF7",
-      "headingFont": "Playfair Display",
-      "bodyFont": "Inter"
-    },
-    "blocks": [
-      {
-        "id": "blk-hero-01",
-        "type": "HERO",
-        "props": {
-          "title": "Minh Tuấn & Mai Lan",
-          "eventDate": "2026-11-20T10:00:00+07:00",
-          "coverImageUrl": "https://images.unsplash.com/photo-wedding-demo.jpg"
-        }
-      },
-      {
-        "id": "blk-countdown-02",
-        "type": "COUNTDOWN",
-        "props": {
-          "targetDate": "2026-11-20T10:00:00+07:00"
-        }
-      },
-      {
-        "id": "blk-location-03",
-        "type": "LOCATION",
-        "props": {
-          "venueName": "Trung tâm Hội nghị Trống Đồng Palace",
-          "address": "Số 65 Quán Sứ, Hoàn Kiếm, Hà Nội",
-          "mapUrl": "https://maps.google.com/?q=..."
-        }
-      },
-      {
-        "id": "blk-wishes-04",
-        "type": "WISHES",
-        "props": {
-          "allowRsvp": true
-        }
-      }
-    ]
-  }
-}
-```
+| ADR ID | Quyết định | Hệ quả |
+|---|---|---|
+| `ADR-01` | Modular monolith cho backend | Các nghiệp vụ dùng REST qua một backend. Cross-module hiện có ở truy vấn Invitation cho sổ lưu bút |
+| `ADR-02` | PostgreSQL JSONB theo thiết kế ban đầu | Deprecated trong baseline hiện tại. Giữ tham chiếu về `FACT-TECH-03` |
+| `ADR-03` | Service concrete, constructor injection, DTO tách request/response | Giữ ranh giới giữa hợp đồng REST và entity |
+| `ADR-04` | Renderer package được resolve ở frontend | HB04 v1, Minimalism Đỏ Đậm v1/v2 và Song Hỷ Xanh v1. Schema không có binding dùng legacy adapter. Binding lạ trả lỗi. Giữ renderer lẫn tài nguyên của version đang được thiệp cũ tham chiếu |
+| `ADR-05` | Schema mẫu và snapshot thiệp là chuỗi JSON lưu trong `TEXT` | Backend lưu trữ; frontend serialize, parse và dựng hình. Đổi kiểu lưu trữ cần migration và kiểm tra dữ liệu cũ |
+| `ADR-06` | Media mẫu trên object storage với URL qua Next.js | Triển khai cần đồng bộ bucket và asset đúng version. Upload ảnh người dùng thuộc `TASK-12` |
 
-#### `[API-09]` Khách Mời Gửi Lời Chúc (`POST /api/v1/public/cards/{slug}/wishes`)
-- **Request Body:**
-```json
-{
-  "senderName": "Bác Hoàng & Gia Đình",
-  "attendance": "ATTENDING",
-  "message": "Chúc hai cháu trăm năm hạnh phúc, đầu bạc răng long!"
-}
-```
-- **Response Body (`201 Created`):**
-```json
-{
-  "code": 201,
-  "message": "Gửi lời chúc thành công",
-  "data": {
-    "id": "8a7b9c1d-2e3f-4a5b-6c7d-8e9f0a1b2c3d",
-    "senderName": "Bác Hoàng & Gia Đình",
-    "attendance": "ATTENDING",
-    "message": "Chúc hai cháu trăm năm hạnh phúc, đầu bạc răng long!",
-    "createdAt": "2026-10-23T19:30:00Z"
-  }
-}
-```
-
----
-
-## 5. Security & Concurrency Architecture (Bảo Mật & Giao Dịch)
-
-### 5.1. Cơ Chế Xác Thực & Phân Quyền (Spring Security + JWT)
-- **Luồng Filter:** Mọi request được chuyển qua `JwtAuthenticationFilter`. Filter trích xuất Bearer token từ header `Authorization`, xác thực chữ ký và giải mã `userId`, sau đó nạp `UsernamePasswordAuthenticationToken` vào `SecurityContextHolder`.
-- **Phân quyền tại Controller:** Sử dụng Annotation `@PreAuthorize("hasRole('ROLE_USER')")` trên các endpoint bảo vệ.
-- **Kiểm tra quyền sở hữu (Ownership Validation):**
-  ```java
-  // Trong InvitationService.java
-  if (!invitation.getUserId().equals(currentAuthenticatedUserId)) {
-      throw new ForbiddenAccessException("Bạn không có quyền chỉnh sửa thiệp này!");
-  }
-  ```
-
-### 5.2. Quản Lý Giao Dịch & Khóa Bất Biến Slug
-- **Giao dịch Database:** Toàn bộ các service method thao tác ghi dữ liệu đều được bao bọc bởi `@Transactional(rollbackFor = Exception.class)`.
-- **Khóa Slug Bất Biến (Slug Immutability):** Khi gọi `publishInvitation`, hệ thống kiểm tra nếu `invitation.getSlug() != null`, giữ nguyên slug cũ. Nếu slug chưa tồn tại, sinh slug dạng `[ten-chu-thiep]-[random-4-chars]`. Đặt ràng buộc `UNIQUE` ở database để bắt va chạm slug và tự động retry sinh lại tối đa 3 lần.
-
-### 5.3. Phòng Chống Spam & Tấn Công Mã Độc (Anti-Spam & Anti-XSS)
-- **Rate Limiting theo IP:** Sử dụng bộ đếm In-Memory `ConcurrentHashMap` kèm sliding window kiểm tra số lượt gọi tới `/api/v1/public/cards/{slug}/wishes`. Nếu một IP gửi $> 5$ requests trong 60 giây, trả về `429 Too Many Requests`.
-- **Chống XSS trong JSON-Driven UI:** Frontend Next.js render text thuần qua các phần tử React tiêu chuẩn (`<p>`, `<h1>`), tuyệt đối không dùng `dangerouslySetInnerHTML`. Backend áp dụng Hibernate Validator `@Size` và tự động loại bỏ các ký tự điều khiển HTML nguy hại.
-
----
-
-## 6. Architecture Decision Records (ADRs)
-
-### `[ADR-01]` Kiến Trúc Modular Monolith Đóng Gói Một Deployment Unit
-- **Ngữ cảnh:** Dự án là sản phẩm MVP cần ra mắt thị trường nhanh (Time-to-Market), đội ngũ phát triển tinh gọn, chi phí hạ tầng ban đầu thấp.
-- **Lựa chọn thay thế:** Microservices kiến trúc phân tán.
-- **Quyết định:** Sử dụng **Modular Monolith** đóng gói toàn bộ Backend thành 1 file JAR Spring Boot duy nhất, chia ranh giới theo package modules và service interfaces.
-- **Hệ quả:** Tối ưu chi phí server ($1$ VPS nhỏ), dễ debug, không có overhead mạng phân tán; yêu cầu kỷ luật cao không được cross-inject repositories.
-
-### `[ADR-02]` Lưu Trữ Cây Giao Diện Bằng PostgreSQL JSONB & Hibernate 6
-- **Ngữ cảnh:** Kiến trúc JSON-Driven UI đòi hỏi cấu trúc các block và theme thay đổi linh hoạt mà không muốn chạy migration DDL cơ sở dữ liệu mỗi khi thêm thuộc tính mới.
-- **Lựa chọn thay thế:** MongoDB (NoSQL) hoặc thiết kế bảng EAV (Entity-Attribute-Value) phức tạp.
-- **Quyết định:** Sử dụng PostgreSQL với cột kiểu `JSONB` kết hợp Hibernate 6 `@JdbcTypeCode(SqlTypes.JSON)`.
-- **Hệ quả:** Vừa đảm bảo tính toàn vẹn quan hệ (ACID) của User, vừa có được tính linh hoạt không giới hạn của JSON Schema.
-
-### `[ADR-03]` No-Impl Pattern Cho Spring Boot Services
-- **Ngữ cảnh:** Tránh bloat code khi tạo hàng loạt interface chỉ có duy nhất 1 class hiện thực tương ứng (ví dụ: `UserService` và `UserServiceImpl`).
-- **Quyết định:** Sử dụng trực tiếp Concrete Service Class (ví dụ: `public class UserService { ... }`).
-- **Hệ quả:** Giảm 50% số lượng file boilerplate, định hướng code trực diện, dễ đọc và bảo trì.
-
-### `[ADR-04]` Client-Side Dynamic Component Registry Trong Next.js
-- **Ngữ cảnh:** Thiệp mời hiển thị trên di động cần tải trang cực nhanh dưới 1.2s trên mạng 4G. Nếu import tĩnh tất cả các block vào bundle chính sẽ làm phình to dung lượng tải.
-- **Quyết định:** Xây dựng `ComponentRegistry` sử dụng `next/dynamic` kết hợp `<Suspense>` và `<ErrorBoundary>`.
-- **Hệ quả:** Block nào có mặt trong `blocks[]` của thiệp thì trình duyệt mới tải mã nguồn của block đó; một block lỗi không bao giờ làm sập các block còn lại.
-
----
-
-## ✅ Definition of Done (DoD) - ADD (Monolith)
-
-- [x] **Database Schema chi tiết:** Định nghĩa đầy đủ cột, kiểu dữ liệu, PK/FK, Index, chỉ mục GIN trên `JSONB` và JPA entity mapping. *(Bằng chứng: Mục 3)*
-- [x] **100% APIs tuân thủ chuẩn RESTful:** Định dạng wrapper `ApiResponse<T>`, mã HTTP Status chuẩn xác, có payload mẫu và phân quyền theo từng vai trò `ROLE-xx`. *(Bằng chứng: 11 APIs tại Mục 4)*
-- [x] **Mọi NFRs đều có giải pháp kiến trúc:** Hiệu năng FCP được giải quyết bởi `next/dynamic`, bảo mật mật khẩu qua BCrypt, chống spam qua IP Rate Limiting. *(Bằng chứng: Mục 5 và Mục 6)*
-- [x] **Hệ thống sơ đồ Mermaid trực quan:** Context Diagram, Component Layout, ERD Diagram. *(Bằng chứng: Mục 2 và Mục 3)*
-- [x] **Ranh giới Module nghiêm ngặt:** Cấm cross-repository injection, tuân thủ nguyên tắc Modular Monolith. *(Bằng chứng: Mục 2.2)*
-- [x] **4 bản ghi quyết định kiến trúc (ADRs):** Giải trình rõ ràng Context, Decision và Consequences. *(Bằng chứng: Mục 6)*
+Xem [template packages](template-packages.md) và [đối chiếu Song Hỷ Xanh](templete/song-hy-xanh-storage-verification.md) để chuẩn bị tài nguyên mẫu.

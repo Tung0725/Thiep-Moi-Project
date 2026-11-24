@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:./.env.google[.properties],optional:file:./backend/.env.google[.properties],optional:file:../.env[.properties],optional:file:./.env[.properties]
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:wedding_db}
     username: ${DB_USER:postgres}
@@ -19,7 +21,6 @@ logging:
     "[com.wedding]": DEBUG
     "[org.springframework.security]": INFO
     "[org.hibernate.SQL]": DEBUG
-    "[org.hibernate.orm.jdbc.bind]": TRACE
 
 app:
   jwt:

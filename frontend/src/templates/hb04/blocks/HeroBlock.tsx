@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HeroBlockProps } from '@/types/schema';
 import { ScrollReveal } from '@/components/common/ScrollReveal';
 
@@ -23,6 +23,10 @@ export default function HeroBlock({
 }: HeroBlockProps) {
   const [imgError, setImgError] = useState(false);
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [coverImageUrl]);
 
   const fallbackImage =
     '/templates/hb04/assets/77f50417-11dc-4fe7-aa0e-05bbe6d27a4f-full.webp';
@@ -157,6 +161,7 @@ export default function HeroBlock({
         <img
           src={activeCoverUrl}
           alt={`${groomName} & ${brideName}`}
+          data-photo-slot="hero-cover"
           onError={() => setImgError(true)}
           style={{
             width: '100%',

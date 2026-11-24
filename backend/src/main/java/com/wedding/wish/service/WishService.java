@@ -2,6 +2,7 @@ package com.wedding.wish.service;
 
 import com.wedding.common.exception.AppException;
 import com.wedding.invitation.entity.Invitation;
+import com.wedding.invitation.entity.InvitationStatus;
 import com.wedding.invitation.repository.InvitationRepository;
 import com.wedding.wish.dto.request.SubmitWishRequest;
 import com.wedding.wish.dto.response.WishResponseDto;
@@ -36,8 +37,7 @@ public class WishService {
      */
     @Transactional
     public WishResponseDto submitWish(String slug, SubmitWishRequest request) {
-        Invitation invitation = invitationRepository.findBySlug(slug)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Không tìm thấy thiệp mời với đường dẫn yêu cầu."));
+        Invitation invitation = findPublishedInvitationOrThrow(slug);
 
         AttendanceStatus status = AttendanceStatus.valueOf(request.getAttendanceStatus());
         int normalizedGuestCount = resolveGuestCount(status, request.getGuestCount());
@@ -66,12 +66,21 @@ public class WishService {
      */
     @Transactional(readOnly = true)
     public Page<WishResponseDto> getWishesBySlug(String slug, Pageable pageable) {
-        Invitation invitation = invitationRepository.findBySlug(slug)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Không tìm thấy thiệp mời với đường dẫn yêu cầu."));
+        Invitation invitation = findPublishedInvitationOrThrow(slug);
 
         return wishRepository
                 .findByInvitationIdOrderByCreatedAtDesc(invitation.getId(), pageable)
                 .map(this::toDto);
+    }
+
+    private Invitation findPublishedInvitationOrThrow(String slug) {
+        Invitation invitation = invitationRepository.findBySlug(slug)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Không tìm thấy thiệp mời với đường dẫn yêu cầu."));
+
+        if (invitation.getStatus() != InvitationStatus.PUBLISHED) {
+            throw new AppException(HttpStatus.NOT_FOUND, "Không tìm thấy thiệp mời với đường dẫn yêu cầu.");
+        }
+        return invitation;
     }
 
     private int resolveGuestCount(AttendanceStatus status, Integer requestedCount) {

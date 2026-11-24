@@ -2,6 +2,7 @@ package com.wedding.wish.service;
 
 import com.wedding.common.exception.AppException;
 import com.wedding.invitation.entity.Invitation;
+import com.wedding.invitation.entity.InvitationStatus;
 import com.wedding.invitation.repository.InvitationRepository;
 import com.wedding.wish.dto.request.SubmitWishRequest;
 import com.wedding.wish.dto.response.WishResponseDto;
@@ -48,6 +49,7 @@ class WishServiceTest {
         Invitation invitation = Invitation.builder()
                 .id(10L)
                 .slug("van-bach-khanh-ly")
+                .status(InvitationStatus.PUBLISHED)
                 .build();
 
         SubmitWishRequest request = SubmitWishRequest.builder()
@@ -81,6 +83,7 @@ class WishServiceTest {
         Invitation invitation = Invitation.builder()
                 .id(10L)
                 .slug("van-bach-khanh-ly")
+                .status(InvitationStatus.PUBLISHED)
                 .build();
 
         SubmitWishRequest request = SubmitWishRequest.builder()
@@ -128,6 +131,7 @@ class WishServiceTest {
         Invitation invitation = Invitation.builder()
                 .id(10L)
                 .slug("van-bach-khanh-ly")
+                .status(InvitationStatus.PUBLISHED)
                 .build();
 
         Wish wish = Wish.builder()
@@ -150,5 +154,42 @@ class WishServiceTest {
         assertEquals(1, page.getTotalElements());
         assertEquals("Hội Bạn Đại Học", page.getContent().get(0).getGuestName());
         assertEquals(2, page.getContent().get(0).getGuestCount());
+    }
+
+    @Test
+    @DisplayName("submitWish - Thiệp ở trạng thái ARCHIVED ném AppException 404 NOT_FOUND")
+    void submitWish_ArchivedInvitation_Throws404() {
+        Invitation archived = Invitation.builder()
+                .id(10L)
+                .slug("van-bach-khanh-ly")
+                .status(InvitationStatus.ARCHIVED)
+                .build();
+        SubmitWishRequest request = SubmitWishRequest.builder()
+                .guestName("Khách A")
+                .attendanceStatus("ATTENDING")
+                .guestCount(1)
+                .build();
+        when(invitationRepository.findBySlug("van-bach-khanh-ly")).thenReturn(Optional.of(archived));
+
+        AppException ex = assertThrows(AppException.class,
+                () -> wishService.submitWish("van-bach-khanh-ly", request));
+
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+    }
+
+    @Test
+    @DisplayName("getWishesBySlug - Thiệp ở trạng thái DRAFT ném AppException 404 NOT_FOUND")
+    void getWishesBySlug_DraftInvitation_Throws404() {
+        Invitation draft = Invitation.builder()
+                .id(10L)
+                .slug("van-bach-khanh-ly")
+                .status(InvitationStatus.DRAFT)
+                .build();
+        when(invitationRepository.findBySlug("van-bach-khanh-ly")).thenReturn(Optional.of(draft));
+
+        AppException ex = assertThrows(AppException.class,
+                () -> wishService.getWishesBySlug("van-bach-khanh-ly", PageRequest.of(0, 10)));
+
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
     }
 }

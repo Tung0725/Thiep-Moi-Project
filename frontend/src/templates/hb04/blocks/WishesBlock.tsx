@@ -3,7 +3,7 @@
 import React from 'react';
 import { WishesBlockProps } from '@/types/schema';
 import { AttendanceStatus, WishItemResponse } from '@/types/api';
-import { useGuestbook } from '@/hooks/useGuestbook';
+import { useGuestbook } from '@/templates/useGuestbook';
 
 const GUEST_COUNT_OPTIONS = [1, 2, 3, 4, 5] as const;
 

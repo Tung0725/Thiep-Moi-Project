@@ -90,6 +90,10 @@ public class InvitationService {
         Invitation invitation = invitationRepository.findBySlug(slug)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Không tìm thấy thiệp mời với đường dẫn yêu cầu."));
 
+        if (invitation.getStatus() != InvitationStatus.PUBLISHED) {
+            throw new AppException(HttpStatus.NOT_FOUND, "Không tìm thấy thiệp mời với đường dẫn yêu cầu.");
+        }
+
         return PublicCardResponse.builder()
                 .slug(invitation.getSlug())
                 .title(invitation.getTitle())

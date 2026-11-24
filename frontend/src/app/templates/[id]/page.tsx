@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { DEFAULT_TEMPLATES, TemplateDefinition } from '@/data/defaultTemplates';
 import { templateService } from '@/services/templateService';
-import { PageRenderer } from '@/components/renderer/PageRenderer';
+import { PageRenderer } from '@/templates/PageRenderer';
 
 interface TemplateDetailPageProps {
   params: {
@@ -17,15 +17,12 @@ interface TemplateDetailPageProps {
 /**
  * Full invitation demo for the selected template.
  * Props: params.id identifies the template loaded from the API or local catalog.
- * State: template data and whether the visitor has scrolled to the invitation end.
+ * State: loaded template data.
  */
 export default function TemplateDetailPage({ params }: TemplateDetailPageProps) {
   const { id } = params;
   const [template, setTemplate] = useState<TemplateDefinition | null>(null);
   const reducedMotion = useReducedMotion();
-
-  const [hasReachedEnd, setHasReachedEnd] = useState(false);
-  const previewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function loadTemplate() {
@@ -70,33 +67,6 @@ export default function TemplateDetailPage({ params }: TemplateDetailPageProps) 
     loadTemplate();
   }, [id]);
 
-  useEffect(() => {
-    const preview = previewRef.current;
-    if (!template || !preview) return;
-
-    let frame = 0;
-    const updateActions = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const bottom = preview.getBoundingClientRect().bottom;
-        setHasReachedEnd(!preview.querySelector('[data-invitation-open="false"]') && window.scrollY > 0 && bottom <= window.innerHeight + 1);
-      });
-    };
-
-    const observer = new ResizeObserver(updateActions);
-    observer.observe(preview);
-    window.addEventListener('scroll', updateActions, { passive: true });
-    window.addEventListener('resize', updateActions);
-    updateActions();
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('scroll', updateActions);
-      window.removeEventListener('resize', updateActions);
-      cancelAnimationFrame(frame);
-    };
-  }, [template]);
-
   if (!template) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#fffafb]">
@@ -108,10 +78,13 @@ export default function TemplateDetailPage({ params }: TemplateDetailPageProps) 
   return (
     <div
       className="min-h-screen w-full"
-      style={{ backgroundColor: template.schema.theme.backgroundColor || '#FFFFFF', '--demo-accent': template.schema.theme.primaryColor } as React.CSSProperties}
+      style={{
+        backgroundColor: template.schema.theme.backgroundColor || '#FFFFFF',
+        '--demo-accent': template.schema.theme.primaryColor,
+      } as React.CSSProperties}
     >
       {/* Full invitation preview */}
-      <div ref={previewRef} className="w-full pb-16">
+      <div className="w-full pb-20">
         <PageRenderer
           key={template.id}
           schema={template.schema}
@@ -119,33 +92,39 @@ export default function TemplateDetailPage({ params }: TemplateDetailPageProps) 
         />
       </div>
 
-      {/* Actions appear only at the end of the invitation */}
-      {hasReachedEnd && (
-        <motion.nav
-          aria-label="Thao tác với mẫu thiệp"
-          initial={{ opacity: 0, y: reducedMotion ? 0 : 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: reducedMotion ? 0 : .28, ease: [.22, 1, .36, 1] }}
-          className="fixed bottom-[max(.75rem,env(safe-area-inset-bottom))] right-3 sm:right-6 z-40 flex max-w-[calc(100%-5rem)] items-center gap-2"
+      {/* Always-accessible floating action bar clear of bottom-left audio controls */}
+      <motion.nav
+        aria-label="Thao tác với mẫu thiệp"
+        initial={{ opacity: 0, y: reducedMotion ? 0 : 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: reducedMotion ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed bottom-[max(.75rem,env(safe-area-inset-bottom))] right-3 sm:right-6 z-40 flex max-w-[calc(100%-5rem)] items-center gap-2 rounded-full bg-white/90 dark:bg-[#151724]/90 backdrop-blur-md p-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.14)] border border-neutral-200/80 dark:border-neutral-700/80"
+      >
+        <Link
+          href="/#kho-thiep"
+          aria-label="Quay lại kho mẫu thiệp"
+          title="Quay lại kho mẫu thiệp"
+          className="group inline-flex min-h-10 w-10 shrink-0 items-center justify-center gap-1.5 rounded-full border border-neutral-200 bg-white text-sm font-semibold text-[var(--demo-accent)] transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--demo-accent)] sm:w-auto sm:px-4"
         >
-          <Link
-            href="/#kho-thiep"
-            aria-label="Quay lại kho mẫu thiệp"
-            title="Quay lại kho mẫu thiệp"
-            className="group inline-flex min-h-11 w-11 shrink-0 items-center justify-center gap-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold text-[var(--demo-accent)] transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--demo-accent)] sm:w-auto sm:px-4"
-          >
-            <ArrowLeft aria-hidden="true" size={18} className="motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:-translate-x-1" />
-            <span className="hidden sm:inline">Quay lại</span>
-          </Link>
-          <Link
-            href={`/create?templateId=${template.id}`}
-            className="group inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-[var(--demo-accent)] px-4 text-sm font-bold text-white shadow-[0_3px_8px_rgba(0,0,0,0.18)] transition-[filter,transform] duration-200 hover:brightness-110 motion-safe:hover:-translate-y-0.5 motion-safe:active:scale-[.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--demo-accent)] sm:px-5"
-          >
-            <span>Chọn mẫu này</span>
-            <ArrowRight aria-hidden="true" size={18} className="motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:translate-x-1" />
-          </Link>
-        </motion.nav>
-      )}
+          <ArrowLeft
+            aria-hidden="true"
+            size={17}
+            className="motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:-translate-x-1"
+          />
+          <span className="hidden sm:inline">Quay lại</span>
+        </Link>
+        <Link
+          href={`/create?templateId=${template.id}`}
+          className="group inline-flex min-h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-[var(--demo-accent)] px-4 text-sm font-bold text-white shadow-sm transition-[filter,transform] duration-200 hover:brightness-110 motion-safe:hover:-translate-y-0.5 motion-safe:active:scale-[.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--demo-accent)] sm:px-5"
+        >
+          <span>Chọn mẫu này</span>
+          <ArrowRight
+            aria-hidden="true"
+            size={17}
+            className="motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:translate-x-1"
+          />
+        </Link>
+      </motion.nav>
     </div>
   );
 }

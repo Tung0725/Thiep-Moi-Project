@@ -71,6 +71,35 @@ export const authService = {
     return result.data;
   },
 
+  async requestGoogleChallenge(signal: AbortSignal): Promise<string> {
+    const response = await fetch(`${API_BASE_URL}/auth/google/challenge`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: '{}',
+      signal,
+    });
+    const result: ApiResponse<string> = await response.json();
+    if (!response.ok) {
+      throw new Error(result.message || 'Không thể kết nối đăng nhập Google.');
+    }
+    return result.data;
+  },
+
+  async loginWithGoogle(credential: string): Promise<UserResponse> {
+    const response = await fetch(`${API_BASE_URL}/auth/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ credential }),
+    });
+    const result: ApiResponse<UserResponse> = await response.json();
+    if (!response.ok) {
+      throw new Error(result.message || 'Đăng nhập Google không thành công.');
+    }
+    return result.data;
+  },
+
   async refreshToken(): Promise<UserResponse> {
     const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
       method: 'POST',
