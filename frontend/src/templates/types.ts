@@ -8,12 +8,13 @@ export interface TemplateRendererProps {
   slug?: string;
   embedded?: boolean;
   containerClassName?: string;
+  onEndReached?: (reached: boolean) => void;
 }
 
 export interface TemplateField {
   key: string;
   label: string;
-  type: 'text' | 'date' | 'time' | 'tel';
+  type: 'text' | 'date' | 'time' | 'tel' | 'image';
   required?: boolean;
 }
 

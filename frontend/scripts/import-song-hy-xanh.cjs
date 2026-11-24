@@ -111,7 +111,7 @@ import * as React from 'react';
 import * as JSX from 'react/jsx-runtime';
 import * as ReactDOM from 'react-dom';
 import dynamic from 'next/dynamic';
-import { sourceService as services } from '@/services/songHySourceService';
+import { sourceService as services } from './sourceService';
 
 export function createSourceRuntime(settings) {
   const cache = {};

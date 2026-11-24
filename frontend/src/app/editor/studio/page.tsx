@@ -8,7 +8,7 @@ import GlobalSettingsTab from '@/components/studio/GlobalSettingsTab';
 import RawJsonTab from '@/components/studio/RawJsonTab';
 import CloneModal from '@/components/studio/CloneModal';
 import CreateModal from '@/components/studio/CreateModal';
-import { PageRenderer } from '@/components/renderer/PageRenderer';
+import { PageRenderer } from '@/templates/PageRenderer';
 import { PageSchema } from '@/types/schema';
 import { TemplateDetailResponse, CreateTemplatePayload } from '@/types/api';
 import { templateService } from '@/services/templateService';
@@ -235,14 +235,16 @@ export default function StudioEditorPage() {
         <main className="flex-1 h-full overflow-y-auto bg-neutral-100/70 dark:bg-[#080910] p-4 sm:p-8 flex flex-col items-center no-scrollbar">
           {schema ? (
             <div
-              className={`w-full transition-all duration-300 shadow-2xl rounded-2xl overflow-hidden border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#121420] ${
+              className={`w-full transition-all duration-300 shadow-2xl rounded-2xl overflow-clip border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#121420] ${
                 viewMode === 'desktop' ? 'max-w-4xl' : 'max-w-md'
               }`}
             >
               <PageRenderer
+                key={activeTemplate?.code || 'preview'}
                 schema={schema}
                 slug={activeTemplate?.code || 'preview'}
                 containerClassName={viewMode === 'desktop' ? 'max-w-4xl' : 'max-w-md'}
+                embedded
               />
             </div>
           ) : (

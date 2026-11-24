@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
 import { OpeningEffectConfig } from '@/types/schema';
+import { useEmbeddedStageHeight } from '../useEmbeddedStageHeight';
 
 interface OpeningEnvelopeProps {
   config?: OpeningEffectConfig;
@@ -31,6 +32,10 @@ export function OpeningEnvelope({ config, embedded = false }: OpeningEnvelopePro
   const [rightReady, setRightReady] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+  const stageHeight = useEmbeddedStageHeight(
+    containerRef,
+    Boolean(embedded && config?.enabled && !isHidden)
+  );
 
   const leftImage = config?.leftImage || '/templates/hb04/opening/left-thiep.webp';
   const rightImage = config?.rightImage || '/templates/hb04/opening/right-thiep.webp';
@@ -98,11 +103,13 @@ export function OpeningEnvelope({ config, embedded = false }: OpeningEnvelopePro
 
   const visibleHeightExpr = topOffset > 0 ? `calc(100dvh - ${topOffset}px)` : '100dvh';
   const negativeMarginExpr = topOffset > 0 ? `calc(-100dvh + ${topOffset}px)` : '-100dvh';
+  const embeddedHeight = stageHeight ? `${stageHeight}px` : '100dvh';
 
   const viewportStyle: React.CSSProperties = embedded
     ? {
-        height: '560px',
-        marginBottom: '-560px',
+        top: '0px',
+        height: embeddedHeight,
+        marginBottom: `-${embeddedHeight}`,
         backgroundColor: bothReady ? 'transparent' : '#a61114',
       }
     : {

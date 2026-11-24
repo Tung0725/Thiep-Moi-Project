@@ -35,6 +35,7 @@ export interface HeroBlockProps {
   coverImageUrl: string;
   title?: string;
   subtitle?: string;
+  variant?: 'polaroid' | 'arch' | 'editorial';
 }
 
 export interface CountdownBlockProps {
@@ -67,6 +68,7 @@ export interface CoupleMemberInfo {
   name: string;
   displayName?: string;
   role: 'GROOM' | 'BRIDE';
+  titleLabel?: string;
   photoUrl: string;
   fatherName?: string;
   motherName?: string;
@@ -80,6 +82,8 @@ export interface CoupleBlockProps {
   quote?: string;
   sectionTitle?: string;
   weddingDateText?: string;
+  announcementLine1?: string;
+  announcementLine2?: string;
 }
 
 export interface SingleEventItem {
@@ -100,6 +104,7 @@ export interface EventsBlockProps {
   receptionTime?: string;
   dressCodeColors?: string[];
   timeline?: { time: string; label: string }[];
+  showMapEmbed?: boolean;
 }
 
 export interface BankAccountInfo {
@@ -145,12 +150,25 @@ export interface UIBlock<T = Record<string, unknown>> {
   props: T;
 }
 
+export interface ThemeDecorations {
+  flowerUrl?: string;
+  envelopeUrl?: string;
+  paperUrl?: string;
+  castleUrl?: string;
+  sealImageUrl?: string;
+  sealText?: string;
+  inviteMessage?: string;
+}
+
 export interface ThemeConfig {
   design?: 'MINIMALISM_DARK_RED';
   primaryColor: string;
   backgroundColor: string;
+  accentColor?: string;
   headingFont: string;
   bodyFont: string;
+  heroVariant?: 'polaroid' | 'arch' | 'editorial';
+  decorations?: ThemeDecorations;
 }
 
 export interface OpeningEffectConfig {

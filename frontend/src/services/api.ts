@@ -80,6 +80,9 @@ const api = {
   put: async <T>(endpoint: string, body?: unknown) => ({
     data: await fetchApi<T>(endpoint, { method: 'PUT', body: JSON.stringify(body) }),
   }),
+  patch: async <T>(endpoint: string, body?: unknown) => ({
+    data: await fetchApi<T>(endpoint, { method: 'PATCH', body: JSON.stringify(body) }),
+  }),
   delete: async <T>(endpoint: string) => ({
     data: await fetchApi<T>(endpoint, { method: 'DELETE' }),
   }),

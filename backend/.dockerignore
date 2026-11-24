@@ -4,3 +4,5 @@ target/
 .git/
 .gitignore
 *.log
+.env
+.env.*

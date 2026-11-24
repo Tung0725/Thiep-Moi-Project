@@ -16,27 +16,34 @@
     "bridePhone": "",
     "eventDate": "2026-07-30",
     "eventTime": "18:00",
-    "venueName": "Gala Center",
-    "venueAddress": "Gala Center, 415 Hoàng Văn Thụ, Phường 2, Tân Bình, Hồ Chí Minh",
-    "coverImageUrl": "/templates/song-hy-xanh/archive/images/eb107c431fdd4c8d8e292f587e30bf3532753b3b4562fd7f21fa1254a42363b1.webp",
     "ceremonyTime": "09:00",
     "groomFather": "Võ Nhật Minh",
     "groomMother": "Trần Thu Thảo",
     "brideFather": "Huỳnh Thanh Nam",
-    "brideMother": "Nguyễn Thị Kim Oanh"
+    "brideMother": "Nguyễn Thị Kim Oanh",
+    "venueName": "Gala Center",
+    "venueAddress": "Gala Center, 415 Hoàng Văn Thụ, Phường 2, Tân Bình, Hồ Chí Minh",
+    "coverImageUrl": "/templates/song-hy-xanh/archive/images/eb107c431fdd4c8d8e292f587e30bf3532753b3b4562fd7f21fa1254a42363b1.webp"
   },
   "schema": {
-    "version": 1,
+    "version": 3,
     "template": {
-      "id": "song-hy-green",
+      "id": "classic-envelope",
       "version": 1
     },
     "layoutMode": "STACK",
     "theme": {
       "primaryColor": "#1F3A25",
       "backgroundColor": "#fff7eb",
+      "accentColor": "#c9a24a",
       "headingFont": "Big Caslon",
-      "bodyFont": "Baskerville"
+      "bodyFont": "Baskerville",
+      "heroVariant": "arch",
+      "decorations": {
+        "sealText": "囍",
+        "sealImageUrl": "/templates/song-hy-xanh/archive/images/chu-hy.webp",
+        "inviteMessage": "đến dự buổi tiệc chung vui cùng gia đình"
+      }
     },
     "effects": {
       "fallingType": "NONE",
@@ -44,300 +51,148 @@
     },
     "blocks": [
       {
-        "id": "song-hy-content",
-        "type": "SONG_HY_GREEN",
+        "id": "hero-1",
+        "type": "HERO",
         "props": {
-          "title": "Nội dung Song Hỷ Xanh",
-          "data": {
-            "date": "2026-07-30",
-            "time": "18:00",
-            "address": {
-              "vi": "Gala Center, 415 Hoàng Văn Thụ, Phường 2, Tân Bình, Hồ Chí Minh"
-            },
-            "bankBin": "",
-            "placeId": "0x31752f2f53a8f12b:0x2166a074ded68eee",
-            "bankCode": "",
-            "bankLogo": "",
-            "bankName": "",
-            "latitude": 10.7799574,
-            "heroPhoto": "/templates/song-hy-xanh/archive/images/eb107c431fdd4c8d8e292f587e30bf3532753b3b4562fd7f21fa1254a42363b1.webp",
-            "longitude": 106.682232,
-            "brideLabel": {
-              "vi": "Út Nữ"
-            },
-            "ceremonies": [
-              {
-                "id": "euyqjqez",
-                "date": "2026-07-30",
-                "time": "09:00",
-                "header": {
-                  "vi": "LỄ THÀNH HÔN ĐƯỢC CỬ HÀNH TẠI\nTƯ GIA"
-                }
-              }
-            ],
-            "groomLabel": {
-              "vi": "Trưởng Nam"
-            },
-            "mapAddress": "",
-            "templateId": "song_hy_green",
-            "accountName": "",
-            "banquetTime": "18:00",
-            "brideFather": "Huỳnh Thanh Nam",
-            "brideMother": "Nguyễn Thị Kim Oanh",
-            "giftMethods": [
-              {
-                "id": "legacy_groom_vietqr",
-                "for": "groom",
-                "type": "vietqr",
-                "bankBin": "970436",
-                "bankCode": "VCB",
-                "bankLogo": "https://api.vietqr.io/img/VCB.png",
-                "bankName": "Vietcombank",
-                "accountName": "Vo Hai Nam",
-                "accountNumber": "123456789"
-              },
-              {
-                "id": "legacy_bride_vietqr",
-                "for": "bride",
-                "type": "vietqr",
-                "bankBin": "970418",
-                "bankCode": "BIDV",
-                "bankLogo": "https://api.vietqr.io/img/BIDV.png",
-                "bankName": "BIDV",
-                "accountName": "Huynh Khanh Linh",
-                "accountNumber": "123456789"
-              }
-            ],
-            "groomFather": "Võ Nhật Minh",
-            "groomMother": "Trần Thu Thảo",
-            "brideAddress": "456 Lê Lợi, Quận 3, TP. Hồ Chí Minh",
-            "brideBankBin": "970418",
-            "ceremonyDate": "2026-02-07",
-            "engagementAt": {
-              "de": "VERLOBUNGSFEIER IM",
-              "en": "ENGAGEMENT CEREMONY AT",
-              "fr": "CÉRÉMONIE DE FIANÇAILLES AU",
-              "ja": "婚約式会場",
-              "ko": "약혼식 장소",
-              "vi": "LỄ NẠP TÀI ĐƯỢC CỬ HÀNH TẠI",
-              "zh-Hant": "訂婚典禮地點"
-            },
-            "groomAddress": {
-              "vi": "63 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh"
-            },
-            "groomBankBin": "970436",
-            "mapPlaceName": "Metropole Wedding & Convention Center",
-            "showCeremony": true,
-            "showTimeline": true,
-            "accountNumber": "",
-            "activeLocales": [
-              "vi"
-            ],
-            "brideBankCode": "BIDV",
-            "brideBankLogo": "https://api.vietqr.io/img/BIDV.png",
-            "brideBankName": "BIDV",
-            "brideFullName": "Huỳnh Khánh Linh",
-            "galleryImages": [
-              {
-                "url": "/templates/song-hy-xanh/archive/images/e3d13b58ea92c96a322e9bcc54cfcf6f6a79f08239a0ed9a8d3a3aca48bba341.webp",
-                "position": {
-                  "x": 0.5,
-                  "y": 0.5
-                }
-              },
-              {
-                "url": "/templates/song-hy-xanh/archive/images/6f2cc45851be18d1562d9e42510d0e9a00660507e3e9204ee24696cc3925da6d.webp",
-                "position": {
-                  "x": 0.5,
-                  "y": 0.5
-                }
-              },
-              {
-                "url": "/templates/song-hy-xanh/archive/images/90cfb6aaf7e0fc20d383aa3bcdaa97c9f73c50b384ee1470dac45126ad5f1cff.webp",
-                "position": {
-                  "x": 0.5,
-                  "y": 0.5
-                }
-              },
-              {
-                "url": "/templates/song-hy-xanh/archive/images/a9c22284a87f0932e84622c79068eaa687fb1a06b8080fb682b9f8dc6ebf1c80.webp",
-                "position": {
-                  "x": 0.5,
-                  "y": 0.5
-                }
-              },
-              {
-                "url": "/templates/song-hy-xanh/archive/images/cfd3d6fc4e4e0479502ac5bacfc4ddf3f4c58f71daa8eb6ea393510eae89bca0.webp",
-                "position": {
-                  "x": 0.5,
-                  "y": 0.5
-                }
-              },
-              {
-                "url": "/templates/song-hy-xanh/archive/images/19b783f13d746af8c7448e8b4227fd4fb88de8761ed6d2b6858b80510720160c.webp",
-                "position": {
-                  "x": 0.5,
-                  "y": 0.5
-                }
-              }
-            ],
-            "groomBankCode": "VCB",
-            "groomBankLogo": "https://api.vietqr.io/img/VCB.png",
-            "groomBankName": "Vietcombank",
-            "groomFullName": "Võ Hải Nam",
-            "showDresscode": true,
-            "guestReception": {
-              "en": "Guest Reception"
-            },
-            "mapDisplayMode": "placeId",
-            "submitWishText": {
-              "en": "SEND WISH"
-            },
-            "timelineEvents": [
-              {
-                "id": "demo-tl-don-khach",
-                "time": "17:30",
-                "label": {
-                  "de": "Empfang",
-                  "en": "Welcome",
-                  "fr": "Accueil des invités",
-                  "ja": "受付",
-                  "ko": "하객 맞이",
-                  "vi": "Đón khách",
-                  "zh-Hant": "賓客迎接"
-                }
-              },
-              {
-                "id": "demo-tl-khai-tiec",
-                "time": "18:30",
-                "label": {
-                  "de": "Feier",
-                  "en": "Reception",
-                  "fr": "Réception",
-                  "ja": "披露宴",
-                  "ko": "피로연",
-                  "vi": "Khai tiệc",
-                  "zh-Hant": "開席"
-                }
-              },
-              {
-                "id": "demo-tl-rot-ruou-cat-banh",
-                "time": "18:45",
-                "label": {
-                  "de": "Anstoßen und Anschnitt",
-                  "en": "Toasts & Cake",
-                  "fr": "Toasts et gâteau",
-                  "ja": "乾杯とケーキカット",
-                  "ko": "건배 및 케이크 컷팅",
-                  "vi": "Rót rượu, cắt bánh",
-                  "zh-Hant": "敬酒、切蛋糕"
-                }
-              },
-              {
-                "id": "demo-tl-mon-chinh",
-                "time": "19:00",
-                "label": {
-                  "de": "Hauptgang",
-                  "en": "Main Course",
-                  "fr": "Plat principal",
-                  "ja": "メイン料理",
-                  "ko": "메인 요리",
-                  "vi": "Phục vụ món chính",
-                  "zh-Hant": "上主菜"
-                }
-              },
-              {
-                "id": "demo-tl-ket-thuc",
-                "time": "21:00",
-                "label": {
-                  "de": "Verabschiedung",
-                  "en": "Farewell",
-                  "fr": "Fin de la réception",
-                  "ja": "お開き",
-                  "ko": "환송",
-                  "vi": "Kết thúc tiệc",
-                  "zh-Hant": "宴會結束"
-                }
-              }
-            ],
-            "brideLinePayUrl": "",
-            "ceremonyAddress": {
-              "en": "FAMILY HOME",
-              "vi": "TƯ GIA"
-            },
-            "dresscodeColors": [
-              "#8B9A6B",
-              "#E8E8E8",
-              "#E8DCC8"
-            ],
-            "groomLinePayUrl": "",
-            "brideAccountName": "Huynh Khanh Linh",
-            "groomAccountName": "Vo Hai Nam",
-            "announcementLine1": "TRÂN TRỌNG BÁO TIN",
-            "announcementLine2": "LỄ THÀNH HÔN CỦA CON CHÚNG TÔI",
-            "engagementAddress": {
-              "de": "FAMILIENHEIM",
-              "en": "FAMILY HOME",
-              "fr": "DOMICILE FAMILIAL",
-              "ja": "自宅",
-              "ko": "자택",
-              "vi": "TƯ GIA",
-              "zh-Hant": "自宅"
-            },
-            "brideAccountNumber": "123456789",
-            "groomAccountNumber": "123456789",
-            "guestNamePlaceholder": {
-              "vi": "Nhập tên của bạn*"
-            },
-            "guestWishPlaceholder": {
-              "vi": "Nhập lời chúc của bạn*"
-            },
-            "envelopeInviteMessage": {
-              "vi": "đến dự buổi tiệc chung vui cùng gia đình"
-            },
-            "giftDisplayMode": "gift_box",
-            "galleryLayout": "cards",
-            "comments": [
-              {
-                "id": "26f43e57-0f1f-45ec-bc2c-f990b05e5afd",
-                "name": "Gia đình cô Lan",
-                "message": "Chúc hai cháu trăm năm hạnh phúc, sớm sinh quý tử!",
-                "timestamp": "2026-07-30T03:58:41.265Z"
-              },
-              {
-                "id": "507b6ba1-0adb-483b-bee8-11d6c163e906",
-                "name": "Trần thị quynh như",
-                "message": "Hy vọng tổ ấm nhỏ này sẽ sớm rộn rã tiếng cười con trẻ và hạnh phúc viên mãn.",
-                "timestamp": "2026-07-17T16:08:37.292Z"
-              },
-              {
-                "id": "16c6b5a0-1f70-470f-833a-25bed89a39d7",
-                "name": "1231",
-                "message": "gáhgtsahkgahkgahjg",
-                "timestamp": "2026-07-14T17:32:39.129Z"
-              },
-              {
-                "id": "3f75b25b-5bbb-4b0c-86e2-64fd2a627789",
-                "name": "e",
-                "message": "Mong hai bạn xây dựng một mái ấm tràn đầy tiếng cười và niềm vui.",
-                "timestamp": "2026-07-14T13:37:55.695Z"
-              },
-              {
-                "id": "2a66ca17-90ad-4b93-b2d5-7eb9369c2ff5",
-                "name": "e",
-                "message": "Mong hai bạn xây dựng một mái ấm tràn đầy tiếng cười và niềm vui.",
-                "timestamp": "2026-07-14T13:37:15.154Z"
-              },
-              {
-                "id": "d0f9d031-8b9f-4dae-ac43-ea0a547ee311",
-                "name": "e",
-                "message": "Mong hai bạn xây dựng một mái ấm tràn đầy tiếng cười và niềm vui.",
-                "timestamp": "2026-07-14T13:36:55.224Z"
-              }
-            ],
-            "groomShortName": "Hải Nam",
-            "brideShortName": "Khánh Linh"
+          "title": "SAVE THE DATE",
+          "groomName": "Hải Nam",
+          "brideName": "Khánh Linh",
+          "eventDate": "2026-07-30",
+          "variant": "arch",
+          "coverImageUrl": "/templates/song-hy-xanh/archive/images/eb107c431fdd4c8d8e292f587e30bf3532753b3b4562fd7f21fa1254a42363b1.webp"
+        }
+      },
+      {
+        "id": "couple-1",
+        "type": "COUPLE",
+        "props": {
+          "sectionTitle": "THÔNG TIN LỄ CƯỚI",
+          "weddingDateText": "2026-07-30",
+          "announcementLine1": "TRÂN TRỌNG BÁO TIN",
+          "announcementLine2": "LỄ THÀNH HÔN CỦA CON CHÚNG TÔI",
+          "groom": {
+            "name": "Võ Hải Nam",
+            "displayName": "Hải Nam",
+            "role": "GROOM",
+            "titleLabel": "TRƯỞNG NAM",
+            "photoUrl": "/templates/song-hy-xanh/archive/images/eb107c431fdd4c8d8e292f587e30bf3532753b3b4562fd7f21fa1254a42363b1.webp",
+            "fatherName": "Võ Nhật Minh",
+            "motherName": "Trần Thu Thảo",
+            "address": "63 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh"
+          },
+          "bride": {
+            "name": "Huỳnh Khánh Linh",
+            "displayName": "Khánh Linh",
+            "role": "BRIDE",
+            "titleLabel": "ÚT NỮ",
+            "photoUrl": "/templates/song-hy-xanh/archive/images/eb107c431fdd4c8d8e292f587e30bf3532753b3b4562fd7f21fa1254a42363b1.webp",
+            "fatherName": "Huỳnh Thanh Nam",
+            "motherName": "Nguyễn Thị Kim Oanh",
+            "address": "456 Lê Lợi, Quận 3, TP. Hồ Chí Minh"
           }
+        }
+      },
+      {
+        "id": "ceremony-1",
+        "type": "EVENTS",
+        "props": {
+          "title": "LỄ THÀNH HÔN",
+          "groomEvents": [
+            {
+              "id": "ceremony",
+              "title": "LỄ THÀNH HÔN ĐƯỢC CỬ HÀNH TẠI",
+              "dateText": "2026-07-30",
+              "timeText": "09:00",
+              "locationName": "TƯ GIA",
+              "address": "63 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh"
+            }
+          ],
+          "brideEvents": []
+        }
+      },
+      {
+        "id": "gallery-1",
+        "type": "GALLERY",
+        "props": {
+          "title": "ALBUM ẢNH",
+          "images": [
+            "/templates/song-hy-xanh/archive/images/e3d13b58ea92c96a322e9bcc54cfcf6f6a79f08239a0ed9a8d3a3aca48bba341.webp",
+            "/templates/song-hy-xanh/archive/images/6f2cc45851be18d1562d9e42510d0e9a00660507e3e9204ee24696cc3925da6d.webp",
+            "/templates/song-hy-xanh/archive/images/90cfb6aaf7e0fc20d383aa3bcdaa97c9f73c50b384ee1470dac45126ad5f1cff.webp",
+            "/templates/song-hy-xanh/archive/images/a9c22284a87f0932e84622c79068eaa687fb1a06b8080fb682b9f8dc6ebf1c80.webp",
+            "/templates/song-hy-xanh/archive/images/cfd3d6fc4e4e0479502ac5bacfc4ddf3f4c58f71daa8eb6ea393510eae89bca0.webp",
+            "/templates/song-hy-xanh/archive/images/19b783f13d746af8c7448e8b4227fd4fb88de8761ed6d2b6858b80510720160c.webp"
+          ]
+        }
+      },
+      {
+        "id": "banquet-1",
+        "type": "EVENTS",
+        "props": {
+          "title": "THÔNG TIN TIỆC CƯỚI",
+          "groomEvents": [
+            {
+              "id": "banquet",
+              "title": "TIỆC CƯỚI SẼ DIỄN RA VÀO LÚC",
+              "dateText": "2026-07-30",
+              "timeText": "18:00",
+              "locationName": "Gala Center",
+              "address": "Gala Center, 415 Hoàng Văn Thụ, Phường 2, Tân Bình, Hồ Chí Minh"
+            }
+          ],
+          "brideEvents": [],
+          "receptionTime": "17:30",
+          "showMapEmbed": true,
+          "dressCodeColors": [
+            "#8B9A6B",
+            "#E8E8E8",
+            "#E8DCC8"
+          ],
+          "timeline": [
+            { "time": "17:30", "label": "Đón khách" },
+            { "time": "18:30", "label": "Khai tiệc" },
+            { "time": "18:45", "label": "Rót rượu, cắt bánh" },
+            { "time": "19:00", "label": "Phục vụ món chính" },
+            { "time": "21:00", "label": "Kết thúc tiệc" }
+          ]
+        }
+      },
+      {
+        "id": "wishes-1",
+        "type": "WISHES",
+        "props": {
+          "title": "Sổ lưu bút & RSVP",
+          "subtitle": "Gửi lời chúc phúc và xác nhận tham dự cùng chúng mình",
+          "allowRsvp": true
+        }
+      },
+      {
+        "id": "giftbox-1",
+        "type": "GIFTBOX",
+        "props": {
+          "title": "Hộp Quà Mừng",
+          "groomAccount": {
+            "ownerName": "Vo Hai Nam",
+            "bankName": "Vietcombank",
+            "accountNumber": "123456789",
+            "qrCodeUrl": "/templates/song-hy-xanh/archive/images/qr-png_2.png",
+            "label": "Chú Rể"
+          },
+          "brideAccount": {
+            "ownerName": "Huynh Khanh Linh",
+            "bankName": "BIDV",
+            "accountNumber": "123456789",
+            "qrCodeUrl": "/templates/song-hy-xanh/archive/images/qr-png.png",
+            "label": "Cô Dâu"
+          }
+        }
+      },
+      {
+        "id": "thankyou-1",
+        "type": "THANKYOU",
+        "props": {
+          "title": "Trân trọng cảm ơn",
+          "message": "Sự hiện diện của quý khách là niềm vinh hạnh lớn của gia đình chúng tôi."
         }
       }
     ]

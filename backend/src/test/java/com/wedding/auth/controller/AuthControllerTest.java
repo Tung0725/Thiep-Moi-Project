@@ -9,10 +9,12 @@ import com.wedding.auth.dto.response.UserResponse;
 import com.wedding.auth.entity.Role;
 import com.wedding.auth.entity.UserStatus;
 import com.wedding.auth.service.AuthService;
+import com.wedding.auth.service.GoogleIdentityService;
 import com.wedding.common.exception.ConflictException;
 import com.wedding.common.exception.GlobalExceptionHandler;
 import com.wedding.common.exception.UnauthorizedException;
 import com.wedding.config.UserPrincipal;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,6 +38,7 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -51,6 +54,9 @@ class AuthControllerTest {
 
     @Mock
     private AuthService authService;
+
+    @Mock
+    private GoogleIdentityService googleIdentityService;
 
     @InjectMocks
     private AuthController authController;
@@ -79,6 +85,43 @@ class AuthControllerTest {
                     }
                 })
                 .build();
+    }
+
+    @Test
+    void googleChallengeBindsNonceToHttpOnlyCookie() throws Exception {
+        mockMvc.perform(post("/auth/google/challenge").contentType(MediaType.APPLICATION_JSON).content("{}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isNotEmpty())
+                .andExpect(cookie().httpOnly("google_login_nonce", true))
+                .andExpect(cookie().path("google_login_nonce", "/api/v1/auth/google"))
+                .andExpect(cookie().maxAge("google_login_nonce", 900));
+    }
+
+    @Test
+    void googleLoginExchangesCredentialForSessionCookies() throws Exception {
+        var identity = new GoogleIdentityService.GoogleIdentity("google-subject", "test@gmail.com", "Test", true);
+        when(googleIdentityService.verify("credential", "challenge")).thenReturn(identity);
+        when(authService.loginWithGoogle(identity)).thenReturn(new AuthSessionResult("access", "refresh", 60_000, null));
+
+        mockMvc.perform(post("/auth/google").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"credential\":\"credential\"}")
+                        .cookie(new Cookie("google_login_nonce", "challenge")))
+                .andExpect(status().isOk())
+                .andExpect(cookie().maxAge("google_login_nonce", 0))
+                .andExpect(cookie().value("access_token", "access"))
+                .andExpect(cookie().httpOnly("access_token", true))
+                .andExpect(cookie().value("refresh_token", "refresh"))
+                .andExpect(cookie().httpOnly("refresh_token", true));
+    }
+
+    @Test
+    void googleLoginWithoutBrowserChallengeReturnsUnauthorized() throws Exception {
+        mockMvc.perform(post("/auth/google").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"credential\":\"credential\"}"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(cookie().doesNotExist("access_token"));
+
+        verifyNoInteractions(googleIdentityService, authService);
     }
 
     @Test

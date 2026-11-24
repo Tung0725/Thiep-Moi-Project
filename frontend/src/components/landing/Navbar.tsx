@@ -133,6 +133,16 @@ export default function Navbar({ currentTheme, onToggleTheme }: NavbarProps) {
                     <p className="text-xs font-bold text-[#2d2d2d] dark:text-white truncate">{user.fullName}</p>
                     <p className="text-[11px] text-[#71717a] dark:text-slate-400 truncate">{user.email}</p>
                   </div>
+                  {user.role === 'ROLE_ADMIN' && (
+                    <Link
+                      href="/admin"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-mh-primary dark:text-rose-400 hover:bg-[#fff0f3] dark:hover:bg-[#202334] transition"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">admin_panel_settings</span>
+                      <span>Quản trị</span>
+                    </Link>
+                  )}
                   <Link
                     href="/create"
                     onClick={() => setIsUserMenuOpen(false)}
